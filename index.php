@@ -29,7 +29,7 @@
 </head>
 
 <body>
-	<?php include('includes/topbar.php'); ?>
+	<?php include('includes/homepage-topbar.php'); ?>
 	<button id="launch-button" class="btn btn-primary"><h3>Welcome to Project Oslo</h3></button>
 	<!-- Register Admin Modal -->
 	<div class="modal fade" id="page-modal">
@@ -242,6 +242,11 @@
 	});
 
 	$('#launch-button').click(function(event){
+		$('#page-modal').modal('show');
+	});
+
+	$('.register-link').click(function(event){
+		event.preventDefault();
 		$('#page-modal').modal('show');
 	});
 

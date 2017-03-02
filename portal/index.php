@@ -4,7 +4,6 @@
     if(!isset($_SESSION['username'])){
         header( "Location: login.php" ); 
     }
-    session_start();
 ?>
 
 <!doctype html>
