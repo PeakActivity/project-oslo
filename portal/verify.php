@@ -104,7 +104,7 @@
 	          </div>  
 		      <div class="modal-footer">
 		      	<div style="width:100%; text-align:center;">
-		        	<a class="btn btn-primary" id="login-link" href="http://<?= $domain ?>.osloideas.com/portal/login.php">Log in to <?= $domain ?>.osloideas.com</a>
+		        	<a class="btn btn-primary" id="login-link" href="http://<?= $domain ?>.project-oslo.com/portal/login.php">Log in to <?= $domain ?>.project-oslo.com</a>
 		        </div>
 		      </div>
 		    </div>
@@ -143,11 +143,11 @@
 		        </button>
 		      </div>
 			  <div class="modal-body">
-	            <p>There was an error when trying to validate your email address. You can <a href="index.php">register</a> again, or email <a href="mailto:customersupport@osloideas.com">customer support</a> and inform them of this error.</p>
+	            <p>There was an error when trying to validate your email address. You can <a href="index.php">register</a> again, or email <a href="mailto:customersupport@project-oslo.com">customer support</a> and inform them of this error.</p>
 	          </div>
 	          <div class="modal-footer">
 		      	<div style="width:100%; text-align:center;">
-		        	<a class="btn btn-primary" href="mailto:customersupport@osloideas.com">Contact Customer Support</a>
+		        	<a class="btn btn-primary" href="mailto:customersupport@project-oslo.com">Contact Customer Support</a>
 		        </div>
 		      </div>
 	        </div>

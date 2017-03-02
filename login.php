@@ -92,7 +92,7 @@
                 <div class="form-group">
              <label for="register_first">Desired Domain Prefix</label>
               <input type="text" class="form-control" id="register_domain" name="register_domain" required="true" >
-              <small class="form-text text-muted">Portal domain will be prefix.osloideas.com</small>
+              <small class="form-text text-muted">Portal domain will be prefix.project-oslo.com</small>
           </div>
                 </div>
             </div>
