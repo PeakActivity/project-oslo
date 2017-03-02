@@ -19,18 +19,43 @@
     <!-- domo arigato mr roboto.. load this font -->
     <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500' rel='stylesheet' type='text/css'>
 
-    <!-- BEGIN Load Styles for Plugins -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <!-- BEGIN Load Styles for Plugins --><!--
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous"> -->
 
 
     <!-- page styles -->
-    <link rel="stylesheet" href="assets/css/home.css" />
+	<link rel="stylesheet" href="assets/css/platform/watermark_styles.css" type="text/css" />
+	<link rel="stylesheet" href="assets/css/platform/jasny-bootstrap.min.css"
+	<link rel="stylesheet" href="assets/css/platform/swiper.css" type="text/css" />
 
 </head>
 
-<body>
-	<?php include('includes/homepage-topbar.php'); ?>
-	<button id="launch-button" class="btn btn-primary"><h3>Welcome to Project Oslo</h3></button>
+<body class="stretched">
+	<!-- Navigation Menu and Slider -->
+	<?php 
+		include ('includes/platform/navigation_hamburger.php');
+		include ('includes/platform/slider.php');
+	?>
+
+
+	<!-- Body Content -->
+	<section id="content">
+    	<div class="content-wrap">
+
+		<!-- Load Content Sections -->
+		<?php 
+			include ('includes/platform/content.php');
+			include ('includes/platform/pricing.php');
+			include ('includes/platform/connections.php');
+			include ('includes/platform/signup.php');
+			include ('includes/platform/team.php');
+		?>
+        
+        </div><!-- end div class="content-wrap" -->
+
+	</section><!-- end section id="content" -->
+
+
 	<!-- Register Admin Modal -->
 	<div class="modal fade" id="page-modal">
 	  <div class="modal-dialog" role="document">
@@ -134,11 +159,14 @@
       </div>
     </div>
 
-	<div class="modal fade" id="success-modal"  data-backdrop="static" keyboard="false">
+	<div class="modal fade" id="success-modal" >
 	  <div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <h5 class="modal-title">Thank you for registering with Project Oslo</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
 	      </div>
 		  <div class="modal-body">
             <p>An email is being sent to the address you provided with a verification link.</p>
@@ -184,12 +212,18 @@
       </div>
     </div>
 
-    <?php include('includes/footer.php'); ?>
+    <?php include('includes/platform/footer.php'); ?>
     <!-- common functions -->
+    <!--
     <script src="assets/js/common.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>-->
+
+	<script type="text/javascript" src="assets/js/platform/jquery-2.2.4.min.js"></script>
+	<script type="text/javascript" src="assets/js/platform/bootstrap.min.js"></script> -->
+	<script type="text/javascript" src="assets/js/platform/watermark.js"></script>
+	<script type="text/javascript" src="assets/js/platform/jasny-bootstrap.min.js"></script>
    
    <script> 
    	$('#exists-alert').hide();
