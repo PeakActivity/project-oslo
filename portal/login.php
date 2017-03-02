@@ -121,7 +121,7 @@
           <div class="modal-header">
             <h5 class="modal-title">Log in to Project Oslo</h5>
           </div>
-          <form name="login_form" id="login_form" role="form" action="../user/login-user.php" method="post">
+          <form name="login_form" id="login_form" role="form" action="../user/login.php" method="post">
           <div class="modal-body">
             <div class="row">
                 <div class='col-12'>
