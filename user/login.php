@@ -83,7 +83,7 @@ if($numrows == 1)
 		    // --------------------------------------------------------------------------  
 		    $strFromName  	= "Project Oslo";
 		    $strFromEmail 	= "no-reply@project-oslo.com";
-		    $strToName  	= $row["first"]." ".$row["last"];
+		    $strToName  	= $row["fname"]." ".$row["lname"];
 		    $strToEmail 	= $row["email"];
 		    $strAltBody		= "To view this message, please use an HTML compatible email viewer."; 
 
