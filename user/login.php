@@ -82,7 +82,7 @@ if($numrows == 1)
 		    // Set the From/To Email and From/To Name fields.
 		    // --------------------------------------------------------------------------  
 		    $strFromName  	= "Project Oslo";
-		    $strFromEmail 	= "no-reply@osloideas.com";
+		    $strFromEmail 	= "no-reply@project-oslo.com";
 		    $strToName  	= $row["first"]." ".$row["last"];
 		    $strToEmail 	= $row["email"];
 		    $strAltBody		= "To view this message, please use an HTML compatible email viewer."; 

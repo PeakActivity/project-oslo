@@ -1,5 +1,5 @@
 <?php
-	$allowed_hosts = array('osloideas.com','portal.osloideas.com','local.osloideas.com','www.osloideas.com','www.watermarkdigital.com');
+	$allowed_hosts = array('local.project-oslo.com','project-oslo.com','www.project-oslo.com','osloideas.com','portal.osloideas.com','local.osloideas.com','www.osloideas.com','www.watermarkdigital.com');
 	if (!isset($_SERVER['HTTP_HOST']) || !in_array($_SERVER['HTTP_HOST'], $allowed_hosts)) {
 		header( "Location: portal/login.php" );
 		die();
@@ -98,13 +98,13 @@
 	             <div class="row">
 	            	<div class='col-12'>
 					  	<div class="alert alert-danger" role="alert" id="create-alert">
-						  <strong>There was a problem creating your domain</strong><br/> Please click on the link in your validation email again, or contact <a href="mailto:customersupport@osloideas.com">customer support</a>.
+						  <strong>There was a problem creating your domain</strong><br/> Please click on the link in your validation email again, or contact <a href="mailto:customersupport@project-oslo.com">customer support</a>.
 						</div>
 					  	<div class="alert alert-danger" role="alert" id="exists-alert">
-						  <strong>There was a problem creating your domain</strong><br/> This domain already exists. <a href="http://<?=$domain?>.osloideas.com">Click here to log in to <?=$domain?>.osloideas.com</a>.
+						  <strong>There was a problem creating your domain</strong><br/> This domain already exists. <a href="http://<?=$domain?>.project-oslo.com">Click here to log in to <?=$domain?>.project-oslo.com</a>.
 						</div>
 	            		<p>Thank you for validating your email address.</p>
-	            		<p>We are now creating your Oslo portal for <?= $domain ?>.osloideas.com</p>
+	            		<p>We are now creating your Oslo portal for <?= $domain ?>.project-oslo.com</p>
 	            		
 					  	<div class="alert alert-success" role="alert" id="success-alert">
 						  <strong>Your Oslo portal is ready</strong><br/>Click on the button below to log in and get started.
@@ -114,7 +114,7 @@
 	          </div>  
 		      <div class="modal-footer">
 		      	<div style="width:100%; text-align:center;">
-		        	<a class="btn btn-primary disabled" id="login-link" href="http://<?= $domain ?>.osloideas.com/portal/login.php">Log in to <?= $domain ?>.osloideas.com</a>
+		        	<a class="btn btn-primary disabled" id="login-link" href="http://<?= $domain ?>.project-oslo.com/portal/login.php">Log in to <?= $domain ?>.project-oslo.com</a>
 		        </div>
 		      </div>
 		    </div>
@@ -150,11 +150,11 @@
 		        </button>
 		      </div>
 			  <div class="modal-body">
-	            <p>There was an error when trying to validate your email address. You can <a href="index.php">register</a> again, or email <a href="mailto:customersupport@osloideas.com">customer support</a> and inform them of this error.</p>
+	            <p>There was an error when trying to validate your email address. You can <a href="index.php">register</a> again, or email <a href="mailto:customersupport@project-oslo.com">customer support</a> and inform them of this error.</p>
 	          </div>
 	          <div class="modal-footer">
 		      	<div style="width:100%; text-align:center;">
-		        	<a class="btn btn-primary" href="mailto:customersupport@osloideas.com">Contact Customer Support</a>
+		        	<a class="btn btn-primary" href="mailto:customersupport@project-oslo.com">Contact Customer Support</a>
 		        </div>
 		      </div>
 	        </div>

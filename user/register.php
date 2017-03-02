@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			    // Set the From/To Email and From/To Name fields.
 			    // --------------------------------------------------------------------------  
 			    $strFromName  	= "Project Oslo";
-			    $strFromEmail 	= "no-reply@osloideas.com";
+			    $strFromEmail 	= "no-reply@project-oslo.com";
 			    $strToName  	= $first." ".$last;
 			    $strToEmail 	= $email;
 			    $strAltBody		= "To view this message, please use an HTML compatible email viewer."; 

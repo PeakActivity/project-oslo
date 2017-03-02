@@ -1,5 +1,5 @@
 <?php
-	$allowed_hosts = array('osloideas.com','portal.osloideas.com','local.osloideas.com','www.osloideas.com','www.watermarkdigital.com');
+	$allowed_hosts = array('local.project-oslo.com','project-oslo.com','www.project-oslo.com','osloideas.com','portal.osloideas.com','local.osloideas.com','www.osloideas.com','www.watermarkdigital.com');
 	if (!isset($_SERVER['HTTP_HOST']) || !in_array($_SERVER['HTTP_HOST'], $allowed_hosts)) {
 		header( "Location: portal/login.php" );
 	}
@@ -94,7 +94,7 @@
             		<div class="form-group">
 					   <label for="register_first">Desired Domain Prefix</label>
 					    <input type="text" class="form-control" id="register_domain" name="register_domain" required="true" >
-					    <small class="form-text text-muted">Portal domain will be prefix.osloideas.com</small>
+					    <small class="form-text text-muted">Portal domain will be prefix.project-oslo.com</small>
 					</div>
                 </div>
             </div>
