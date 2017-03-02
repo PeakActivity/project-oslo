@@ -195,6 +195,7 @@ if($numrows == 1)
 			}
 		}
 
+		ini_set('session.cookie_domain', $row['domain'].'.project-oslo.com');
 		session_start();
 		$_SESSION['userid'] = $row['id'];
 		$_SESSION['usertype'] = $row['type'];

@@ -1,5 +1,6 @@
 <?php 
     require_once ('includes/utilityfunctions.php');
+    require_once ('includes/managesessions.php');
 ?>
 
 <!doctype html>
@@ -322,7 +323,7 @@
             $('#unapproved-admin-alert').show();
           }
           if(data == "success"){
-             var url = "index.php";
+             var url = "http://<?=$_SESSION['domain']?>.project-oslo.com/portal/index.php";
              $(location).attr('href',url);
           }
         },
