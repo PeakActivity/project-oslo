@@ -1,0 +1,40 @@
+html { 
+  background: url(../../images/home_bg.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height: 100%;
+}
+
+body {
+	position: relative;
+	min-height: 100%;
+	background: none;
+}
+
+#launch-button {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	cursor: pointer;
+	padding: 20px 40px;
+	border-radius: 10px
+}
+
+button h3 {
+	margin: 0;
+}
+
+.sidebar {
+	padding: 0px;
+}
+
+.nav-pills .nav-link {
+	border-radius: 0;
+}
+
+main {
+	background-color: rgba(255,255,255, .9);
+}
