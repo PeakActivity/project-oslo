@@ -73,7 +73,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 		$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
 		$numrows = mysqli_num_rows($result);
-
+		
+		
 		// --------------------------------------------------------------------------  
 		// If the number of rows is 1 that means that this email or domain was found in our 
 		// database. Redirect them back to registration with an error

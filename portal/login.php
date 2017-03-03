@@ -6,7 +6,7 @@
     if(isset($_SESSION['username'])){
         header( "Location: index.php" ); 
     }
-    session_start();
+    $login_domain = extract_subdomains($_SERVER['HTTP_HOST']);
 ?>
 
 <!doctype html>
@@ -30,6 +30,8 @@
 
     <!-- page styles -->
     <link rel="stylesheet" href="../assets/css/home.css" />
+
+    <link rel="stylesheet" href="domains/<?=$login_domain?>/css/portal.css" />
 
 </head>
 

@@ -1164,4 +1164,8 @@ function checkManualValidate()
     }
 }
 
+function function_update_styles($domain_id, $style_name, $property_name, $property_value) {
+    return "UPDATE domain_styles SET property_value = '$property_value' WHERE property_name = '$property_name' AND style_name = '$style_name' AND domain_id = '$domain_id';"; 
+}
+
 ?>

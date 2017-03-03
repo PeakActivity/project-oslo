@@ -27,6 +27,7 @@
 
     <!-- page styles -->
     <link rel="stylesheet" href="../assets/css/home.css" />
+    <link rel="stylesheet" href="domains/<?=$_SESSION['domain']?>/css/portal.css" />
 
 </head>
 
@@ -39,14 +40,19 @@
                 <li class="nav-item">
                   <a class="nav-link active" href="#">Portal Home <span class="sr-only">(current)</span></a>
                 </li>
+                <?php if(($_SESSION['type'] & 16) > 0) { ?>
+                <li class="nav-item">
+                  <a class="nav-link" href="manage-portal.php">Manage Portal</a>
+                </li>
+                <?php } ?>
+                <?php if(($_SESSION['type'] & 16) > 0) { ?>
+                <li class="nav-item">
+                  <a class="nav-link" href="manage-users.php">Manage Users</a>
+                </li>
+                <?php } ?>
                 <li class="nav-item">
                   <a class="nav-link" href="#">Nav item</a>
                 </li>
-                <?php if(($_SESSION['usertype'] & 16) > 0) { ?>
-                <li class="nav-item">
-                  <a class="nav-link" href="user-manage.php">Manage Users</a>
-                </li>
-                <?php } ?>
                 <li class="nav-item">
                   <a class="nav-link" href="#">Nav item again</a>
                 </li>

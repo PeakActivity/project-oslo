@@ -12,7 +12,11 @@
     </form>
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link register-link" href="#">Register</a>
+        <?php if(!isset($_SESSION['username'])){ ?>
+          <a class="nav-link" href="login.php">Log in</a>
+        <?php } else { ?>
+          <a class="nav-link" href="../user/logout.php">Log out</a>
+        <?php } ?>
       </li>
     </ul>
   </div>
