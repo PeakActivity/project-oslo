@@ -14,12 +14,13 @@
                 	<div class="container-fluid clearfix">
 					
 						<div class="vertical-middle no-fade">
-							<div id="slider1text" class="col-sm-8 col-md-5 fright nobottommargin" data-animate="fadeIn">
+							<div id="slider1text" class="col-sm-8 col-md-5 nobottommargin" data-animate="fadeIn">
 
 								<div class="emphasis-title">
-									<h1 >
-										Leverage our Smart Science technologies to Win More – Win Faster.<br/> 
-                                        <strong>Welcome to DealCoachPro</strong> 
+									<h1 style="color:#fff;">
+                                   
+										<span style="font-family:montserrat;font-weight:100;line-height:-1.5;color:#ffffff;">Leverage our Smart Science technologies to Win More – Win Faster.</span><br/> 
+                                        <strong>Welcome to Oslo</strong> 
 									</h1>
 								</div>
 
@@ -41,12 +42,13 @@
                 	<div class="container-fluid clearfix">
 					
 						<div class="vertical-middle no-fade">
-							<div id="slider2text" class="col-sm-8 col-md-4 fright nobottommargin" data-animate="fadeIn">
+							<div id="slider2text" class="col-sm-8 col-md-4 nobottommargin" data-animate="fadeIn">
 
 								<div class="emphasis-title">
 									<h1 style="color:#fff;">
-										Imagine your own expert sales coach helping you close deals.<br/> 
-                                        <strong>Welcome to DealCoachPro</strong> 
+                                    
+										<span style="font-family:montserrat;font-weight:100;line-height:-1.5;color:#ffffff;">Imagine your own expert sales coach helping you close deals.</span><br/> 
+                                        <strong>Welcome to Oslo</strong> 
 									</h1>
 								</div>
 
@@ -68,12 +70,13 @@
                 	<div class="container-fluid clearfix">
 					
 						<div class="vertical-middle no-fade">
-							<div id="slider3text" class="col-sm-8 col-md-4 fright nobottommargin" data-animate="fadeIn">
+							<div id="slider3text" class="col-sm-8 col-md-4 nobottommargin" data-animate="fadeIn">
 
 								<div class="emphasis-title">
 									<h1 style="color:#fff">
-										Relevant sales insight and proven next steps to enable your success<br/> 
-                                        <strong>Welcome to DealCoachPro</strong> 
+                                   
+										<span style="font-family:montserrat;font-weight:100;line-height:-1.5;color:#ffffff;">Relevant sales insight and proven next steps to enable your success</span><br/> 
+                                        <strong>Welcome to Oslo</strong> 
 									</h1>
 								</div>
 
