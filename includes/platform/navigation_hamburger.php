@@ -1,6 +1,6 @@
 <div class="navmenu navmenu-default navmenu-fixed-left offcanvas">
     <a class="navmenu-brand" href="http://<?= $_SERVER['HTTP_HOST'] ?>">
-        <img id="sidebar-logo" src="images/platform/dealcoach-black.png" alt="" width="200px" />
+        <img id="sidebar-logo" src="images/platform/Oslo_Logo-header-black.png" height="36" alt="Oslo" />
     </a>
     <ul class="nav navmenu-nav">
         <li class="hidden-md hidden-lg register-link"><a href="#">Register</a>
@@ -39,8 +39,8 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a href="index.php">
-                    <img class="hidden-sm hidden-xs" id="top-navbar-logo" src="images/platform/dealcoach-white.png" alt="" width="200px" />
-                    <img class="hidden-md hidden-lg" id="top-navbar-logo" src="images/platform/dealcoach-black.png" alt="" width="200px" />
+                    <img class="hidden-sm hidden-xs" id="top-navbar-logo" src="images/platform/Oslo_Logo-header.png" alt=""  />
+                    <img class="hidden-md hidden-lg" id="top-navbar-logo" src="images/platform/Oslo_Logo-header-black.png" alt=""  />
                 </a>
 
                 <div class="right hidden-sm hidden-xs">

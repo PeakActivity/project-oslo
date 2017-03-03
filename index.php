@@ -17,7 +17,7 @@
     <title>Welcome to Project Oslo</title>
 
     <!-- domo arigato mr roboto.. load this font -->
-    <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500|Montserrat:100,300,400,600|Raleway:100,300,400,600' rel='stylesheet' type='text/css'>
 
     <!-- BEGIN Load Styles for Plugins --><!--
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous"> -->
@@ -221,7 +221,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>-->
 
 	<script type="text/javascript" src="assets/js/platform/jquery-2.2.4.min.js"></script>
-	<script type="text/javascript" src="assets/js/platform/bootstrap.min.js"></script> -->
+	<script type="text/javascript" src="assets/js/platform/bootstrap.min.js"></script>
 	<script type="text/javascript" src="assets/js/platform/watermark.js"></script>
 	<script type="text/javascript" src="assets/js/platform/jasny-bootstrap.min.js"></script>
    

@@ -9,7 +9,7 @@
 
 						<div class="widget clearfix">
 
-							<img src="images/platform/dealcoach-white.png" alt="" class="alignleft" style="margin-top: 8px; padding-right: 18px; border-right: 1px solid #4A4A4A;">
+							<img src="../../images/platform/Oslo_Logo-header.png" alt="" class="alignleft" style="margin-top: 8px; padding-right: 18px; border-right: 1px solid #4A4A4A;">
 
 								<p>
 									We provide tools to equip your sales team for success. By leveraging a proven scientific methodology, Deal Coach Pro 
