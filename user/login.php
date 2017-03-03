@@ -195,12 +195,28 @@ if($numrows == 1)
 			}
 		}
 
-		ini_set('session.cookie_domain', $row['domain'].'.project-oslo.com');
+		$admin_id = $row['id'];
+		$query = "SELECT id FROM domains WHERE admin_id='$admin_id'"; 
+		$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+		$numrows = mysqli_num_rows($result);
+
+		// --------------------------------------------------------------------------  
+		// If the number of rows is 1 that means that this user was found in our 
+		// database.  So start a session and copy the userid into a session 
+		// variable so it can be used across other pages.  Then since the user 
+		// has logged in succesfully redirect them to the next page.
+		// --------------------------------------------------------------------------  		
+		if($numrows == 1)
+		{
+			$domainResult = mysqli_fetch_array($result,  MYSQLI_ASSOC);
+		}
+
 		session_start();
 		$_SESSION['userid'] = $row['id'];
-		$_SESSION['usertype'] = $row['type'];
+		$_SESSION['type'] = $row['type'];
 		$_SESSION['email'] = $row['email'];
 		$_SESSION['domain'] = $row['domain'];
+		$_SESSION['domain_id'] = $domainResult['id'];
 		$_SESSION['username'] = $row['fname'] . " " . $row['lname'];
 
 		$output = "success";

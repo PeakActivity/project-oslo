@@ -21,10 +21,10 @@
 // --------------------------------------------------------------------------    	  	
 // Use constants to define the database access information.
 // --------------------------------------------------------------------------                        
-DEFINE ('DB_USER', 'waterm18_admin');
+DEFINE ('DB_USER', 'rojectos_admin');
 DEFINE ('DB_PASSWORD', 'W@termark!');
 DEFINE ('DB_HOST', 'localhost');
-DEFINE ('DB_NAME', 'waterm18_oslo');
+DEFINE ('DB_NAME', 'rojectos_oslo');
 
 // --------------------------------------------------------------------------    	  	
 // Attempt to connect to the specified database.  Die if we get an error.

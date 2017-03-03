@@ -1,0 +1,12 @@
+body {
+	background-color: #bfbfbf !important;
+	color: #404040 !important;
+}
+
+.bg-primary {
+	background-color: #db9716 !important;
+}
+
+.navbar-inverse .navbar-nav .nav-link {
+	color: rgba(121,122,58,0.81) !important;
+}

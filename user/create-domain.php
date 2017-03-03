@@ -67,14 +67,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			//SQL INSERT GOES HERE
 			$query = "INSERT INTO domains (domain, admin_id) VALUES ('$domain', '$admin_id')";
 			$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+			$last_id = $GLOBALS["___mysqli_ston"]->insert_id;
+			
+
+			$query = "INSERT INTO domain_styles (domain_id, style_name, property_name, property_value) VALUES ('$last_id', 'body', 'background-color', '#FFFFFF')";
+			$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query);
+			
+			$query = "INSERT INTO domain_styles (domain_id, style_name, property_name, property_value) VALUES ('$last_id', 'body', 'color', '#333333')";
+			$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query);
+			
+			$query = "INSERT INTO domain_styles (domain_id, style_name, property_name, property_value) VALUES ('$last_id', '.bg-primary', 'background-color', '#0275d8')";
+			$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query);
+			
+			$query = "INSERT INTO domain_styles (domain_id, style_name, property_name, property_value) VALUES ('$last_id', '.navbar-inverse .navbar-nav .nav-link', 'color', 'rgba (255,255,255, .7)')";
+			$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query);
+			$last_id = $GLOBALS["___mysqli_ston"]->insert_id;
 		
-			if($result){
-				if (!file_exists('../domains/'.$domain.'')) {
-    				mkdir('../domains/'.$domain.'', 0755, true);
+			if($last_id > 0){
+				if (!file_exists('../portal/domains/'.$domain.'')) {
+    				mkdir('../portal/domains/'.$domain.'', 0755, true);
+    				mkdir('../portal/domains/'.$domain.'/css', 0755, true);
+    				mkdir('../portal/domains/'.$domain.'/images', 0755, true);
 				}
 
-				$output = "success";
-				die($output);
+				$raw_css = file_get_contents('../portal/assets/templates/css_template.css');
+				$css_file = sprintf($raw_css, '#FFFFFF', '#333333', '#0275d8', 'rgba (255,255,255, .7)');
+
+				$domain_name = $_SESSION['domain'];
+				$css_written = file_put_contents('../portal/domains/'.$domain.'/css/portal.css', $css_file, FILE_USE_INCLUDE_PATH);
+
+				echo("success");
+				die();
 			} else {
 				//----------------------------------------------------------------------------
 				// The insert failed
