@@ -1,5 +1,5 @@
 <?php
-	$allowed_hosts = array('local.project-oslo.com','project-oslo.com','www.project-oslo.com','osloideas.com','portal.osloideas.com','local.osloideas.com','www.osloideas.com','www.watermarkdigital.com');
+	$allowed_hosts = array('local.project-oslo.com','project-oslo.com','www.project-oslo.com','www.watermarkdigital.com');
 	if (!isset($_SERVER['HTTP_HOST']) || !in_array($_SERVER['HTTP_HOST'], $allowed_hosts)) {
 		header( "Location: portal/login.php" );
 	}
@@ -234,7 +234,7 @@
       
       $.ajax({
         type: 'post',
-        url: 'user/register.php',
+        url: 'portal/user/register.php',
         data: $('#admin_register_form').serialize(),
         success: function (data) {
           if(data == "exists"){

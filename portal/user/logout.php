@@ -27,7 +27,7 @@ $domain = $_SESSION['domain'];
 session_unset();
 session_destroy();
 
-header ("Location: http://".$domain.".project-oslo.com/portal/login.php");
+header ("Location: http://".$domain.".project-oslo.com/login.php");
 
 
 ?>

@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		// --------------------------------------------------------------------------  
 		else
 		{
-			CreateSubdomain($domain, "");
+			CreateSubdomain($domain, "portal");
 
 			//SQL INSERT GOES HERE
 			$query = "INSERT INTO domains (domain, admin_id) VALUES ('$domain', '$admin_id')";
@@ -87,17 +87,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$last_id = $GLOBALS["___mysqli_ston"]->insert_id;
 		
 			if($last_id > 0){
-				if (!file_exists('../portal/domains/'.$domain.'')) {
-    				mkdir('../portal/domains/'.$domain.'', 0755, true);
-    				mkdir('../portal/domains/'.$domain.'/css', 0755, true);
-    				mkdir('../portal/domains/'.$domain.'/images', 0755, true);
+				if (!file_exists('../domains/'.$domain.'')) {
+    				mkdir('../domains/'.$domain.'', 0755, true);
+    				mkdir('../domains/'.$domain.'/css', 0755, true);
+    				mkdir('../domains/'.$domain.'/images', 0755, true);
 				}
 
-				$raw_css = file_get_contents('../portal/assets/templates/css_template.css');
+				$raw_css = file_get_contents('../assets/templates/css_template.css');
 				$css_file = sprintf($raw_css, '#FFFFFF', '#333333', '#0275d8', 'rgba (255,255,255, .7)');
 
 				$domain_name = $_SESSION['domain'];
-				$css_written = file_put_contents('../portal/domains/'.$domain.'/css/portal.css', $css_file, FILE_USE_INCLUDE_PATH);
+				$css_written = file_put_contents('../domains/'.$domain.'/css/portal.css', $css_file, FILE_USE_INCLUDE_PATH);
 
 				echo("success");
 				die();

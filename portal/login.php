@@ -272,7 +272,7 @@
       
       $.ajax({
         type: 'post',
-        url: '../user/register.php',
+        url: 'user/register.php',
         data: $('#user_register_form').serialize(),
         success: function (data) {
           if(data == "exists"){
@@ -312,7 +312,7 @@
       e.preventDefault();
       $.ajax({
         type: 'post',
-        url: '../user/login.php',
+        url: 'user/login.php',
         data: $('#login_form').serialize(),
         success: function (data) {
           if(data == "error"){
@@ -333,7 +333,7 @@
           }
         },
         error: function (data) {
-               var r = jQuery.parseJSON(data.responseText);
+               var r = data.responseText;
                alert("Message: " + r.Message);
                alert("StackTrace: " + r.StackTrace);
                alert("ExceptionType: " + r.ExceptionType);
@@ -347,7 +347,7 @@
       
       $.ajax({
         type: 'post',
-        url: '../user/recover.php',
+        url: 'user/recover.php',
         data: $('#recover_form').serialize(),
         success: function (data) {
           if(data == "error"){

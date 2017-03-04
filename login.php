@@ -270,7 +270,7 @@
       
       $.ajax({
         type: 'post',
-        url: 'user/register.php',
+        url: 'portal/user/register.php',
         data: $('#admin_register_form').serialize(),
         success: function (data) {
           if(data == "exists"){
@@ -307,7 +307,7 @@
       e.preventDefault();
       $.ajax({
         type: 'post',
-        url: 'user/login.php',
+        url: 'portal/user/login.php',
         data: $('#login_form').serialize(),
         success: function (data) {
           if(data == "error"){
@@ -342,7 +342,7 @@
       
       $.ajax({
         type: 'post',
-        url: 'user/recover.php',
+        url: 'portal/user/recover.php',
         data: $('#recover_form').serialize(),
         success: function (data) {
           if(data == "error"){
