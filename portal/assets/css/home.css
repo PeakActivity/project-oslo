@@ -1,0 +1,17 @@
+:root {
+	font-size: 14px;
+}
+
+body {
+	position: relative;
+	min-height: 100%;
+	background: none;
+}
+
+.top-nav-bar {
+	padding: 0 .0825rem;
+}
+
+.navbar-inverse .navbar-toggler {
+	border-color: #ffffff;
+}

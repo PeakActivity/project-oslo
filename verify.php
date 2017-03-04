@@ -1,9 +1,4 @@
 <?php
-	$allowed_hosts = array('local.project-oslo.com','project-oslo.com','www.project-oslo.com','osloideas.com','portal.osloideas.com','local.osloideas.com','www.osloideas.com','www.watermarkdigital.com');
-	if (!isset($_SERVER['HTTP_HOST']) || !in_array($_SERVER['HTTP_HOST'], $allowed_hosts)) {
-		header( "Location: portal/login.php" );
-		die();
-	}
 	require_once ('includes/utilityfunctions.php');
 	require_once ('includes/swdb_connect.php'); 
 	$validated = false;
@@ -87,7 +82,10 @@
 	<?php include('includes/topbar.php'); ?>
 	<!-- Register Admin Modal -->
 	<?php if($validated) { ?>
-		<?php if($approved) { ?>
+		<?php if($approved) { 
+			session_unset();
+			session_destroy();
+			?>
 		<div class="modal fade" id="page-modal" data-backdrop="static" keyboard="false">
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
@@ -104,17 +102,17 @@
 						  <strong>There was a problem creating your domain</strong><br/> This domain already exists. <a href="http://<?=$domain?>.project-oslo.com">Click here to log in to <?=$domain?>.project-oslo.com</a>.
 						</div>
 	            		<p>Thank you for validating your email address.</p>
-	            		<p>We are now creating your Oslo portal for <?= $domain ?>.project-oslo.com</p>
+	            		<p>One moment. We are now creating your Oslo portal for <?= $domain ?>.project-oslo.com</p>
 	            		
 					  	<div class="alert alert-success" role="alert" id="success-alert">
-						  <strong>Your Oslo portal is ready</strong><br/>Click on the button below to log in and get started.
+						  <strong>Your Oslo portal has been created.</strong><br/>Note that sometimes it can take a few minutes for the new domain name to take hold. If you receive an error message trying to reach your portal, wait a few minutes and try again.
 						</div>
 	                </div>
 	            </div>
 	          </div>  
 		      <div class="modal-footer">
 		      	<div style="width:100%; text-align:center;">
-		        	<a class="btn btn-primary disabled" id="login-link" href="http://<?= $domain ?>.project-oslo.com/portal/login.php">Log in to <?= $domain ?>.project-oslo.com</a>
+		        	<a class="btn btn-primary disabled" id="login-link" href="http://<?= $domain ?>.project-oslo.com/login.php">Log in to <?= $domain ?>.project-oslo.com</a>
 		        </div>
 		      </div>
 		    </div>
@@ -190,7 +188,7 @@
       
       $.ajax({
         type: 'post',
-        url: 'user/create-domain.php',
+        url: 'portal/user/create-domain.php',
         data: $('#create-domain').serialize(),
         success: function (data) {
           if(data == "error"){

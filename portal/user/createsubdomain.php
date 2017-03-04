@@ -85,7 +85,6 @@ function CreateSubdomain($subdomain, $docroot)
 	$rc = curl_exec($c);
 	//print_r($rc);
 
-	echo "done";
 }
 
 ?>

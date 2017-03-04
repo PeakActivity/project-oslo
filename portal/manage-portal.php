@@ -40,62 +40,23 @@
 
     <!-- BEGIN Load Styles for Plugins -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/plugins/font-awesome-4.7.0/css/font-awesome.min.css" >
 
 
     <!-- page styles -->
-    <link rel="stylesheet" href="../assets/css/home.css" />
-    <link href="assets/colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/home.css" />
+    <link rel="stylesheet" href="assets/plugins/orakuploader/orakuploader.css">
+    <link href="assets/plugins/colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet">
     <link rel="stylesheet" href="domains/<?=$_SESSION['domain']?>/css/portal.css" />
 
 </head>
 
-<body style="padding-top:56px;">
-	<?php include('../includes/topbar.php'); ?>
-	<div class="container-fluid style="background-color: rgba(255,255,255, .7);">
+<body>
+	<?php include('includes/topbar.php'); ?>
+	<div class="container">
 		<div class="row">
-            <nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
-              <ul class="nav nav-pills flex-column">
-                <li class="nav-item">
-                  <a class="nav-link" href="index.php">Portal Home </a>
-                </li>
-                <?php if(($_SESSION['type'] & 16) > 0) { ?>
-                <li class="nav-item">
-                  <a class="nav-link active" href="manage-portal.php">Manage Portal <span class="sr-only">(current)</span></a>
-                </li>
-                <?php } ?>
-                <?php if(($_SESSION['type'] & 16) > 0) { ?>
-                <li class="nav-item">
-                  <a class="nav-link" href="manage-users.php">Manage Users</a>
-                </li>
-                <?php } ?>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Nav item</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Nav item again</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">One more nav</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Another nav item</a>
-                </li>
-              </ul>
-
-              <ul class="nav nav-pills flex-column">
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Nav item again</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">One more nav</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Another nav item</a>
-                </li>
-              </ul>
-            </nav>
-			<main class="col-xs-12 col-sm-9 col-md-10">
-        <div class="col-xs-12 col-sm-8 offset-sm-2">
+            
+			  <div class="col-xs-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3">
           <div class="card text-center my-5">
             <form id="style-form" name="style-form" action="assets/ajax/update-styles.php" method="post">
               <div class="card-header">
@@ -134,6 +95,12 @@
                   </div>
                 </div>
                 <hr />
+                <div class="form-group row">   
+                    <label class="col-md-2 control-label">Upload an Image</label>
+                    <div class="col-md-12">
+                        <div id="imageloader" orakuploader="on"></div>
+                    </div>
+                </div>
               </div>
               <div class="card-footer text-muted">
                 <button type="submit" class="btn btn-primary" style="cursor: pointer;">Update</button>
@@ -141,8 +108,8 @@
             </div>
           </form>
         </div>
-      </main>
-		</div>
+      </div>
+    </div>
 	</div>
 
 
@@ -152,7 +119,12 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-    <script src="assets/colorpicker/js/bootstrap-colorpicker.js"></script>
+    
+    <!--color picker -->
+    <script src="assets/plugins/colorpicker/js/bootstrap-colorpicker.js"></script>
+
+    <!-- Uploader -->
+    <script src="assets/plugins/orakuploader/orakuploader.js?ver=1.02"></script>   
 
   <script>
   $('#error-alert').hide();
