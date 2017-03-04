@@ -35,7 +35,7 @@
 <body>
 	<?php include('includes/topbar.php'); ?>
 	
-  <div class="container py-5">
+  <div class="container py-5" id="body-container">
     <div class="row">
 			<div class="col-xs-12 col-sm-9 col-md-10">
         <h5>Welcome to your Oslo Portal, <?= $_SESSION['username'] ?></h5>

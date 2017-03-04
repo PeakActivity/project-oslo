@@ -2,10 +2,11 @@
 	require_once ('../includes/utilityfunctions.php');
 	require_once ('../includes/swdb_connect.php'); 
 	require_once ('../includes/managesessions.php');
-
+    
     if(isset($_SESSION['username'])){
         header( "Location: index.php" ); 
     }
+    $login_domain = extract_subdomains($_SERVER['HTTP_HOST']);
 
 	$validated = false;
 	$approved - false;
@@ -76,15 +77,19 @@
 
     <!-- BEGIN Load Styles for Plugins -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/plugins/font-awesome-4.7.0/css/font-awesome.min.css" >
 
 
     <!-- page styles -->
-    <link rel="stylesheet" href="../assets/css/home.css" />
+    <link rel="stylesheet" href="assets/css/home.css" />
+    <link rel="stylesheet" href="domains/<?=$_SESSION['domain']?>/css/portal.css" />
 
 </head>
 
 <body>
-	<?php include('../includes/topbar.php'); ?>
+    <div class="container" id="body-container">
+    </div>
+	<?php include('includes/topbar.php'); ?>
 	<?php if($validated) { ?>
 		<?php if($approved) { ?>
 		<div class="modal fade" id="page-modal" data-backdrop="static" keyboard="false">
@@ -155,7 +160,7 @@
 	    </div>
 	<?php } ?>
 
-    <?php include('../includes/footer.php'); ?>
+    <?php include('includes/footer.php'); ?>
     <!-- common functions -->
     <script src="../assets/js/common.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>

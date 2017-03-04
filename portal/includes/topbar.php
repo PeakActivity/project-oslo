@@ -2,10 +2,16 @@
   <div class="container">
     <div class="row">
       <div class="col-6">
-        <a href="/"><img src="domains/<?= $_SESSION['domain'] ?>/images/logo.png" border="0" /></a>
+        <?php if($_SESSION['domain']) { ?>
+          <a href="/"><img src="domains/<?= $_SESSION['domain'] ?>/images/logo.png" border="0" /></a>
+        <?php } else { ?>
+          <a href="/"><img src="domains/<?= $login_domain ?>/images/logo.png" border="0" /></a>
+        <?php } ?>
       </div>
       <div class="col-6 text-right">
-        <span class="align-middle"><a href="#"><?= $_SESSION['username']?> <i class="fa fa-user"></i></a></span>
+        <?php if($_SESSION['username']){ ?>
+          <span class="align-middle"><a href="#"><?= $_SESSION['username']?> <i class="fa fa-user"></i></a></span>
+        <?php } ?>
       </div>
     </div>
   </div>

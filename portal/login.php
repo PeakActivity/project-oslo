@@ -19,25 +19,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 
-    <title>Welcome to Project Oslo</title>
+    <title>Log in to your portal</title>
 
     <!-- domo arigato mr roboto.. load this font -->
     <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500' rel='stylesheet' type='text/css'>
 
     <!-- BEGIN Load Styles for Plugins -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/plugins/font-awesome-4.7.0/css/font-awesome.min.css" >
 
 
     <!-- page styles -->
-    <link rel="stylesheet" href="../assets/css/home.css" />
-
-    <link rel="stylesheet" href="domains/<?=$login_domain?>/css/portal.css" />
+    <link rel="stylesheet" href="assets/css/home.css" />
+    <link rel="stylesheet" href="domains/<?=$_SESSION['domain']?>/css/portal.css" />
 
 </head>
 
 <body>
 
-    <?php include('../includes/topbar.php'); ?>
+    <?php include('includes/topbar.php'); ?>
+    <div class="container" id="body-container">
+    </div>
     <!-- Register User Modal -->
     <div class="modal fade" id="register-modal">
       <div class="modal-dialog" role="document">
@@ -248,7 +250,7 @@
 
 
     
-    <?php include('../includes/footer.php'); ?>
+    <?php include('includes/footer.php'); ?>
     <!-- common functions -->
     <script src="../assets/js/common.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
