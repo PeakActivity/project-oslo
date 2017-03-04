@@ -23,6 +23,7 @@
 // --------------------------------------------------------------------------  
 require_once ('../includes/swdb_connect.php'); 
 require_once ('../includes/utilityfunctions.php');
+require_once ('createsubdomain.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -64,6 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		// --------------------------------------------------------------------------  
 		else
 		{
+			CreateSubdomain($domain, "");
+
 			//SQL INSERT GOES HERE
 			$query = "INSERT INTO domains (domain, admin_id) VALUES ('$domain', '$admin_id')";
 			$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
