@@ -1,12 +1,12 @@
 body {
-	background-color: #bfbfbf !important;
-	color: #404040 !important;
+	background-color: #333333 !important;
+	color: #3c50b8 !important;
 }
 
 .bg-primary {
-	background-color: #db9716 !important;
+	background-color: #ed1d1d !important;
 }
 
 .navbar-inverse .navbar-nav .nav-link {
-	color: rgba(121,122,58,0.81) !important;
+	color: #d4d4d4 !important;
 }

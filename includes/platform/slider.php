@@ -25,11 +25,11 @@
 								</div>
 
 								<div class="hidden-xs">
-									<a href="#register" class="button button-desc button-border button-light button-rounded nomargin"><i class="icon-bullseye"></i><div>Start your Free Trial<span>30-Days &amp; No Credit card Required</span></div></a>
+									<a href="#" class="button button-desc button-border button-light button-rounded nomargin register-link"><i class="icon-bullseye"></i><div>Start your Free Trial<span>30-Days &amp; No Credit card Required</span></div></a>
 								</div>
 
 								<div class="visible-xs">
-									<a href="#register" class="button button-light button-xlarge button-rounded nomargin"><i class="icon-bullseye"></i>Start Free Trial</a>
+									<a href="#" class="button button-light button-xlarge button-rounded nomargin register-link"><i class="icon-bullseye"></i>Start Free Trial</a>
 								</div>
 
 							</div>
@@ -53,11 +53,11 @@
 								</div>
 
 								<div class="hidden-xs">
-									<a href="#register" class="button button-desc button-border button-light button-rounded nomargin"><i class="icon-bullseye"></i><div>Start your Free Trial<span>30-Days &amp; No Credit card Required</span></div></a>
+									<a href="#" class="button button-desc button-border button-light button-rounded nomargin register-link"><i class="icon-bullseye"></i><div>Start your Free Trial<span>30-Days &amp; No Credit card Required</span></div></a>
 								</div>
 
 								<div class="visible-xs">
-									<a href="#register" class="button button-light button-xlarge button-rounded nomargin"><i class="icon-bullseye"></i>Start Free Trial</a>
+									<a href="#" class="button button-light button-xlarge button-rounded nomargin register-link"><i class="icon-bullseye"></i>Start Free Trial</a>
 								</div>
 
 							</div>
@@ -81,11 +81,11 @@
 								</div>
 
 								<div class="hidden-xs">
-									<a href="#register" class="button button-desc button-border button-light button-rounded nomargin"><i class="icon-bullseye"></i><div>Start your Free Trial<span>30-Days &amp; No Credit card Required</span></div></a>
+									<a href="#" class="button button-desc button-border button-light button-rounded nomargin register-link"><i class="icon-bullseye"></i><div>Start your Free Trial<span>30-Days &amp; No Credit card Required</span></div></a>
 								</div>
 
 								<div class="visible-xs">
-									<a href="#register" class="button button-light button-xlarge button-rounded nomargin"><i class="icon-bullseye"></i>Start Free Trial</a>
+									<a href="#" class="button button-light button-xlarge button-rounded nomargin register-link"><i class="icon-bullseye"></i>Start Free Trial</a>
 								</div>
 
 							</div>
