@@ -42,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$body_text_color = filter_var(trim($_POST["body-text-color"]), FILTER_SANITIZE_STRING);
 	$topbar_background_color = filter_var(trim($_POST["topbar-background-color"]), FILTER_SANITIZE_STRING);
 	$topbar_link_color = filter_var(trim($_POST["topbar-link-color"]), FILTER_SANITIZE_STRING);
+	$image_name = $_POST["imageloader"];
 
 	// --------------------------------------------------------------------------  
 	// Update styles in database
@@ -64,9 +65,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$query = function_update_styles($domain_id, '.navbar-inverse .navbar-nav .nav-link', 'color', $topbar_link_color);
 	$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
 	
+	//topbar link color
+	$query = function_update_styles($domain_id, '.navbar-inverse .nav .nav-pills .nav-link', 'color', $topbar_link_color);
+	$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+	
+	//logo image
+	if(strlen($image_name[0] > 1)) {
+		$query = function_update_styles($domain_id, 'logo-image', 'name', $image_name[0]);
+		$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+	}
+	
 
 	$raw_css = file_get_contents('../templates/css_template.css');
-	$css_file = sprintf($raw_css, $body_background_color, $body_text_color, $topbar_background_color, $topbar_link_color);
+	$css_file = sprintf($raw_css, $body_background_color, $body_text_color, $topbar_background_color, $topbar_link_color, $topbar_link_color);
 
 	$domain_name = $_SESSION['domain'];
 	$css_written = file_put_contents('../../domains/'.$domain_name.'/css/portal.css', $css_file, FILE_USE_INCLUDE_PATH);

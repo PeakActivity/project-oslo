@@ -67,7 +67,7 @@
 			$("#"+holdername.attr("id")+"_to_clone").find(".file").css("cursor", "auto");
 			$("#"+holdername.attr("id")+"_to_clone").find(".multibox .file").css("cursor", "auto");
 		}
-		$(holdername).disableSelection();
+		//$(holdername).disableSelection();
 		
 		$(document).on("change", "."+$(holdername).attr("id")+"Input", function() {
 			if(settings.orakuploader_hide_in_progress == true) {

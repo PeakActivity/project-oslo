@@ -97,6 +97,9 @@
 		    <div class="modal-content">
 		      <div class="modal-header">
 		        <h5 class="modal-title">Thank you for validating your Email address</h5>
+	            <button type="button" class="close" data-dismiss="modal" id="close-register" aria-label="Close">
+	              <span aria-hidden="true">&times;</span>
+	            </button>
 		      </div>
 			  <div class="modal-body">
 	             <div class="row">

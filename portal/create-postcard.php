@@ -50,17 +50,7 @@
 
 <body>
 	<?php include('includes/topbar.php'); ?>
-	
-  <div class="container py-5" id="body-container">
-    <div class="row">
-			<div class="col-xs-12 col-sm-9 col-md-10">
-        <?php if(isset($_SESSION['username'])) { ?>
-            <h5>Welcome to your Oslo Portal, <?= $_SESSION['username'] ?></h5>
-        <?php } ?>
-      </div>
-		</div>
-	</div>
-
+	<iframe src="builder/" width="100%"  height="650" frameborder="0" scrolling="no"></iframe>
 
     <?php include('includes/footer.php'); ?>
     <!-- common functions -->

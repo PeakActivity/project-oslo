@@ -9,7 +9,7 @@
         header( "Location: index.php" ); 
     }
 
-    $style =[];
+    $styles =[];
     $domain = $_SESSION['domain_id'];
     $query = "SELECT style_name, property_name, property_value FROM domain_styles ";
     $query .="WHERE domain_id ='$domain' ORDER BY id;"; 
@@ -95,11 +95,18 @@
                   </div>
                 </div>
                 <hr />
-                <div class="form-group row">   
-                    <label class="col-md-2 control-label">Upload an Image</label>
-                    <div class="col-md-12">
-                        <div id="imageloader" orakuploader="on"></div>
-                    </div>
+                <strong>Portal logo</strong><br/>
+                <div class="form-group row">
+                  <label for="topbar-link-picker" class="col-12 col-sm-12 col-md-4 col-form-label text-right">Current PNG:</label> 
+                  <div class="col-12 col-sm-12 col-md-8 ">
+                    <img src="domains/<?=$_SESSION['domain']?>/images/tn/<?= $styles[4]['property_value'] ?>"/>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="topbar-link-picker" class="col-12 col-sm-12 col-md-4 col-form-label text-right">Upload PNG:</label> 
+                  <div class="col-12 col-sm-12 col-md-8">
+                    <div id="imageloader" orakuploader="on"></div>
+                  </div>
                 </div>
               </div>
               <div class="card-footer text-muted">
@@ -127,6 +134,30 @@
     <script src="assets/plugins/orakuploader/orakuploader.js?ver=1.02"></script>   
 
   <script>
+    $(document).ready(function(){
+    $('#imageloader').orakuploader({
+      orakuploader_path : "assets/plugins/orakuploader/",
+      
+      orakuploader_main_path : "domains/<?=$_SESSION['domain']?>/images",
+      orakuploader_thumbnail_path : "domains/<?=$_SESSION['domain']?>/images/tn",
+      
+      orakuploader_add_image : 'assets/plugins/orakuploader/images/add.png',
+      orakuploader_add_label : 'Browser for images',
+      
+      orakuploader_resize_to : 600,
+      orakuploader_thumbnail_size : 150,
+      
+      orakuploader_maximum_uploads : 1,
+      orakuploader_hide_on_exceed : true,
+      
+      orakuploader_max_exceeded : function() {
+        alert("You are limited to one logo image.");
+      }
+      
+    });
+  });
+
+
   $('#error-alert').hide();
 
   $('#style-form').on('submit', function (e) {
