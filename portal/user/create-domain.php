@@ -84,13 +84,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			
 			$query = "INSERT INTO domain_styles (domain_id, style_name, property_name, property_value) VALUES ('$last_id', '.navbar-inverse .navbar-nav .nav-link', 'color', 'rgba (255,255,255, .7)')";
 			$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query);
+
+			$query = "INSERT INTO domain_styles (domain_id, style_name, property_name, property_value) VALUES ('$last_id', 'logo-image', 'name', 'logo.png";
+			$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query);
 			$last_id = $GLOBALS["___mysqli_ston"]->insert_id;
 		
 			if($last_id > 0){
 				if (!file_exists('../domains/'.$domain.'')) {
-    				mkdir('../domains/'.$domain.'', 0755, true);
-    				mkdir('../domains/'.$domain.'/css', 0755, true);
-    				mkdir('../domains/'.$domain.'/images', 0755, true);
+    				mkdir('../domains/'.$domain.'', 0777, true);
+    				mkdir('../domains/'.$domain.'/css', 0777, true);
+    				mkdir('../domains/'.$domain.'/images', 0777, true);
+    				mkdir('../domains/'.$domain.'/images/tn', 0777, true);
+    				$srcfile = '../assets/images/logo.png';
+    				$destfile = '../domains/'.$domain.'/images/logo.png';
+    				copy($srcfile, $destfile);
+    				$srcfile = '../assets/images/logo.png';
+    				$destfile = '../domains/'.$domain.'/images/tn/logo.png';
+    				copy($srcfile, $destfile);
+    				$srcfile = '../assets/plugins/orakuploader/images/loader.gif';
+    				$destfile = '../domains/'.$domain.'/images/loader.gif';
+    				copy($srcfile, $destfile);
+    				$srcfile = '../assets/plugins/orakuploader/images/no-image.jpg';
+    				$destfile = '../domains/'.$domain.'/images/no-image.jpg';
+    				copy($srcfile, $destfile);
 				}
 
 				$raw_css = file_get_contents('../assets/templates/css_template.css');

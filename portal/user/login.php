@@ -195,8 +195,8 @@ if($numrows == 1)
 			}
 		}
 
-		$admin_id = $row['id'];
-		$query = "SELECT id FROM domains WHERE admin_id='$admin_id'"; 
+		$admin_id = $row['domain'];
+		$query = "SELECT id FROM domains WHERE domain='$admin_id'"; 
 		$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
 		$numrows = mysqli_num_rows($result);
 
