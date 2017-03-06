@@ -9,11 +9,10 @@
 
 						<div class="widget clearfix">
 
-							<img src="../../images/platform/Oslo_Logo-header.png" alt="" class="alignleft" style="margin-top: 8px; padding-right: 18px; border-right: 1px solid #4A4A4A;">
+							<img src="images/platform/Oslo_Logo-header.png" alt="" class="alignleft" style="margin-top: 8px; padding-right: 18px; border-right: 1px solid #4A4A4A;">
 
 								<p>
-									We provide tools to equip your sales team for success. By leveraging a proven scientific methodology, Deal Coach Pro 
-									helps your Sales team <strong> win more deals faster and more efficiently </strong> than ever before.
+									WLorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque maximus orci lobortis felis fringilla, vel accumsan augue efficitur. Praesent quis diam et augue placerat semper eget a felis. 
 								</p>
 
 							<div class="line" style="margin: 30px 0;"></div>
@@ -50,12 +49,14 @@
 							<div class="row">
 
 								<div class="col-md-12 clearfix bottommargin-sm">
+                                 
 									<!-- <a href="#" class="nobottommargin" style="margin-right: 10px;"> -->
+                                    <!--
 									<a href="#" class="nobottommargin"><small style="display: block; margin-top: 3px;"><strong>Our Digital Agency:</strong></small></a>
 										<img src="images/platform/watermark_digital.png">										
 									</a>
-									
-								</div>
+									-->
+								</div> 
 							</div>
 
 						</div>
@@ -73,7 +74,7 @@
 
 					<div class="col_half">
 
-						Copyrights &copy; 2016 Deal Coach Pro - All Rights Reserved
+						Copyrights &copy; 2017 Project OSLO - All Rights Reserved
 						
 					</div>
 

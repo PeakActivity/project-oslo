@@ -1,5 +1,5 @@
 <?php
-	$allowed_hosts = array('local.project-oslo.com','project-oslo.com','www.project-oslo.com','www.watermarkdigital.com');
+	$allowed_hosts = array('local.project-oslo.com','project-oslo.com','www.project-oslo.com','osloideas.com','portal.osloideas.com','local.osloideas.com','www.osloideas.com','www.watermarkdigital.com');
 	if (!isset($_SERVER['HTTP_HOST']) || !in_array($_SERVER['HTTP_HOST'], $allowed_hosts)) {
 		header( "Location: portal/login.php" );
 	}
@@ -17,7 +17,7 @@
     <title>Welcome to Project Oslo</title>
 
     <!-- domo arigato mr roboto.. load this font -->
-    <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500|Montserrat:100,300,400,600|Raleway:100,300,400,600' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500|Montserrat:100,300,400,600' rel='stylesheet' type='text/css'>
 
     <!-- BEGIN Load Styles for Plugins --><!--
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous"> -->
@@ -48,7 +48,6 @@
 			include ('includes/platform/pricing.php');
 			include ('includes/platform/connections.php');
 			include ('includes/platform/signup.php');
-			include ('includes/platform/team.php');
 		?>
         
         </div><!-- end div class="content-wrap" -->
@@ -66,7 +65,7 @@
 	          <span aria-hidden="true">&times;</span>
 	        </button>
 	      </div>
-		  <form name="admin_register_form" id="admin_register_form" role="form" action="user/register.php" method="post">
+		  <form name="admin_register_form" id="admin_register_form" role="form" action="portal/user/register.php" method="post">
 	      <div class="modal-body">
              <div class="row">
             	<div class='col-6'>
@@ -221,7 +220,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>-->
 
 	<script type="text/javascript" src="assets/js/platform/jquery-2.2.4.min.js"></script>
-	<script type="text/javascript" src="assets/js/platform/bootstrap.min.js"></script>
+	<script type="text/javascript" src="assets/js/platform/bootstrap.min.js"></script> -->
 	<script type="text/javascript" src="assets/js/platform/watermark.js"></script>
 	<script type="text/javascript" src="assets/js/platform/jasny-bootstrap.min.js"></script>
    

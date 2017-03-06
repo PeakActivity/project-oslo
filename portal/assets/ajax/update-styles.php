@@ -22,9 +22,9 @@
 // --------------------------------------------------------------------------    	  	
 // Connect to the database.
 // --------------------------------------------------------------------------  
-require_once ('../../../includes/swdb_connect.php'); 
-require_once ('../../../includes/managesessions.php'); 
-require_once ('../../../includes/utilityfunctions.php'); 
+require_once ('../../includes/swdb_connect.php'); 
+require_once ('../../includes/managesessions.php'); 
+require_once ('../../includes/utilityfunctions.php'); 
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

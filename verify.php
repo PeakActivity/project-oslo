@@ -1,6 +1,6 @@
 <?php
-	require_once ('includes/utilityfunctions.php');
-	require_once ('includes/swdb_connect.php'); 
+	require_once ('portal/includes/utilityfunctions.php');
+	require_once ('portal/includes/swdb_connect.php'); 
 	$validated = false;
 	$approved - false;
 	// --------------------------------------------------------------------------  
@@ -74,12 +74,12 @@
 
 
     <!-- page styles -->
-    <link rel="stylesheet" href="assets/css/home.css" />
+    <link rel="stylesheet" href="portal/assets/css/home.css" />
 
 </head>
 
 <body>
-	<?php include('includes/topbar.php'); ?>
+	<?php include('portal/includes/topbar.php'); ?>
 	<!-- Register Admin Modal -->
 	<?php if($validated) { ?>
 		<?php if($approved) { 
@@ -165,9 +165,9 @@
 		<input type="hidden" id="admin_id" name="admin_id" value="<?= $adminid ?>"/>
 	</form>
 
-    <?php include('includes/footer.php'); ?>
+    <?php include('portal/includes/footer.php'); ?>
     <!-- common functions -->
-    <script src="assets/js/common.js"></script>
+    <script src="portal/assets/js/common.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>

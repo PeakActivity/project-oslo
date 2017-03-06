@@ -4,9 +4,7 @@
     </div>
 
     <p class="divcenter center" style="max-width: 800px;">
-        If you want to learn more about how Deal Coach Pro can make your Sales Team win more deals faster than
-        ever before, simply enter your email address below. We will provide you access to our demo site for 
-        30 days. No credit card is required and we promise not to SPAM you. 
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque maximus orci lobortis felis fringilla, vel accumsan augue efficitur. Praesent quis diam et augue placerat semper eget a felis. Mauris et orci vitae elit suscipit mollis a quis tellus. Sed ex diam, commodo et leo non, dictum porta odio.
     </p>
 
     <div class="divider divider-short divider-vshort divider-line divider-center">&nbsp;</div>
