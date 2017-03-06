@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-6">
         <?php 
-          require_once ('../includes/swdb_connect.php'); 
+          //require_once ('swdb_connect.php'); 
 
           if(isset($_SESSION['domain'])) {
             $domain_id = $_SESSION['domain']; 

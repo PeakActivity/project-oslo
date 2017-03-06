@@ -10,7 +10,7 @@
               <!-- CAROUSEL WRAPPER -->
               <div class="carousel-inner" role="listbox">
             
-                <div class="item full-screen active" style="background: url('images/platform/dealcoach.jpg'); background-size: cover;">
+                <div class="item full-screen active" style="background: url('images/platform/no-name.jpg'); background-size: cover;">
                 	<div class="container-fluid clearfix">
 					
 						<div class="vertical-middle no-fade">
@@ -19,17 +19,17 @@
 								<div class="emphasis-title">
 									<h1 style="color:#fff;">
                                    
-										<span style="font-family:montserrat;font-weight:100;line-height:-1.5;color:#ffffff;">Leverage our Smart Science technologies to Win More – Win Faster.</span><br/> 
+										<span style="font-family:montserrat;font-weight:100;line-height:-1.5;color:#ffffff;">Create integrated marketing campaigns with our cost effective on-demand print services.</span><br/> 
                                         <strong>Welcome to Oslo</strong> 
 									</h1>
 								</div>
 
 								<div class="hidden-xs">
-									<a href="#" class="button button-desc button-border button-light button-rounded nomargin register-link"><i class="icon-bullseye"></i><div>Start your Free Trial<span>30-Days &amp; No Credit card Required</span></div></a>
+									<a href="#register" class="button button-desc button-border button-light button-rounded nomargin"><i class="icon-bullseye"></i><div>Start your Free Trial<span>30-Days &amp; No Credit card Required</span></div></a>
 								</div>
 
 								<div class="visible-xs">
-									<a href="#" class="button button-light button-xlarge button-rounded nomargin register-link"><i class="icon-bullseye"></i>Start Free Trial</a>
+									<a href="#register" class="button button-light button-xlarge button-rounded nomargin"><i class="icon-bullseye"></i>Start Free Trial</a>
 								</div>
 
 							</div>
@@ -47,17 +47,17 @@
 								<div class="emphasis-title">
 									<h1 style="color:#fff;">
                                     
-										<span style="font-family:montserrat;font-weight:100;line-height:-1.5;color:#ffffff;">Imagine your own expert sales coach helping you close deals.</span><br/> 
+										<span style="font-family:montserrat;font-weight:100;line-height:-1.5;color:#ffffff;">We have the industry and creative expertise and experience to optimize your business results.</span><br/> 
                                         <strong>Welcome to Oslo</strong> 
 									</h1>
 								</div>
 
 								<div class="hidden-xs">
-									<a href="#" class="button button-desc button-border button-light button-rounded nomargin register-link"><i class="icon-bullseye"></i><div>Start your Free Trial<span>30-Days &amp; No Credit card Required</span></div></a>
+									<a href="#register" class="button button-desc button-border button-light button-rounded nomargin"><i class="icon-bullseye"></i><div>Start your Free Trial<span>30-Days &amp; No Credit card Required</span></div></a>
 								</div>
 
 								<div class="visible-xs">
-									<a href="#" class="button button-light button-xlarge button-rounded nomargin register-link"><i class="icon-bullseye"></i>Start Free Trial</a>
+									<a href="#register" class="button button-light button-xlarge button-rounded nomargin"><i class="icon-bullseye"></i>Start Free Trial</a>
 								</div>
 
 							</div>
@@ -75,17 +75,17 @@
 								<div class="emphasis-title">
 									<h1 style="color:#fff">
                                    
-										<span style="font-family:montserrat;font-weight:100;line-height:-1.5;color:#ffffff;">Relevant sales insight and proven next steps to enable your success</span><br/> 
+										<span style="font-family:montserrat;font-weight:100;line-height:-1.5;color:#ffffff;">From a small job to large global print and digital projects, Project Oslo is the partner for your print and digital requirements.</span><br/> 
                                         <strong>Welcome to Oslo</strong> 
 									</h1>
 								</div>
 
 								<div class="hidden-xs">
-									<a href="#" class="button button-desc button-border button-light button-rounded nomargin register-link"><i class="icon-bullseye"></i><div>Start your Free Trial<span>30-Days &amp; No Credit card Required</span></div></a>
+									<a href="#register" class="button button-desc button-border button-light button-rounded nomargin"><i class="icon-bullseye"></i><div>Start your Free Trial<span>30-Days &amp; No Credit card Required</span></div></a>
 								</div>
 
 								<div class="visible-xs">
-									<a href="#" class="button button-light button-xlarge button-rounded nomargin register-link"><i class="icon-bullseye"></i>Start Free Trial</a>
+									<a href="#register" class="button button-light button-xlarge button-rounded nomargin"><i class="icon-bullseye"></i>Start Free Trial</a>
 								</div>
 
 							</div>

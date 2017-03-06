@@ -1,7 +1,7 @@
                 <div id="connections" class="section notopmargin">
                     <div class="row" style="margin-top:30px;">
                         <div class="col-xs-12 center">
-                          <h2>Connect DealCoachPro to your favorite apps</h2>
+                          <h2>Customers love OSLO and its services</h2>
                         </div>
                     </div>
 					<div class="row" style="margin-bottom: 30px;">

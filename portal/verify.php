@@ -1,7 +1,7 @@
 <?php
-	require_once ('../includes/utilityfunctions.php');
-	require_once ('../includes/swdb_connect.php'); 
-	require_once ('../includes/managesessions.php');
+	require_once ('includes/utilityfunctions.php');
+	require_once ('includes/swdb_connect.php'); 
+	require_once ('includes/managesessions.php');
     
     if(isset($_SESSION['username'])){
         header( "Location: index.php" ); 
