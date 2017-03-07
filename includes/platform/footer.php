@@ -5,7 +5,7 @@
 
 				<div class="footer-widgets-wrap clearfix">
 
-					<div class="col_two_third">
+					<div class="col_8">
 
 						<div class="widget clearfix">
 
@@ -23,7 +23,7 @@
 
 					</div>
 
-					<div class="col_one_third col_last">
+					<div class="col_4">
 
 						<div class="widget clearfix" style="margin-bottom: -20px;">
 					
