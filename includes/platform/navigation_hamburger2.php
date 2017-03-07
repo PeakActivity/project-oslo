@@ -1,11 +1,15 @@
 <div class="navmenu navmenu-default navmenu-fixed-left offcanvas">
+</div>
+
+<div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
     <a class="navmenu-brand" href="http://<?= $_SERVER['HTTP_HOST'] ?>">
         <img id="sidebar-logo" src="images/platform/Oslo_Logo-header-black.png" height="36" alt="Oslo" />
     </a>
     <ul class="nav navmenu-nav">
-        <li class="hidden-md hidden-lg register-link"><a href="#">Register</a>
+        <li class="hidden-md-up register-link"><a href="#">Register</a>
         </li>
-        <li class="hidden-md hidden-lg"><hr></li>
+        <li class="hidden-md-up"><hr></li>
         <li><a href="#">My Dashboard</a>
         </li>
         <li><a href="#">New Order</a>
@@ -27,18 +31,16 @@
 </div>
 
 <!-- Document Wrapper -->
-<div id="wrapper" class="clearfix">
+<div id="main">
     <div id="header">
-        <div id="top-navbar" class="navbar navbar-default navbar-fixed-top">
+        <div id="top-navbar" class="navbar navbar-default fixed-top">
             <div class="container-fluid">
-                <button id="top-navbar-menu-button" type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".navmenu" data-canvas="body" style="float:left;">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
+                <button class="btn default navbar-toggler navbar-toggler-left" type="button" data-toggle="offcanvas" data-target=".navmenu" data-canvas="body" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
                 </button>
                 <a href="index.php">
-                    <img class="hidden-sm hidden-xs" id="top-navbar-logo" src="images/platform/Oslo_Logo-header.png" alt=""  />
-                    <img class="hidden-md hidden-lg" id="top-navbar-logo" src="images/platform/Oslo_Logo-header-black.png" alt=""  />
+                    <img class="hidden-sm-down" id="top-navbar-logo" src="images/platform/Oslo_Logo-header.png" alt=""  />
+                    <img class="hidden-md-up" id="top-navbar-logo" src="images/platform/Oslo_Logo-header-black.png" alt=""  />
                 </a>
 
                 <div class="right hidden-sm hidden-xs">
