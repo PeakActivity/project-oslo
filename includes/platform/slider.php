@@ -1,99 +1,73 @@
-        <section id="slider" class="slider-parallax full-screen">     
-          <div id="myCarousel" class="carousel slide" data-ride="carousel">
-              <!-- CAROUSEL INDICATORS -->
-              <ol class="carousel-indicators">
-                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                <li data-target="#myCarousel" data-slide-to="1"></li>
-                <li data-target="#myCarousel" data-slide-to="2"></li>
-              </ol>
-            
-              <!-- CAROUSEL WRAPPER -->
-              <div class="carousel-inner" role="listbox">
-            
-                <div class="item full-screen active" style="background: url('images/platform/no-name.jpg'); background-size: cover;">
-                	<div class="container-fluid clearfix">
-					
-						<div class="vertical-middle no-fade">
-							<div id="slider1text" class="col-sm-8 col-md-5 nobottommargin" data-animate="fadeIn">
+<section id="slider">     
+  <div id="mycarousel" class="carousel slide" data-ride="carousel">
+	  <!-- Indicators -->
+	  <ol class="carousel-indicators">
+	    <li data-target="#mycarousel" data-slide-to="0" class="active"></li>
+	    <li data-target="#mycarousel" data-slide-to="1"></li>
+	    <li data-target="#mycarousel" data-slide-to="2"></li>
+	  </ol>
 
-								<div class="emphasis-title">
-									<h1 style="color:#fff;">
-                                   
-										<span style="font-family:montserrat;font-weight:100;line-height:-1.5;color:#ffffff;">Create integrated marketing campaigns with our cost effective on-demand print services.</span><br/> 
-                                        <strong>Welcome to Oslo</strong> 
-									</h1>
-								</div>
+	  <!-- Wrapper for slides -->
+	  <div class="carousel-inner" role="listbox">
+	    <div class="carousel-item">
+	        <img src="images/platform/no-name.jpg" data-color="lightblue" alt="First Image">
+	        <div class="row carousel-caption">
+	        	<div class="col-xs-12 col-sm-8 offset-sm-2 col-md-6 offset-md-0 col-lg-5">
+	            	<h1>Create integrated marketing campaigns with our cost effective on-demand print services.<br/> 
+                	<strong>Welcome to Oslo</strong></h1>
+					<div class="hidden-sm-down">
+						<a href="#register" class="button button-desc button-border button-light button-rounded nomargin register-link"><i class="fa fa-bullseye"></i><div>Start your Free Trial<span>30-Days &amp; No Credit card Required</span></div></a>
+					</div>
 
-								<div class="hidden-xs">
-									<a href="#register" class="button button-desc button-border button-light button-rounded nomargin"><i class="icon-bullseye"></i><div>Start your Free Trial<span>30-Days &amp; No Credit card Required</span></div></a>
-								</div>
-
-								<div class="visible-xs">
-									<a href="#register" class="button button-light button-xlarge button-rounded nomargin"><i class="icon-bullseye"></i>Start Free Trial</a>
-								</div>
-
-							</div>
-						</div>
-
+					<div class="hidden-md-up">
+						<a href="#register" class="button button-light button-xlarge button-rounded nomargin register-link"><i class="fa fa-bullseye"></i>Start Free Trial</a>
 					</div>
                 </div>
-            
-                <div class="item full-screen" style="background: url('images/platform/slider/54832381_l_comp.jpg'); background-size: cover;">
-                	<div class="container-fluid clearfix">
-					
-						<div class="vertical-middle no-fade">
-							<div id="slider2text" class="col-sm-8 col-md-4 nobottommargin" data-animate="fadeIn">
+	        </div>
+	    </div>
+	    <div class="carousel-item">
+	        <img src="images/platform/slider/54832381_l_comp.jpg" data-color="firebrick" alt="Second Image">
+	        <div class="row carousel-caption">
+	        	<div class="col-xs-12 col-sm-8 offset-sm-2 col-md-6 offset-md-0 col-lg-5">
+	        		<h1>We have the industry and creative expertise and experience to optimize your business results.<br/> 
+                    <strong>Welcome to Oslo</strong></h1>
+					<div class="hidden-sm-down">
+						<button class="button button-desc button-border button-light button-rounded nomargin register-link"><i class="fa fa-bullseye"></i><div>Start your Free Trial<span>30-Days &amp; No Credit card Required</span></div></button>
+					</div>
 
-								<div class="emphasis-title">
-									<h1 style="color:#fff;">
-                                    
-										<span style="font-family:montserrat;font-weight:100;line-height:-1.5;color:#ffffff;">We have the industry and creative expertise and experience to optimize your business results.</span><br/> 
-                                        <strong>Welcome to Oslo</strong> 
-									</h1>
-								</div>
-
-								<div class="hidden-xs">
-									<a href="#register" class="button button-desc button-border button-light button-rounded nomargin"><i class="icon-bullseye"></i><div>Start your Free Trial<span>30-Days &amp; No Credit card Required</span></div></a>
-								</div>
-
-								<div class="visible-xs">
-									<a href="#register" class="button button-light button-xlarge button-rounded nomargin"><i class="icon-bullseye"></i>Start Free Trial</a>
-								</div>
-
-							</div>
-						</div>
-
+					<div class="hidden-md-up">
+						<a href="#register" class="button button-light button-xlarge button-rounded nomargin register-link"><i class="fa fa-bullseye"></i>Start Free Trial</a>
 					</div>
                 </div>
-            
-                <div class="item full-screen" style="background: url('images/platform/slider/54420246_l_comp.jpg'); background-size: cover;">
-                	<div class="container-fluid clearfix">
-					
-						<div class="vertical-middle no-fade">
-							<div id="slider3text" class="col-sm-8 col-md-4 nobottommargin" data-animate="fadeIn">
+	        </div>
+	    </div>
+	    <div class="carousel-item">
+	        <img src="images/platform/slider/54420246_l_comp.jpg" data-color="violet" alt="Third Image">
+	        <div class="row carousel-caption">
+	        	<div class="col-xs-12 col-sm-8 offset-sm-2 col-md-6 offset-md-0 col-lg-5">
+	            	<h1>From a small job to large global print and digital projects, Project Oslo is the partner for your print and digital requirements.<br/> 
+                    <strong>Welcome to Oslo</strong></h1>
+					<div class="hidden-sm-down">
+						<a href="#register" class="button button-desc button-border button-light button-rounded nomargin register-link"><i class="fa fa-bullseye"></i><div>Start your Free Trial<span>30-Days &amp; No Credit card Required</span></div></a>
+					</div>
 
-								<div class="emphasis-title">
-									<h1 style="color:#fff">
-                                   
-										<span style="font-family:montserrat;font-weight:100;line-height:-1.5;color:#ffffff;">From a small job to large global print and digital projects, Project Oslo is the partner for your print and digital requirements.</span><br/> 
-                                        <strong>Welcome to Oslo</strong> 
-									</h1>
-								</div>
-
-								<div class="hidden-xs">
-									<a href="#register" class="button button-desc button-border button-light button-rounded nomargin"><i class="icon-bullseye"></i><div>Start your Free Trial<span>30-Days &amp; No Credit card Required</span></div></a>
-								</div>
-
-								<div class="visible-xs">
-									<a href="#register" class="button button-light button-xlarge button-rounded nomargin"><i class="icon-bullseye"></i>Start Free Trial</a>
-								</div>
-
-							</div>
-						</div>
-
+					<div class="hidden-md-up">
+						<a href="#register" class="button button-light button-xlarge button-rounded nomargin register-link"><i class="fa fa-bullseye"></i>Start Free Trial</a>
 					</div>
                 </div>
-                
-              </div>
-            </div>
-        </section>
+	        </div>
+	    </div>
+	  </div>
+
+	  <!-- Controls 
+	  <a class="carousel-control-prev" href="#mycarousel" role="button" data-slide="prev">
+	    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+	    <span class="sr-only">Previous</span>
+	  </a>
+	  <a class="carousel-control-next" href="#mycarousel" role="button" data-slide="next">
+	    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+	    <span class="sr-only">Next</span>
+	  </a>-->
+	</div>
+
+</section>
