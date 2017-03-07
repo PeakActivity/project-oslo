@@ -19,28 +19,68 @@
     <!-- domo arigato mr roboto.. load this font -->
     <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500|Montserrat:100,300,400,600' rel='stylesheet' type='text/css'>
 
-    <!-- BEGIN Load Styles for Plugins --><!--
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous"> -->
+    <!-- BEGIN Load Styles for Plugins -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
 
 
     <!-- page styles -->
-	<link rel="stylesheet" href="assets/css/platform/watermark_styles.css" type="text/css" />
-	<link rel="stylesheet" href="assets/css/platform/jasny-bootstrap.min.css"
-	<link rel="stylesheet" href="assets/css/platform/swiper.css" type="text/css" />
+	<link rel="stylesheet" href="assets/plugins/platform/font-awesome-4.7.0/css/font-awesome.min.css" type="text/css" />
+	<link rel="stylesheet" href="assets/css/platform/platform.css" type="text/css" />
 
 </head>
 
 <body class="stretched">
 	<!-- Navigation Menu and Slider -->
+	<div id="mySidenav" class="sidenav">
+	    <a class="navmenu-brand" href="http://<?= $_SERVER['HTTP_HOST'] ?>">
+	        <img id="sidebar-logo" src="images/platform/Oslo_Logo-header-black.png" height="36" alt="Oslo" />
+	    </a>
+	    <ul id="sidebar-navbar-nav" class="nav navbar-nav">
+	        <li class="hidden-md-up register-link"><a href="#">Register</a>
+	        </li>
+	        <li class="hidden-md-up"><hr></li>
+	        <li><a href="#">My Dashboard</a>
+	        </li>
+	        <li><a href="#">New Order</a>
+	        </li>
+	        <li><a href="#">Open Orders</a>
+	        </li>
+	        <li><a href="#">Past Orders</a>
+	        </li>
+	        <li><a href="#">Account Settings</a>
+	        </li>
+	    </ul>
+	</div>
+
+	<!-- Document Wrapper -->
+	<div id="main" class="container-fluid">
+		<nav id="top-navbar" class="navbar">
+			<ul class="nav navmenu-nav">
+      		  <li class="nav-item">
+		  	    <button class="btn btn-default" id="open-navbar-btn" type="button" aria-label="Toggle navigation">
+		          <i class="fa fa-bars" aria-hidden="true"></i>
+		        </button>
+	          </li>
+		      <li class="mr-auto">
+		        <a href="index.php">
+		          <img id="top-navbar-logo" src="images/platform/Oslo_Logo-header.png" alt=""  />
+		        </a>
+		      </li>
+		      <li>
+		          <div class="hidden-sm hidden-xs" style="float:right;">
+		            <button href="#" id="register-btn" class="btn btn-default register-link">Register</button>
+		          </div>
+		      </li>
+		    </ul>
+		</nav>
 	<?php 
-		include ('includes/platform/navigation_hamburger.php');
 		include ('includes/platform/slider.php');
 	?>
 
 
 	<!-- Body Content -->
-	<section id="content">
-    	<div class="content-wrap">
+		<section id="content">
+    		<div class="content-wrap">
 
 		<!-- Load Content Sections -->
 		<?php 
@@ -50,9 +90,8 @@
 			include ('includes/platform/signup.php');
 		?>
         
-        </div><!-- end div class="content-wrap" -->
-
-	</section><!-- end section id="content" -->
+        	</div><!-- end div class="content-wrap" -->
+		</section><!-- end section id="content" -->
 
 
 	<!-- Register Admin Modal -->
@@ -210,21 +249,48 @@
         </div>
       </div>
     </div>
-
+    </main>
     <?php include('includes/platform/footer.php'); ?>
     <!-- common functions -->
-    <!--
-    <script src="assets/js/common.js"></script>
+    <script src="portal/assets/js/common.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>-->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 
-	<script type="text/javascript" src="assets/js/platform/jquery-2.2.4.min.js"></script>
+	<!--<script type="text/javascript" src="assets/js/platform/jquery-2.2.4.min.js"></script>
 	<script type="text/javascript" src="assets/js/platform/bootstrap.min.js"></script> -->
-	<script type="text/javascript" src="assets/js/platform/watermark.js"></script>
-	<script type="text/javascript" src="assets/js/platform/jasny-bootstrap.min.js"></script>
+    <!--<script type="text/javascript" src="assets/js/platform/jasny-bootstrap.min.js"></script>  -->
    
    <script> 
+
+	
+
+   	var $item = $('.carousel .carousel-item'); 
+	var $wHeight = $(window).height();
+	$item.eq(0).addClass('active');
+	$item.height($wHeight); 
+	$item.addClass('full-screen');
+
+	$('.carousel img').each(function() {
+	  var $src = $(this).attr('src');
+	  var $color = $(this).attr('data-color');
+	  $(this).parent().css({
+	    'background-image' : 'url(' + $src + ')',
+	    'background-color' : $color
+	  });
+	  $(this).remove();
+	});
+
+	$(window).on('resize', function (){
+	  $wHeight = $(window).height();
+	  $item.height($wHeight);
+	});
+
+	$('.carousel').carousel({
+	  interval: 6000,
+	  pause: "false"
+	});
+
    	$('#exists-alert').hide();
    	$('#password-alert').hide();
 
@@ -286,6 +352,21 @@
 	$('#help-close').click(function(event){
 		$('#page-modal').modal('show');
 	});
+
+	function open_navbar(){
+	    $("#mySidenav").css("left", "0px");
+	    $("#main").css("marginLeft", "250px");
+	    $("#top-navbar-logo").css("visibility", "hidden");
+	    $(this).one("click", close_navbar);
+	}
+	function close_navbar(){
+	    $("#mySidenav").css("left", "-250px");
+	    $("#main").css("marginLeft", "0px");
+	    $("#top-navbar-logo").css("visibility", "visible");
+	    $(this).one("click", open_navbar);
+	}
+
+	$('#open-navbar-btn').one("click", open_navbar);
    </script>
 </body>
 </html>
