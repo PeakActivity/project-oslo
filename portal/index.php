@@ -12,10 +12,6 @@
     if ($numrows < 1) {
         header( "Location: http://www.project-oslo.com" );
     }
-
-    if(!isset($_SESSION['username'])){
-        header( "Location: login.php" ); 
-    }
 ?>
 
 <!doctype html>
@@ -56,6 +52,8 @@
 			<div class="col-xs-12 col-sm-9 col-md-10">
         <?php if(isset($_SESSION['username'])) { ?>
             <h5>Welcome to your Oslo Portal, <?= $_SESSION['username'] ?></h5>
+        <?php } else {?>
+            <h5>Welcome to <?= $login_domain ?>.project-oslo.com</h5>
         <?php } ?>
       </div>
 		</div>

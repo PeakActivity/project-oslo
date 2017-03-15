@@ -8,10 +8,41 @@ body {
 	background: none;
 }
 
+button {
+	cursor: pointer;
+}
+
 .top-nav-bar {
 	padding: 0 .0825rem;
 }
 
 .navbar-inverse .navbar-toggler {
 	border-color: #ffffff;
+}
+
+
+.navbar-inverse .nav-link.active {
+	background-color: #050a64;
+	border-radius: 0px;
+}
+
+#manage_submenu .nav-link {
+	font-size: 10px;
+	color: #333333;
+	cursor: pointer;
+	background-color: transparent;
+}
+
+#manage_submenu .nav-link.active {
+	color: #f79305;
+	cursor: pointer;
+	background-color: transparent;
+}
+
+#manage_submenu {
+	border-bottom: 1px solid #000;
+}
+
+#datatable-responsive td {
+	vertical-align: middle;
 }
