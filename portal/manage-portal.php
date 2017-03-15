@@ -5,8 +5,8 @@
     if(!isset($_SESSION['username'])){
         header( "Location: login.php" ); 
     }
-    if(($_SESSION['type'] & 16) < 1) {
-        header( "Location: index.php" ); 
+    if(!isset($_SESSION['type']) || ($_SESSION['type'] & 16) < 1 || ($_SESSION['type'] & 32) < 1) {
+        //header( "Location: index.php" ); 
     }
 
     $styles =[];
@@ -120,7 +120,7 @@
 	</div>
 
 
-    <?php include('../includes/footer.php'); ?>
+    <?php include('includes/footer.php'); ?>
     <!-- common functions -->
     <script src="assets/js/common.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>

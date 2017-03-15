@@ -1,4 +1,5 @@
 <?php 
+	set_time_limit(0);
 
 // ---------------------------------------------------------------------------------
 //  FILENAME:      create-domain.php
@@ -24,6 +25,130 @@
 require_once ('../includes/swdb_connect.php'); 
 require_once ('../includes/utilityfunctions.php');
 require_once ('createsubdomain.php');
+require_once ('../assets/libs/mailer/class.phpmailer.php');
+require_once ('../assets/libs/mailer/class.smtp.php');
+
+
+function sendDomainEmail($userid) {
+
+	$query = "SELECT * FROM users WHERE id = '$userid';"; 
+	$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+	$numrows = mysqli_num_rows($result);
+
+	if($numrows == 1)
+	{
+		$row = mysqli_fetch_array($result,  MYSQLI_ASSOC);
+
+		//wait 10 minutes to send email
+		sleep(600);
+
+		// --------------------------------------------------------------------------  
+	    // Load the subject string.
+	    // --------------------------------------------------------------------------  
+	    $strSubject = "Welcome to Project Oslo";
+	    
+	    // --------------------------------------------------------------------------
+	    // Set the From/To Email and From/To Name fields.
+	    // --------------------------------------------------------------------------  
+	    $strFromName  	= "Project Oslo";
+	    $strFromEmail 	= "no-reply@project-oslo.com";
+	    $strToName  	= $row['fname']." ".$row['lname'];
+	    $strToEmail 	= $row['email'];
+	    $strAltBody		= "To view this message, please use an HTML compatible email viewer."; 
+
+	    // --------------------------------------------------------------------------  
+	    // Grab today's date;
+	    // --------------------------------------------------------------------------  
+	    $strDate = date("F j, Y");
+	    $date_made = date('Y-m-d');   
+	                                    
+	    // --------------------------------------------------------------------------   
+	    // Load the email content from a file, and store it in a string 
+	    // --------------------------------------------------------------------------  
+	    $strEmailBodyTemp = file_get_contents('../assets/email_creatives/domain_contact.html');
+		
+	    // --------------------------------------------------------------------------  
+	    // Now perform variable substitution on the email body.. so we are left with
+	    // email body with data in it.
+	    // --------------------------------------------------------------------------  
+	    $original = array("%%email%%", "%%domain%%", "%%fname%%", "%%lname%%");
+	    $replace  = array($row['email'], $row['domain'], $row['fname'], $row['lname']);
+	    $strEmailBody = str_replace($original, $replace, $strEmailBodyTemp);
+
+	    // --------------------------------------------------------------------------  
+	    // Define our headers
+	    // --------------------------------------------------------------------------  
+	    $headers  = 'MIME-Version: 1.0' . "\r\n";
+	    $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+	    $headers .= 'From: ' . $strFromEmail;
+	    
+	    // --------------------------------------------------------------------------  
+	    // Set the default timezone
+	    // --------------------------------------------------------------------------  
+	    date_default_timezone_set('America/Chicago');
+
+	    // --------------------------------------------------------------------------           
+	    // Instantiate the Mailer class.
+	    // --------------------------------------------------------------------------  
+	    $mail = new PHPMailer();
+
+	    //$mail->IsSMTP();										// telling the class to use SMTP
+	    $mail->IsHTML(true);									// telling the class to use HTML Email
+	    $mail->SMTPDebug  = 1;                                  // enables SMTP debug information (for testing)
+																//      1 = errors and messages
+	                                                            //      2 = messages only
+	    $mail->SMTPAuth   = true;                               // enable SMTP authentication
+	    $mail->SMTPSecure = 'tls';								// secure transfer enabled REQUIRED use SSL
+	    $mail->Host       = "smtp.gmail.com";				// sets the SMTP server
+	    $mail->Port       = 587;								// set the SMTP port for the EMAIL server
+	    $mail->Username   = "admin@watermarkdigital.com";             // SMTP account username
+	    $mail->Password   = "W@termark1!";                      // SMTP account password
+	    $mail->SetFrom($strFromEmail, $strFromName);			// From name and email address
+	    $mail->AddReplyTo($strFromEmail, $strFromName);	        // Reply To name and email address
+	    //$mail->AddBCC($partnerBCC);                             // BCC contact at partner site 	
+	    $mail->Subject      = $strSubject;						// Subject
+	    $mail->AltBody      = $strAltBody; 						// Alternate body for non HTML email clients
+	    $mail->Body         = $strEmailBody;					// Email Body 
+
+	    // --------------------------------------------------------------------------           
+	    // This is whom the email is going to
+	    // --------------------------------------------------------------------------     
+	    $mail->AddAddress($strToEmail, $strToName);
+	    
+	    // --------------------------------------------------------------------------           
+	    // This is the list of people on BCC list
+	    // --------------------------------------------------------------------------         
+	    //$list=array();
+	    //foreach($list as $bccer)
+	    //{
+	//     $mail->AddBCC($bccer);
+	    //}
+
+	    // --------------------------------------------------------------------------           
+	    // If we got an error message.
+	    // --------------------------------------------------------------------------       
+	    if(!$mail->Send()) 
+	    {
+	    	$output = 'mailerr';
+		    die($output);
+	    } 
+
+	    // --------------------------------------------------------------------------           
+	    // If the email was successfully mailed.
+	    // --------------------------------------------------------------------------       
+		else 
+		{
+			$output = 'success';
+		    die($output);
+		}
+	} else {
+		$output = "userNotFound";
+		die($output);
+	}
+}
+
+
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -82,38 +207,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$query = "INSERT INTO domain_styles (domain_id, style_name, property_name, property_value) VALUES ('$last_id', '.bg-primary', 'background-color', '#0275d8')";
 			$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query);
 			
-			$query = "INSERT INTO domain_styles (domain_id, style_name, property_name, property_value) VALUES ('$last_id', '.navbar-inverse .navbar-nav .nav-link', 'color', 'rgba (255,255,255, .7)')";
+			$query = "INSERT INTO domain_styles (domain_id, style_name, property_name, property_value) VALUES ('$last_id', '.navbar-inverse .navbar-nav .nav-link', 'color', '#ededed')";
 			$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query);
 
-			$query = "INSERT INTO domain_styles (domain_id, style_name, property_name, property_value) VALUES ('$last_id', 'logo-image', 'name', 'logo.png";
+			$query = "INSERT INTO domain_styles (domain_id, style_name, property_name, property_value) VALUES ('$last_id', 'logo-image', 'name', 'logo.png')";
 			$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query);
 			$last_id = $GLOBALS["___mysqli_ston"]->insert_id;
 		
 			if($last_id > 0){
 				if (!file_exists('../domains/'.$domain.'')) {
-    				mkdir('../domains/'.$domain.'', 0777, true);
-    				mkdir('../domains/'.$domain.'/css', 0777, true);
-    				mkdir('../domains/'.$domain.'/images', 0777, true);
-    				mkdir('../domains/'.$domain.'/images/tn', 0777, true);
+    				
     				$srcfile = '../assets/images/logo.png';
     				$destfile = '../domains/'.$domain.'/images/logo.png';
-    				copy($srcfile, $destfile);
+					mkdir(dirname($destfile), 0777, true);
+					copy($srcfile, $destfile);
+    				
     				$srcfile = '../assets/images/logo.png';
     				$destfile = '../domains/'.$domain.'/images/tn/logo.png';
-    				copy($srcfile, $destfile);
+					mkdir(dirname($destfile), 0777, true);
+					copy($srcfile, $destfile);
+    				
     				$srcfile = '../assets/plugins/orakuploader/images/loader.gif';
     				$destfile = '../domains/'.$domain.'/images/loader.gif';
     				copy($srcfile, $destfile);
+    				
     				$srcfile = '../assets/plugins/orakuploader/images/no-image.jpg';
     				$destfile = '../domains/'.$domain.'/images/no-image.jpg';
     				copy($srcfile, $destfile);
+
+    				mkdir('../domains/'.$domain.'/css', 0777, true);
 				}
 
 				$raw_css = file_get_contents('../assets/templates/css_template.css');
-				$css_file = sprintf($raw_css, '#FFFFFF', '#333333', '#0275d8', 'rgba (255,255,255, .7)');
+				$css_file = sprintf($raw_css, '#FFFFFF', '#333333', '#0275d8', '#ededed', '#ededed');
 
-				$domain_name = $_SESSION['domain'];
 				$css_written = file_put_contents('../domains/'.$domain.'/css/portal.css', $css_file, FILE_USE_INCLUDE_PATH);
+
+				sendDomainEmail($admin_id);
 
 				echo("success");
 				die();

@@ -32,7 +32,7 @@
     </div>
   </div>
 </div>
-<div class="container-fluid bg-primary py-2">
+<div class="container-fluid bg-primary py-0">
   <div class="container">
     <div class="row">
       <div class="col-6">
@@ -44,14 +44,9 @@
 
           <ul class="nav nav-pills hidden-md-down">
             <?php if(isset($_SESSION['type'])) { ?>
-              <?php if(($_SESSION['type'] & 16) > 0) { ?>
+              <?php if(($_SESSION['type'] & 16) > 0 || ($_SESSION['type'] & 32) > 0) { ?>
               <li class="nav-item">
-                <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/manage-portal.php') { echo('active'); } ?>" href="manage-portal.php">Manage Portal <span class="sr-only">(current)</span></a>
-              </li>
-              <?php } ?>
-              <?php if(($_SESSION['type'] & 16) > 0) { ?>
-              <li class="nav-item">
-                <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/manage-users.php') { echo('active'); } ?>" href="manage-users.php">Manage Users</a>
+                <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/manage-portal.php' || $_SERVER['PHP_SELF'] == '/manage-users.php') { echo('active'); } ?>" href="manage-portal.php">Manage Portal <span class="sr-only">(current)</span></a>
               </li>
               <?php } ?>
               <?php if(($_SESSION['type'] & 8) > 0 || ($_SESSION['type'] & 16) > 0 || ($_SESSION['type'] & 32) > 0) { ?>
@@ -83,12 +78,12 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav">
           <?php if(isset($_SESSION['type'])) { ?>
-            <?php if(($_SESSION['type'] & 16) > 0) { ?>
+            <?php if(($_SESSION['type'] & 16) > 0 || ($_SESSION['type'] & 32) > 0) { ?>
             <li class="nav-item">
               <a class="nav-link active" href="manage-portal.php">Manage Portal <span class="sr-only">(current)</span></a>
             </li>
             <?php } ?>
-            <?php if(($_SESSION['type'] & 16) > 0) { ?>
+            <?php if(($_SESSION['type'] & 16) > 0 || ($_SESSION['type'] & 32) > 0){ ?>
             <li class="nav-item">
               <a class="nav-link" href="manage-users.php">Manage Users</a>
             </li>
@@ -99,3 +94,27 @@
     </nav>
   </div>
 </div>
+<?php if($_SERVER['PHP_SELF'] == '/manage-portal.php' || $_SERVER['PHP_SELF'] == '/manage-users.php') { ?>
+<div class="container-fluid hidden-md-down" id="manage_submenu">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <ul class="nav nav-pills">
+          <?php if(isset($_SESSION['type'])) { ?>
+            <?php if(($_SESSION['type'] & 16) > 0 || ($_SESSION['type'] & 32) > 0){ ?>
+            <li class="nav-item">
+              <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/manage-portal.php') { echo('active'); } ?>" href="manage-portal.php">Manage Styles <span class="sr-only">(current)</span></a>
+            </li>
+            <?php } ?>
+            <?php if(($_SESSION['type'] & 16) > 0 || ($_SESSION['type'] & 32) > 0) { ?>
+            <li class="nav-item">
+              <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/manage-users.php') { echo('active'); } ?>" href="manage-users.php">Manage Users <span class="sr-only">(current)</span></a>
+            </li>
+            <?php } ?>
+          <?php } ?>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<?php } ?>

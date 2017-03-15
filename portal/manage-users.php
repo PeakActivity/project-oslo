@@ -6,20 +6,13 @@
     if(!isset($_SESSION['username'])){
         header( "Location: login.php" ); 
     }
-    if(($_SESSION['type'] & 16) < 1) {
-        header( "Location: index.php" ); 
-    }
-
-    $style =[];
-    $domain = $_SESSION['domain_id'];
-    $query = "SELECT style_name, property_name, property_value FROM domain_styles ";
-    $query .="WHERE domain_id ='$domain' ORDER BY id;"; 
-    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
-    
-    if (!empty($result)) {
-      foreach ($result as $row) {
-        $styles[] = $row;
-      }
+    if(!isset($_SESSION['type']) || ($_SESSION['type'] & 16) < 1 || ($_SESSION['type'] & 32) < 1) {
+       // echo("<pre>");
+        //echo("type: ".$_SESSION['type'].'<br/>');
+        //echo("domain: ".$_SESSION['domain'].'<br/>');
+        //echo("domain_id: ".$_SESSION['domain_id'].'<br/>');
+        //echo("</pre>");
+        //header( "Location: index.php" ); 
     }
 
 ?>
@@ -46,8 +39,6 @@
 
     <!-- page styles -->
     <link rel="stylesheet" href="assets/css/home.css" />
-    <link rel="stylesheet" href="assets/plugins/orakuploader/orakuploader.css">
-    <link href="assets/plugins/colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet">
     <link rel="stylesheet" href="domains/<?=$_SESSION['domain']?>/css/portal.css" />
 
     <!-- DataTables -->
@@ -65,47 +56,66 @@
 	<?php include('includes/topbar.php'); ?>
 
 
-	<div class="container" id="body-container">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="card-box table-responsive">
+	<div class="container-fluid" id="body-container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                <div class="card text-center mt-5">
+                    <div class="card-header">
+                        <h5 class="my-0">Invite Users to <?=$_SESSION['domain']?>.project-oslo.com</h5>
+                    </div>
+                    <div class="card-block">
+                    <div class="alert alert-danger" role="alert" id="exists-alert" style="display:none;">
+                      <strong>A conflict exists</strong><br/> Someone has registered this email address. Please check the user list below to verify the user exists.</a>.
+                    </div>
+                        <form id="invite-form" name="invite-form" action="users/invite-user.php" method="post">
+                            <input type="hidden" id="inviter-name" name="inviter-name" value="<?= $_SESSION['username'] ?>">
+                            <input type="hidden" id="inviter-domain" name="inviter-domain" value="<?= $_SESSION['domain'] ?>">
+                            <div class="input-group">
+                              <span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
+                              <input type="email" id="invitee-email" name="invitee-email" class="form-control" placeholder="Enter email address" aria-label="Send invite to join <?=$_SESSION['domain']?>.project-oslo.com">
+                              <span class="input-group-btn">
+                                <button type="submit" id="email-btn" name="email-btn" class="btn btn-success" type="button">Email</button>
+                              </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+            <?php 
+    
+    $aUsers = GetUserInfo($_SESSION['domain']);
 
-                                    <div class="dropdown pull-right">
-                                        <a href="#" class="dropdown-toggle card-drop" data-toggle="dropdown" aria-expanded="false">
-                                            <i class="zmdi zmdi-more-vert"></i>
-                                        </a>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li><a href="#">Action</a></li>
-                                            <li><a href="#">Another action</a></li>
-                                            <li><a href="#">Something else here</a></li>
-                                            <li class="divider"></li>
-                                            <li><a href="#">Separated link</a></li>
-                                        </ul>
-                                    </div>
-
-
+    //echo "<pre>";
+    //print_r($aUsers);
+    //echo "</pre>";
+?>
+                <div class="card text-center my-5">
+                    <div class="card-header">
+                        <h5 class="my-0">Manage users for <?=$_SESSION['domain']?>.project-oslo.com</h5>
+                    </div>
+                    <div class="card-block">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12">
                                     <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                                         <thead>
                                             <tr>
-                                                <th>User ID</th>
-                                                <th>E-mail</th>
-                                                <th>First name</th>
-                                                <th>Last name</th>
-                                                <th>a</th>
-                                                <th>d</th>
+                                                <th class="text-center">ID</th>
+                                                <th class="text-center">E-mail</th>
+                                                <th class="text-center">First name</th>
+                                                <th class="text-center">Last name</th>  
+                                                <th class="text-center">Access</th>
+                                                <th class="text-center">Email Confirmed</th>
+                                                <th class="text-center">Admin Approved</th>
+                                                <th class="text-center"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
 <?php
 
-
-$utype = "16";
-$domain = GetDomainFromDomainID($domain);
-$aUsers = GetUserInfo($domain, $utype);
-
-//echo "<pre>";
-//print_r($aUsers);
-//echo "</pre>";
 
 // --------------------------------------------------------------------------
 // Load our Template HTML
@@ -140,23 +150,106 @@ $strApprovalsBody = file_get_contents('includes/template_view_approvals.html');
           $fname = $value;
         }
 
+        if ($key == 'type')
+        {
+            if(($value & 32) > 0 && ($_SESSION['type'] & 32) < 1){
+                $type = "Platform Admin";
+            } else {
+                $type = "<input type='hidden' id='user_id' name='user_id' value='$id'>";
+                $type .= "<input type='hidden' id='original_type' name='original_type' value='$value'>";
+                $type .= "<div class='form-group my-0'>";
+                $type .= "<select id='user_type' name='user_type' class='form-control-sm' onchange='changeUserType($id, this.value, $value)'>";
+                if (($value & 8) > 0) {
+                    $type .= "<option value='8' selected='selected'>Portal User</option>";
+                } else {
+                    $type .= "<option value='8'>Portal User</option>";
+                }
+                if (($value & 16) > 0) {
+                    $type .= "<option value='16' selected='selected'>Portal Admin</option>";
+                } else {
+                    $type .= "<option value='16'>Portal Admin</option>";
+                }
+                if(($_SESSION['type'] & 32) > 0) {
+                    if (($value & 32) > 0) {
+                        $type .= "<option value='32' selected='selected'>Platform Admin</option>";
+                    } else {
+                        $type .= "<option value='32'>Platform Admin</option>";
+                    }
+                }
+                $type .= "</select>";
+                $type .= "</div>";
+            }
 
+            if (($value & 1) > 0) {
+                $verified = "<div class='form-check'>";
+                if(($value & 32) > 0 && ($_SESSION['type'] & 32) < 1){
+                    $verified .="<fieldset disabled>";
+                }
+                $verified .="   <label class='form-check-label'>";
+                $verified .="       <input class='form-check-input' type='checkbox' id='verified_checkbox$id' name='verified_checkbox$id' onchange='changeUserVerify($id, this.checked, $value)' aria-label='Email Verified' >";
+                $verified .="   </label>";
+                if(($value & 32) > 0 && ($_SESSION['type'] & 32) < 1){
+                    $verified .="</fieldset>";
+                }
+                $verified .="</div>";
+            } else {
+                $verified = "<div class='form-check'>";
+                if(($value & 32) > 0 && ($_SESSION['type'] & 32) < 1){
+                    $verified .="<fieldset disabled>";
+                }
+                $verified .="   <label class='form-check-label'>";
+                $verified .="       <input class='form-check-input' type='checkbox' id='verified_checkbox$id' name='verified_checkbox$id' onchange='changeUserVerify($id, this.checked, $value)'  aria-label='Email Verified' checked='checked'>";
+                $verified .="   </label>";
+                if(($value & 32) > 0 && ($_SESSION['type'] & 32) < 1){
+                    $verified .="</fieldset>";
+                }
+                $verified .="</div>";
+            }
 
+            if (($value & 2) > 0) {
+                $approved = "<div class='form-check'>";
+                if(($value & 32) > 0 && ($_SESSION['type'] & 32) < 1){
+                    $approved .="<fieldset disabled>";
+                }
+                $approved .="   <label class='form-check-label'>";
+                $approved .="       <input class='form-check-input' type='checkbox' id='approved_checkbox$id' name='approved_checkbox$id' onchange='changeUserApprove($id, this.checked, $value)' aria-label='Admin Approved' >";
+                $approved .="   </label>";
+                if(($value & 32) > 0 && ($_SESSION['type'] & 32) < 1){
+                    $approved .="</fieldset>";
+                }
+                $approved .="</div>";
+            } else {
+                $approved = "<div class='form-check'>";
+                if(($value & 32) > 0 && ($_SESSION['type'] & 32) < 1){
+                    $approved .="<fieldset disabled>";
+                }
+                $approved .="   <label class='form-check-label'>";
+                $approved .="       <input class='form-check-input' type='checkbox' id='approved_checkbox$id' name='approved_checkbox$id'  onchange='changeUserApprove($id, this.checked, $value)' aria-label='Admin Approved' checked='checked'>";
+                $approved .="   </label>";
+                if(($value & 32) > 0 && ($_SESSION['type'] & 32) < 1){
+                    $approved .="</fieldset>";
+                }
+                $approved .="</div>";
+            }
+            
+            if(($value & 32) > 0 && ($_SESSION['type'] & 32) < 1){
+                $delete = '<button class=\'btn btn-danger disabled\'><i class=\'fa fa-trash\'></i></button>';
+            } else {
+                $delete = "<button class='btn btn-danger' onclick=\"deleteConfirm('$id', '$fname', '$lname')\" ><i class='fa fa-trash'></i></button>";
+            }
 
-        $accept   = sprintf ('<a href=approvals.php?id=%s&statusid=%s> %s </a>', $id, "1", "Accept");
-        $decline  = sprintf ('<a href=approvals.php?id=%s&statusid=%s> %s </a>', $id, "0", "Decline");
+        }
       } // end foreach
-
-      
-      $strBuffer = sprintf($strApprovalsBody, $id, $email, $lname, $fname, $accept, $decline);
+      /*
+      $buttons = "<div class='btn-group' role='group' aria-label='Approve/Delete'>";
+      $buttons .= "<button type='button' class='btn btn-success update-button'>Update</button>";
+      $buttons .= "<button type='button' class='btn btn-danger delete-button'><i class='fa fa-trash' aria-hidden='true'></i></button>";
+      $buttons .= "</div>";
+      */
+      $strBuffer = sprintf($strApprovalsBody, $id, $email, $fname, $lname, $type, $verified, $approved, $delete);
       echo $strBuffer;  
 
     }
-  
-
-
-
-
 ?>
 
 
@@ -165,13 +258,44 @@ $strApprovalsBody = file_get_contents('includes/template_view_approvals.html');
                                         </tbody>
                                     </table>
                                 </div>
-                            </div><!-- end col -->
+                            </div>
                         </div>
-                        <!-- end row -->
+                    </div>
+                    <div class="card-footer text-muted">
+                    </div>
+                </div>
+            </div><!-- end col -->
+        </div><!-- end row -->
 	</div>
 
 
-    <?php include('../includes/footer.php'); ?>
+
+    <!-- Delete Confirm Modal -->
+    <div class="modal fade" id="delete-confirm-modal"  data-backdrop="static" keyboard="false">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirm Delete User</h5>
+            <button type="button" class="close" id="close-recover" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="hidden-user-id" name="hidden-user-id">
+            <p>You are about to delete <span id="username"></span>.</p>
+            <p>This cannot be undone. Are you sure?</p>
+          </div>
+          <div class="modal-footer">
+            <div style="width:100%; text-align:center;">
+                <button class="btn btn-danger" onclick="deleteUser($('#hidden-user-id').val())">Delete</button>
+                <button class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <?php include('includes/footer.php'); ?>
     <!-- common functions -->
     <script src="assets/js/common.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
@@ -185,12 +309,12 @@ $strApprovalsBody = file_get_contents('includes/template_view_approvals.html');
     <script src="assets/plugins/orakuploader/orakuploader.js?ver=1.02"></script>   
 
 
-        <!-- Datatables-->
+        <!--Datatables--> 
         <script src="assets/plugins/datatables/jquery.dataTables.min.js"></script>
-        <script src="assets/plugins/datatables/dataTables.bootstrap.js"></script>
+        <!--<script src="assets/plugins/datatables/dataTables.bootstrap.js"></script>
+        <script src="assets/plugins/datatables/jszip.min.js"></script> -->
         <script src="assets/plugins/datatables/dataTables.buttons.min.js"></script>
         <script src="assets/plugins/datatables/buttons.bootstrap.min.js"></script>
-        <script src="assets/plugins/datatables/jszip.min.js"></script>
         <script src="assets/plugins/datatables/pdfmake.min.js"></script>
         <script src="assets/plugins/datatables/vfs_fonts.js"></script>
         <script src="assets/plugins/datatables/buttons.html5.min.js"></script>
@@ -199,32 +323,37 @@ $strApprovalsBody = file_get_contents('includes/template_view_approvals.html');
         <script src="assets/plugins/datatables/dataTables.keyTable.min.js"></script>
         <script src="assets/plugins/datatables/dataTables.responsive.min.js"></script>
         <script src="assets/plugins/datatables/responsive.bootstrap.min.js"></script>
-        <script src="assets/plugins/datatables/dataTables.scroller.min.js"></script>
+        <script src="assets/plugins/datatables/dataTables.scroller.min.js"></script> 
         <script src="assets/plugins/datatables/datatables.init.js"></script>
 
         <script type="text/javascript">
-            $(document).ready(function() {
-                //$('#datatable').dataTable();
-                
-                $('#datatable-responsive').DataTable();
-                
-            } );
+
+            $(document).ready( function() {
+              $('#datatable-responsive').DataTable({
+                  columnDefs: [
+                    {bSortable: false, targets: [7]} 
+                  ]
+                });
+              });
+
+
+
             //TableManageButtons.init();
 
         </script>
 
   <script>
-  $('#error-alert').hide();
+  $('#exists-alert').hide();
 
-  $('#style-form').on('submit', function (e) {
+  $('#invite-form').on('submit', function (e) {
       e.preventDefault();
       $.ajax({
         type: 'post',
-        url: 'assets/ajax/update-styles.php',
-        data: $('#style-form').serialize(),
+        url: 'user/invite-user.php',
+        data: $('#invite-form').serialize(),
         success: function (data) {
           if(data == "error"){
-            $('#error-alert').show();
+            $('#exists-alert').show();
           }
           if(data == "success"){
              location.reload();
@@ -237,8 +366,108 @@ $strApprovalsBody = file_get_contents('includes/template_view_approvals.html');
                alert("ExceptionType: " + r.ExceptionType);
         }
       });
-
+      return false;
     });
+
+    function changeUserType(userid, type, original) {
+      $.ajax({
+        type: 'post',
+        url: 'user/update-user-type.php',
+        data: {user_id: userid, user_type: type, original_type: original},
+        success: function (data) {
+          if(data == "error"){
+            console.log("error changing user type");
+          }
+          if(data == "success"){
+             console.log("user updated");
+          }
+        },
+        error: function (data) {
+               var r = jQuery.parseJSON(data.responseText);
+               alert("Message: " + r.Message);
+               alert("StackTrace: " + r.StackTrace);
+               alert("ExceptionType: " + r.ExceptionType);
+        }
+      });
+      return false;
+    };
+
+    function changeUserVerify(userid, verified, original) {
+      $.ajax({
+        type: 'post',
+        url: 'user/update-user-verify.php',
+        data: {user_id: userid, user_verified: verified, original_type: original},
+        success: function (data) {
+          if(data == "error"){
+            console.log("error changing user verified status");
+          }
+          if(data == "success"){
+             console.log("user updated");
+          }
+        },
+        error: function (data) {
+               var r = jQuery.parseJSON(data.responseText);
+               alert("Message: " + r.Message);
+               alert("StackTrace: " + r.StackTrace);
+               alert("ExceptionType: " + r.ExceptionType);
+        }
+      });
+      return false;
+    };
+
+    function changeUserApprove(userid, approved, original) {
+      $.ajax({
+        type: 'post',
+        url: 'user/update-user-approve.php',
+        data: {user_id: userid, user_approved: approved, original_type: original},
+        success: function (data) {
+          if(data == "error"){
+            console.log("error changing user approved status");
+          }
+          if(data == "success"){
+             console.log("user updated");
+          }
+        },
+        error: function (data) {
+               var r = jQuery.parseJSON(data.responseText);
+               alert("Message: " + r.Message);
+               alert("StackTrace: " + r.StackTrace);
+               alert("ExceptionType: " + r.ExceptionType);
+        }
+      });
+      return false;
+    };
+
+    function deleteConfirm(userid, fname, lname){
+        $('#hidden-user-id').val(userid)
+        $('#username').html(fname+' '+lname);
+        $('#delete-confirm-modal').modal('show');
+    }
+
+    function deleteUser(userid) {
+      $('#delete-confirm-modal').modal('hide');
+      $.ajax({
+        type: 'post',
+        url: 'user/delete-user.php',
+        data: {user_id: userid},
+        success: function (data) {
+          if(data == "error"){
+            console.log("error deleting user");
+          }
+          if(data == "success"){
+             location.reload();
+          }
+        },
+        error: function (data) {
+               var r = jQuery.parseJSON(data.responseText);
+               alert("Message: " + r.Message);
+               alert("StackTrace: " + r.StackTrace);
+               alert("ExceptionType: " + r.ExceptionType);
+        }
+      });
+      return false;
+    };
+
 
     $('#body-background-picker').colorpicker();
     $('#topbar-background-picker').colorpicker();
