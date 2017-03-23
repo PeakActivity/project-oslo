@@ -1,19 +1,10 @@
 <?php
     require_once ('includes/managesessions.php'); 
     require_once ('includes/swdb_connect.php'); 
-    require_once ('includes/utilityfunctions.php');
+    require_once ('includes/utilityfunctions.php'); 
 
-    if(!isset($_SESSION['username'])){
-        header( "Location: login.php" ); 
-    }
-    if(!isset($_SESSION['type']) || ($_SESSION['type'] & 16) < 1 || ($_SESSION['type'] & 32) < 1) {
-       // echo("<pre>");
-        //echo("type: ".$_SESSION['type'].'<br/>');
-        //echo("domain: ".$_SESSION['domain'].'<br/>');
-        //echo("domain_id: ".$_SESSION['domain_id'].'<br/>');
-        //echo("</pre>");
-        //header( "Location: index.php" ); 
-    }
+    ValidateDomain($_SERVER['HTTP_HOST']);
+    ValidateAdminLoggedIn($_SESSION['type']);
 
 ?>
 
@@ -56,7 +47,7 @@
 	<?php include('includes/topbar.php'); ?>
 
 
-	<div class="container-fluid" id="body-container">
+	<div class="container" id="body-container">
         <div class="row">
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
                 <div class="card text-center mt-5">
@@ -105,11 +96,11 @@
                                             <tr>
                                                 <th class="text-center">ID</th>
                                                 <th class="text-center">E-mail</th>
-                                                <th class="text-center">First name</th>
-                                                <th class="text-center">Last name</th>  
+                                                <th class="text-center">First</th>
+                                                <th class="text-center">Last</th>  
                                                 <th class="text-center">Access</th>
-                                                <th class="text-center">Email Confirmed</th>
-                                                <th class="text-center">Admin Approved</th>
+                                                <th class="text-center">Email</th>
+                                                <th class="text-center">Approved</th>
                                                 <th class="text-center"></th>
                                             </tr>
                                         </thead>

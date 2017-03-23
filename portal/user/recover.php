@@ -47,7 +47,7 @@ $numrows = mysqli_num_rows($result);
 // --------------------------------------------------------------------------  		
 if($numrows == 1)
 {
-	$newguid = getGUID();
+	$newguid = GetGUID();
 	$row = mysqli_fetch_array($result,  MYSQLI_ASSOC);
 
 	$query = "UPDATE users SET validationGUID='$newguid' WHERE email = '$email'";

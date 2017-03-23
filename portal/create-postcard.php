@@ -1,21 +1,9 @@
 <?php
     require_once ('includes/managesessions.php'); 
-    require_once ('includes/utilityfunctions.php'); 
     require_once ('includes/swdb_connect.php'); 
+    require_once ('includes/utilityfunctions.php'); 
 
-    $login_domain = extract_subdomains($_SERVER['HTTP_HOST']);
-    $query = "SELECT domain FROM domains ";
-    $query .="WHERE domain = '$login_domain';"; 
-    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
-    $numrows = mysqli_num_rows($result);
-    
-    if ($numrows < 1) {
-        header( "Location: http://www.project-oslo.com" );
-    }
-
-    if(!isset($_SESSION['username'])){
-        header( "Location: login.php" ); 
-    }
+    ValidateDomain($_SERVER['HTTP_HOST']);
 ?>
 
 <!doctype html>

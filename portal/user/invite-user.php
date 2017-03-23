@@ -31,7 +31,7 @@ require_once ('../assets/libs/mailer/class.smtp.php');
 $inviter = filter_var(trim($_POST["inviter-name"]), FILTER_SANITIZE_STRING);
 $domain = filter_var(trim($_POST["inviter-domain"]), FILTER_SANITIZE_STRING);
 $invitee = filter_var(trim($_POST["invitee-email"]), FILTER_SANITIZE_STRING);
-$guid = getGUID();
+$guid = GetGUID();
 
 // --------------------------------------------------------------------------  
 // Look the user up in the database by email address.

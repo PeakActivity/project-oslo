@@ -1,12 +1,9 @@
 <?php
-	require_once ('includes/utilityfunctions.php');
-	require_once ('includes/swdb_connect.php'); 
-	require_once ('includes/managesessions.php');
-    
-    if(isset($_SESSION['username'])){
-        header( "Location: index.php" ); 
-    }
-    $login_domain = extract_subdomains($_SERVER['HTTP_HOST']);
+    require_once ('includes/managesessions.php'); 
+    require_once ('includes/swdb_connect.php'); 
+    require_once ('includes/utilityfunctions.php'); 
+
+    ValidateDomain($_SERVER['HTTP_HOST']);
 
 	$validated = false;
 	$approved - false;
@@ -35,7 +32,7 @@
 			//if type says the user is not admin approved
 			if(($type & 2) > 0){
 				//check to see if manual verification of portals is turned on
-				$validate = checkManualValidate();
+				$validate = CheckManualValidate();
 				//if manual verification of portals is turned off, remove the bitmask for "not admin approved" (2)
 				if(!$validate) {
 					//we're only auto-validating portal admins for now.. portal users must always be approved by portal admins (for now) 

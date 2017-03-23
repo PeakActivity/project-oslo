@@ -50,28 +50,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	//body background-color
 	$domain_id = $_SESSION['domain_id'];
-	$query = function_update_styles($domain_id, 'body', 'background-color', $body_background_color);
+	$query = UpdatePortalStyles($domain_id, 'body', 'background-color', $body_background_color);
 	$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
 
 	//body color
-	$query = function_update_styles($domain_id, 'body', 'color', $body_text_color);
+	$query = UpdatePortalStyles($domain_id, 'body', 'color', $body_text_color);
 	$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
 
 	//topbar background-color
-	$query = function_update_styles($domain_id, '.bg-primary', 'background-color', $topbar_background_color);
+	$query = UpdatePortalStyles($domain_id, '.bg-primary', 'background-color', $topbar_background_color);
 	$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
 
 	//topbar link color
-	$query = function_update_styles($domain_id, '.navbar-inverse .navbar-nav .nav-link', 'color', $topbar_link_color);
+	$query = UpdatePortalStyles($domain_id, '.navbar-inverse .navbar-nav .nav-link', 'color', $topbar_link_color);
 	$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
 	
 	//topbar link color
-	$query = function_update_styles($domain_id, '.navbar-inverse .nav .nav-pills .nav-link', 'color', $topbar_link_color);
+	$query = UpdatePortalStyles($domain_id, '.navbar-inverse .nav .nav-pills .nav-link', 'color', $topbar_link_color);
 	$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
 	
 	//logo image
 	if(strlen($image_name[0] > 1)) {
-		$query = function_update_styles($domain_id, 'logo-image', 'name', $image_name[0]);
+		$query = UpdatePortalStyles($domain_id, 'logo-image', 'name', $image_name[0]);
 		$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
 	}
 	
