@@ -96,6 +96,166 @@ function GetUserInfo($domain)
     return $aUsers;
 } // End of Function
 
+
+function GetProductInfo($domain_id)
+{
+    $rc = 0;
+    $aProducts = array();
+
+    $query = "SELECT id, email, fname, lname, type FROM users WHERE domain='$domain_id' "; 
+    
+    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+
+    // --------------------------------------------------------------------------                 
+    // Enumerate through the list of Projects and store each within option tags
+    // --------------------------------------------------------------------------                 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_ASSOC)) 
+    {
+        $aProduct = array(
+                    'id'                    => $row['id'],
+                    'email'                 => $row['email'],
+                    'lname'             => $row['lname'],
+                    'fname'              => $row['fname'],
+                    'type'              => $row['type']                   
+                    );      
+        array_push($aProducts, $aProduct);       
+    }
+
+    return $aProducts;
+} // End of Function
+
+function GetNavProducts($category_id, $domain)
+{
+    $rc = 0;
+    $aProducts = array();
+
+    $query = "SELECT t1.id AS id, t1.name AS name FROM products t1 JOIN domains t2 on t1.domain_id = t2.id WHERE t2.domain = '$domain' AND t1.category_id = $category_id";
+    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+
+    // --------------------------------------------------------------------------                 
+    // Enumerate through the list of Projects and store each within option tags
+    // --------------------------------------------------------------------------                 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_ASSOC)) 
+    {
+        $aProduct = array(
+                    'id'           => $row['id'],
+                    'name'         => $row['name']                  
+                    );      
+        array_push($aProducts, $aProduct);       
+    }
+
+    return $aProducts;
+} // End of Function
+
+function GetNavCategories($domain)
+{
+    $rc = 0;
+    $aCategories = array();
+
+    $query = "SELECT t1.id AS id, category_name FROM product_categories t1 JOIN products t2 on t1.id = t2.category_id JOIN domains t3 on t2.domain_id = t3.id WHERE t3.domain = '$domain' GROUP BY t1.id";
+    
+    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+
+    // --------------------------------------------------------------------------                 
+    // Enumerate through the list of Projects and store each within option tags
+    // --------------------------------------------------------------------------                 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_ASSOC)) 
+    {
+        $aCategory = array(
+                    'id'                    => $row['id'],
+                    'category_name'         => $row['category_name']                  
+                    );      
+        array_push($aCategories, $aCategory);       
+    }
+
+    return $aCategories;
+} // End of Function
+
+function GetFeatured($domain)
+{
+    $rc = 0;
+    $aAllFeatured = array();
+
+    $query = "SELECT t1.id AS id, category_id, name, description, price, per_unit, category_name, t3.file_name AS file_name FROM products t1 JOIN product_categories t2 on t1.category_id = t2.id JOIN product_images t3 on t3.product_id = (SELECT t4.product_id FROM product_images t4 WHERE t1.id = t4.product_id LIMIT 1) JOIN domains t5 on t1.domain_id = t5.id WHERE t5.domain = '$domain' AND featured = 1";
+    
+    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+
+    // --------------------------------------------------------------------------                 
+    // Enumerate through the list of Projects and store each within option tags
+    // --------------------------------------------------------------------------                 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_ASSOC)) 
+    {
+        $aFeatured = array(
+                    'id'                    => $row['id'],
+                    'category_id'           => $row['category_id'],
+                    'name'                  => $row['name'],
+                    'description'           => $row['description'],
+                    'price'                 => $row['price'],
+                    'per_unit'              => $row['per_unit'],
+                    'category_name'         => $row['category_name'],
+                    'file_name'             => $row['file_name']                   
+                    );      
+        array_push($aAllFeatured, $aFeatured);       
+    }
+
+    return $aAllFeatured;
+} // End of Function
+
+function GetCarouselItems($domain)
+{
+    $rc = 0;
+    $aCarouselItems = array();
+
+    $query = "SELECT file_name, link, slide_title, slide_desc FROM carousel_items t1 JOIN domains t2 on t1.domain_id = t2.id WHERE t2.domain = '$domain'";
+    
+    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+
+    // --------------------------------------------------------------------------                 
+    // Enumerate through the list of Projects and store each within option tags
+    // --------------------------------------------------------------------------                 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_ASSOC)) 
+    {
+        $aCarouselItem = array(
+                    'file_name'      => $row['file_name'],
+                    'link'           => $row['link'],
+                    'slide_title'    => $row['slide_title'],
+                    'slide_desc'     => $row['slide_desc']                  
+                    );      
+        array_push($aCarouselItems, $aCarouselItem);       
+    }
+
+    return $aCarouselItems;
+} // End of Function
+
+function GetAllUserInfo()
+{
+    $rc = 0;
+    $aUsers = array();
+
+
+    $query = "SELECT id, domain, email, fname, lname, type FROM users ORDER BY domain DESC, type DESC"; 
+    
+    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+
+    // --------------------------------------------------------------------------                 
+    // Enumerate through the list of Projects and store each within option tags
+    // --------------------------------------------------------------------------                 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_ASSOC)) 
+    {
+        $aUser = array(
+                    'id'                    => $row['id'],
+                    'domain'                => $row['domain'],
+                    'email'                 => $row['email'],
+                    'fname'                 => $row['fname'],
+                    'lname'                 => $row['lname'],
+                    'type'                  => $row['type']                   
+                    );      
+        array_push($aUsers, $aUser);       
+    }
+
+    return $aUsers;
+} // End of Function
+
 // --------------------------------------------------------------------------           
 // Send debug information to browser console
 // --------------------------------------------------------------------------
@@ -155,35 +315,15 @@ function GetLengthAndTrim($strInput)
 }
 
 // --------------------------------------------------------------------------           
-// The name field in the companies table should be a unique value.
-// Returns id if it does and 0 if the company does not exist.
-// -------------------------------------------------------------------------- 
-function DoesCompanyExist($company)
-{
-    $rc = 0;
-
-    $query = "SELECT id FROM companies WHERE name='$company'"; 
-    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
-
-    if (mysqli_num_rows($result) == 1) 
-    {   
-        $row = mysqli_fetch_array($result,  MYSQLI_ASSOC); 
-        $rc = $row['id'];                    
-    }    
-
-    return $rc;
-} // End of Function
-
-// --------------------------------------------------------------------------           
 // The user field in the users table contains the email address for a given 
 // user.  Since this is a unique value, check to see if the user previously
 // exists.  Returns userid if it does and 0 if the user does not exist.
 // -------------------------------------------------------------------------- 
-function DoesUserExist($user)
+function DoesUserExist($email)
 {
     $rc = 0;
 
-    $query = "SELECT id FROM users WHERE user='$user'"; 
+    $query = "SELECT id FROM users WHERE email='$email'"; 
     $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
 
     if (mysqli_num_rows($result) == 1) 
@@ -352,7 +492,7 @@ function IsNumberEven($number)
 //--------------------------------------------------------------------------
 // Create a GUID 
 //--------------------------------------------------------------------------
-function getGUID(){
+function GetGUID(){
     mt_srand((double)microtime()*10000);//optional for php 4.2.0 and up.
     $charid = strtoupper(md5(uniqid(rand(), true)));
     $hyphen = chr(45);// "-"
@@ -367,7 +507,7 @@ function getGUID(){
 //--------------------------------------------------------------------------
 // Extract the domain from a URL
 //--------------------------------------------------------------------------
-function extract_domain($domain)
+function ExtractDomain($domain)
 {
     if(preg_match("/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i", $domain, $matches))
     {
@@ -381,10 +521,10 @@ function extract_domain($domain)
 //--------------------------------------------------------------------------
 // Extract the subdomain from a domain
 //--------------------------------------------------------------------------
-function extract_subdomains($domain)
+function ExtractSubdomains($domain)
 {
     $subdomains = $domain;
-    $domain = extract_domain($subdomains);
+    $domain = ExtractDomain($subdomains);
 
     $subdomains = rtrim(strstr($subdomains, $domain, true), '.');
 
@@ -395,7 +535,7 @@ function extract_subdomains($domain)
 //--------------------------------------------------------------------------
 // Check if manual approval is turned on for portals
 //--------------------------------------------------------------------------
-function checkManualValidate() 
+function CheckManualValidate() 
 {
     $query = "SELECT * FROM platform_prefs WHERE pref = 'validate_portal';"; 
     $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
@@ -414,8 +554,440 @@ function checkManualValidate()
     }
 }
 
-function function_update_styles($domain_id, $style_name, $property_name, $property_value) {
+function UpdatePortalStyles($domain_id, $style_name, $property_name, $property_value) {
     return "UPDATE domain_styles SET property_value = '$property_value' WHERE property_name = '$property_name' AND style_name = '$style_name' AND domain_id = '$domain_id';"; 
+}
+
+function ValidateDomain($host) {
+    $login_domain = ExtractSubdomains($host);
+    $query = "SELECT domain FROM domains ";
+    $query .="WHERE domain = '$login_domain';"; 
+    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+    $numrows = mysqli_num_rows($result);
+    
+    if ($numrows < 1) {
+        header( "Location: http://www.project-oslo.com" );
+    }
+}
+
+
+
+function ValidatePlatformAdminLoggedIn($type) {
+    if(!isset($_SESSION['type']) || ($_SESSION['type'] & 32) < 1) {
+        header( "Location: /" ); 
+    }
+}
+
+function ValidateAdminLoggedIn($type) {
+    if(!isset($_SESSION['type']) || (($_SESSION['type'] & 16) < 1 && ($_SESSION['type'] & 32) < 1)) {
+        header( "Location: /" ); 
+    }
+}
+
+function ValidateUserLoggedIn($type) {
+    if(!isset($_SESSION['type']) || (($_SESSION['type'] & 8) < 1 && ($_SESSION['type'] & 16) < 1 && ($_SESSION['type'] & 32) < 1)) {
+        header( "Location: /" ); 
+    }
+}
+
+function GetDomainLogo($host) {
+    $login_domain = ExtractSubdomains($host);
+    $query = "SELECT property_name, property_value FROM domain_styles t1 ";
+    $query .= "JOIN domains t2 on t1.domain_id = t2.id ";
+    $query .= "WHERE t2.domain = '$login_domain' AND t1.style_name = 'logo-image';";
+    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+    $numrows = mysqli_num_rows($result);
+    if($numrows == 1) {
+        $row = mysqli_fetch_array($result,  MYSQLI_ASSOC);
+        $img = $row['property_value'];
+        echo('<a href="/"><img src="domains/'.$login_domain.'/images/tn/'.$img.'" border="0" height="46" /></a>');
+    } else { 
+        echo('<a href="/"><img src="domains/'.$login_domain.'/images/tn/logo.png" border="0" height="46" /></a>');
+    }
+}
+
+
+/**
+    * Function: msg
+    * 
+    * NOTE: This function is used to display a message to the user. The 
+    * message information is stored as an array in a session variable
+    *
+    * @param string $message - the message to be displayed
+    * @param string $type - the type of message (success, danger, etc.)
+    * @return void
+*/
+function msg($message, $type) 
+{
+    $_SESSION['flash'] = array(
+                                'type' => $type,
+                                'message' => $message
+                            );
+}
+
+/**
+    * Function: go
+    * 
+    * NOTE: This function is used to perform a PHP location redirect  
+    * to the specified URL 
+    *
+    * @param string $url - the URL to go to
+    * @return void
+*/
+function go($url = '') 
+{
+    header('Location: ' . $url);
+    die();
+}
+
+/**
+    * Function: url
+    * 
+    * NOTE: This function is used to get a full URL (path and filename) from 
+    * a partial url by appending the host and full path
+    *
+    * @param string $url - the URL 
+    * @return void
+*/
+function url($url = '') 
+{
+    $host = $_SERVER['HTTP_HOST'];
+    $host = !preg_match('/^http/', $host) ? 'http://' . $host : $host;
+    $path = preg_replace('/\w+\.php/', '', $_SERVER['REQUEST_URI']);
+    $path = preg_replace('/\?.*$/', '', $path);
+    $path = !preg_match('/\/$/', $path) ? $path . '/' : $path;
+
+    if ( preg_match('/http:/', $host) && is_ssl() ) 
+    {
+        $host = preg_replace('/http:/', 'https:', $host);
+    }
+    
+    if ( preg_match('/https:/', $host) && !is_ssl() ) 
+    {
+        $host = preg_replace('/https:/', 'http:', $host);
+    }
+    
+    return $host . $path . $url;
+}
+
+/**
+    * Function: email
+    * 
+    * NOTE: This function is used to send an email using phpmailer. 
+    *
+    * @param string $to - the person you are sending the email to 
+    * @param string $file - the template file containing the content
+    * @param array $values - the values for variable substitution
+    * @param string $subject - the subject line      
+    * @return void
+*/
+function email($to, $file, $values, $subject) 
+{
+    global $config;
+
+    // --------------------------------------------------------------------------
+    // Add config data to values array
+    // --------------------------------------------------------------------------
+    $values = array_merge($values, $config);
+
+    // --------------------------------------------------------------------------
+    // Get email header
+    // --------------------------------------------------------------------------
+    $content = file_get_contents('templates/emails/layout/header.php');
+
+    // --------------------------------------------------------------------------
+    // Get email content
+    // --------------------------------------------------------------------------
+    $content .= file_get_contents('templates/emails/' . $file . '.php');
+
+    // --------------------------------------------------------------------------
+    // Get email footer
+    // --------------------------------------------------------------------------
+    $content .= file_get_contents('templates/emails/layout/footer.php');
+
+    // --------------------------------------------------------------------------
+    // Perform variable substitution for placeholders values
+    // --------------------------------------------------------------------------
+    foreach ( $values as $key => $value ) 
+    {
+        $content = str_replace('{' . $key . '}', $value, $content);
+    }
+    
+    // --------------------------------------------------------------------------
+    // Build our email and send
+    // --------------------------------------------------------------------------
+    require_once 'lib/vendor/PHPMailer/PHPMailerAutoload.php';
+    $mail = new PHPMailer;
+    $mail->isMail();
+    $mail->From = $config['email'];
+    $mail->FromName = $config['name'];
+    $mail->addAddress($to);
+    $mail->isHTML(true);
+    $mail->Subject = $subject;
+    $mail->Body = $content;
+    $mail->send();
+}
+
+/**
+    * Function: template
+    * 
+    * NOTE: This function is used to require a template file 
+    *
+    * @param string $path - the path and filename of the template 
+    * @param bool $container - default set to true 
+    * @return void
+*/
+function template($path, $container = true) 
+{
+    global $csrf;
+    require 'assets/templates/' . $path . '.php';
+}
+
+/**
+    * Function: is_ssl
+    * 
+    * NOTE: This function is used to check if a connection is using SSL 
+    *
+    * @return true if yes and false if no
+*/
+function is_ssl() 
+{
+    if ( isset($_SERVER['HTTPS']) ) 
+    {
+        if ( 'on' == strtolower($_SERVER['HTTPS']))
+            return true;
+
+        if ( '1' == $_SERVER['HTTPS'])
+            return true;
+
+    } 
+
+    elseif ( isset($_SERVER['SERVER_PORT']) && ( '443' == $_SERVER['SERVER_PORT'] ) ) 
+    {
+        return true;
+    }
+    return false;
+}
+
+
+/**
+    * Function: post
+    * 
+    * NOTE: This function is used to get POST request 
+    *
+    * @param string $key - the array key 
+    * @return array $_POST - the post array
+*/
+function post($key = null) 
+{
+    if ( is_null($key) ) 
+    {
+        return $_POST;
+    }
+    
+    $post = isset($_POST[$key]) ? $_POST[$key] : null;
+    
+    if (is_string($post)) 
+    {
+        $post = trim($post);
+    }
+    
+    return $post;
+}
+
+/**
+    * Function: get
+    * 
+    * NOTE: This function is used to get GET request 
+    *
+    * @param string $key - the array key 
+    * @return array $_GET - the get array
+*/
+function get($key = null) 
+{
+    if ( is_null($key) ) 
+    {
+        return $_GET;
+    }
+    
+    $get = isset($_GET[$key]) ? $_GET[$key] : null;
+    
+    if (is_string($get)) 
+    {
+        $get = trim($get);
+    }
+    
+    return $get;
+}
+
+/**
+    * Function: currencyCode
+    * 
+    * NOTE: This function is used to get the Font Awesome currency code 
+    *
+    * @return string - the 3 digit currency code 
+*/
+function currencyCode() 
+{
+    global $config;
+
+    switch ( $config['currency'] ) 
+    {
+        case 'USD':
+        case 'CAD':
+        case 'AUD':
+            return 'usd';
+        break;
+        case 'EUR':
+            return 'eur';
+        break;
+        case 'GBP':
+            return 'gbp';
+        break;
+    }
+}
+
+/**
+    * Function: currencySymbol
+    * 
+    * NOTE: This function is used to get the currency symbol 
+    *
+    * @return string - the 1 digit currency symbol
+*/
+function currencySymbol() 
+{
+    global $config;
+
+    switch ( $config['currency'] ) 
+    {
+        case 'USD':
+        case 'CAD':
+        case 'AUD':
+            return '$';
+        break;
+
+        case 'EUR':
+            return '&euro;';
+        break;
+
+        case 'GBP':
+            return '&pound;';
+        break;
+    }
+}
+
+/**
+    * Function: currencySuffix
+    * 
+    * NOTE: This function is used to get the currency suffix
+    *
+    * @return string - the 3 digit currency suffix
+*/
+function currencySuffix() 
+{
+    global $config;
+
+    switch ( $config['currency'] ) 
+    {
+        case 'AUD':
+            return '(AUD)';
+        break;
+    
+        case 'CAD':
+            return '(CAD)';
+        break;
+    }
+}
+
+/**
+    * Function: currency
+    * 
+    * NOTE: This function is used to format a number with the correct currency code 
+    * prefixed ahead of the number
+    *
+    * @return string - the formatted number with currency code 
+*/
+function currency($amount) 
+{
+    return currencySymbol() . number_format($amount, 2, '.', ',');
+}
+
+/**
+    * Function: coutries
+    * 
+    * NOTE: This function is used to return an array of country names and their 
+    * two digit country codes. The key is the 2 digit country code and the value
+    * is the country name
+    *
+    * @return array $countries - the array
+*/
+function countries() 
+{
+    $countries = array( 'US' => 'United States', 'CA' => 'Canada', 'UK' => 'United Kingdom', 'AU' => 'Australia', 'AF' => 'Afghanistan', 'AL' => 'Albania', 'DZ' => 'Algeria', 'AS' => 'American Samoa', 'AD' => 'Andorra', 'AO' => 'Angola', 'AI' => 'Anguilla', 'AQ' => 'Antarctica', 'AG' => 'Antigua and Barbuda', 'AR' => 'Argentina', 'AM' => 'Armenia', 'AW' => 'Aruba', 'AT' => 'Austria', 'AZ' => 'Azerbaijan', 'BS' => 'Bahamas', 'BH' => 'Bahrain', 'BD' => 'Bangladesh', 'BB' => 'Barbados', 'BY' => 'Belarus', 'BE' => 'Belgium', 'BZ' => 'Belize', 'BJ' => 'Benin', 'BM' => 'Bermuda', 'BT' => 'Bhutan', 'BO' => 'Bolivia', 'BA' => 'Bosnia and Herzegovina', 'BW' => 'Botswana', 'BR' => 'Brazil', 'BN' => 'Brunei Darussalam', 'BG' => 'Bulgaria', 'BF' => 'Burkina Faso', 'BI' => 'Burundi', 'KH' => 'Cambodia', 'CM' => 'Cameroon', 'CV' => 'Cape Verde', 'KY' => 'Cayman Islands', 'CF' => 'Central African Republic', 'TD' => 'Chad', 'CL' => 'Chile', 'CN' => 'China', 'CX' => 'Christmas Island', 'CC' => 'Cocos (Keeling) Islands', 'CO' => 'Colombia', 'KM' => 'Comoros', 'CG' => 'Congo', 'CD' => 'Congo, The Democratic Republic of the', 'CK' => 'Cook Islands', 'CR' => 'Costa Rica', 'CI' => 'Cote D`Ivoire', 'HR' => 'Croatia', 'CY' => 'Cyprus', 'CZ' => 'Czech Republic', 'DK' => 'Denmark', 'DJ' => 'Djibouti', 'DM' => 'Dominica', 'DO' => 'Dominican Republic', 'EC' => 'Ecuador', 'EG' => 'Egypt', 'SV' => 'El Salvador', 'GQ' => 'Equatorial Guinea', 'ER' => 'Eritrea', 'EE' => 'Estonia', 'ET' => 'Ethiopia', 'FK' => 'Falkland Islands (Malvinas)', 'FO' => 'Faroe Islands', 'FJ' => 'Fiji', 'FI' => 'Finland', 'FR' => 'France', 'GF' => 'French Guiana', 'PF' => 'French Polynesia', 'GA' => 'Gabon', 'GM' => 'Gambia', 'GE' => 'Georgia', 'DE' => 'Germany', 'GH' => 'Ghana', 'GI' => 'Gibraltar', 'GR' => 'Greece', 'GL' => 'Greenland', 'GD' => 'Grenada', 'GP' => 'Guadeloupe', 'GU' => 'Guam', 'GT' => 'Guatemala', 'GN' => 'Guinea', 'GW' => 'Guinea-Bissau', 'GY' => 'Guyana', 'HT' => 'Haiti', 'HN' => 'Honduras', 'HK' => 'Hong Kong', 'HU' => 'Hungary', 'IS' => 'Iceland', 'IN' => 'India', 'ID' => 'Indonesia', 'IR' => 'Iran (Islamic Republic Of)', 'IQ' => 'Iraq', 'IE' => 'Ireland', 'IL' => 'Israel', 'IT' => 'Italy', 'JM' => 'Jamaica', 'JP' => 'Japan', 'JO' => 'Jordan', 'KZ' => 'Kazakhstan', 'KE' => 'Kenya', 'KI' => 'Kiribati', 'KP' => 'Korea North', 'KR' => 'Korea South', 'KW' => 'Kuwait', 'KG' => 'Kyrgyzstan', 'LA' => 'Laos', 'LV' => 'Latvia', 'LB' => 'Lebanon', 'LS' => 'Lesotho', 'LR' => 'Liberia', 'LI' => 'Liechtenstein', 'LT' => 'Lithuania', 'LU' => 'Luxembourg', 'MO' => 'Macau', 'MK' => 'Macedonia', 'MG' => 'Madagascar', 'MW' => 'Malawi', 'MY' => 'Malaysia', 'MV' => 'Maldives', 'ML' => 'Mali', 'MT' => 'Malta', 'MH' => 'Marshall Islands', 'MQ' => 'Martinique', 'MR' => 'Mauritania', 'MU' => 'Mauritius', 'MX' => 'Mexico', 'FM' => 'Micronesia', 'MD' => 'Moldova', 'MC' => 'Monaco', 'MN' => 'Mongolia', 'MS' => 'Montserrat', 'MA' => 'Morocco', 'MZ' => 'Mozambique', 'NA' => 'Namibia', 'NP' => 'Nepal', 'NL' => 'Netherlands', 'AN' => 'Netherlands Antilles', 'NC' => 'New Caledonia', 'NZ' => 'New Zealand', 'NI' => 'Nicaragua', 'NE' => 'Niger', 'NG' => 'Nigeria', 'NO' => 'Norway', 'OM' => 'Oman', 'PK' => 'Pakistan', 'PW' => 'Palau', 'PS' => 'Palestine Autonomous', 'PA' => 'Panama', 'PG' => 'Papua New Guinea', 'PY' => 'Paraguay', 'PE' => 'Peru', 'PH' => 'Philippines', 'PL' => 'Poland', 'PT' => 'Portugal', 'PR' => 'Puerto Rico', 'QA' => 'Qatar', 'RE' => 'Reunion', 'RO' => 'Romania', 'RU' => 'Russian Federation', 'RW' => 'Rwanda', 'VC' => 'Saint Vincent and the Grenadines', 'MP' => 'Saipan', 'SM' => 'San Marino', 'SA' => 'Saudi Arabia', 'SN' => 'Senegal', 'SC' => 'Seychelles', 'SL' => 'Sierra Leone', 'SG' => 'Singapore', 'SK' => 'Slovak Republic', 'SI' => 'Slovenia', 'SO' => 'Somalia', 'ZA' => 'South Africa', 'ES' => 'Spain', 'LK' => 'Sri Lanka', 'KN' => 'St. Kitts/Nevis', 'LC' => 'St. Lucia', 'SD' => 'Sudan', 'SR' => 'Suriname', 'SZ' => 'Swaziland', 'SE' => 'Sweden', 'CH' => 'Switzerland', 'SY' => 'Syria', 'TW' => 'Taiwan', 'TI' => 'Tajikistan', 'TZ' => 'Tanzania', 'TH' => 'Thailand', 'TG' => 'Togo', 'TK' => 'Tokelau', 'TO' => 'Tonga', 'TT' => 'Trinidad and Tobago', 'TN' => 'Tunisia', 'TR' => 'Turkey', 'TM' => 'Turkmenistan', 'TC' => 'Turks and Caicos Islands', 'TV' => 'Tuvalu', 'UG' => 'Uganda', 'UA' => 'Ukraine', 'AE' => 'United Arab Emirates', 'UY' => 'Uruguay', 'UZ' => 'Uzbekistan', 'VU' => 'Vanuatu', 'VE' => 'Venezuela', 'VN' => 'Viet Nam', 'VG' => 'Virgin Islands (British)', 'VI' => 'Virgin Islands (U.S.)', 'WF' => 'Wallis and Futuna Islands', 'YE' => 'Yemen', 'YU' => 'Yugoslavia', 'ZM' => 'Zambia', 'ZW' => 'Zimbabwe');
+    return $countries;
+}
+
+/**
+    * Function: states
+    * 
+    * NOTE: This function is used to return an array of states.. both US states
+    * as well as Canadian and Australian provinces.
+    *
+    * @return array $states - the array
+*/
+function states() 
+{
+    $states = array(
+          'US States' => array('AL' => 'Alabama','AK' => 'Alaska','AZ' => 'Arizona','AR' => 'Arkansas','BVI' => 'British Virgin Islands','CA' => 'California','CO' => 'Colorado','CT' => 'Connecticut','DE' => 'Delaware','FL' => 'Florida','GA' => 'Georgia','GU' => 'Guam','HI' => 'Hawaii','ID' => 'Idaho','IL' => 'Illinois','IN' => 'Indiana','IA' => 'Iowa','KS' => 'Kansas','KY' => 'Kentucky','LA' => 'Louisiana','ME' => 'Maine','MP' => 'Mariana Islands','MPI' => 'Mariana Islands (Pacific)','MD' => 'Maryland','MA' => 'Massachusetts','MI' => 'Michigan','MN' => 'Minnesota','MS' => 'Mississippi','MO' => 'Missouri','MT' => 'Montana','NE' => 'Nebraska','NV' => 'Nevada','NH' => 'New Hampshire','NJ' => 'New Jersey','NM' => 'New Mexico','NY' => 'New York','NC' => 'North Carolina','ND' => 'North Dakota','OH' => 'Ohio','OK' => 'Oklahoma','OR' => 'Oregon','PA' => 'Pennsylvania','PR' => 'Puerto Rico','RI' => 'Rhode Island','SC' => 'South Carolina','SD' => 'South Dakota','TN' => 'Tennessee','TX' => 'Texas','UT' => 'Utah','VT' => 'Vermont','USVI' => 'VI  U.S. Virgin Islands','VA' => 'Virginia','WA' => 'Washington','DC' => 'Washington, D.C.','WV' => 'West Virginia','WI' => 'Wisconsin','WY' => 'Wyoming',
+          ),
+          'Canadian Provinces' => array('AB' => 'Alberta','BC' => 'British Columbia','MB' => 'Manitoba','NB' => 'New Brunswick','NF' => 'Newfoundland','NT' => 'Northwest Territories','NS' => 'Nova Scotia','NVT' => 'Nunavut','ON' => 'Ontario','PE' => 'Prince Edward Island','QC' => 'Quebec','SK' => 'Saskatchewan','YK' => 'Yukon',
+          ),
+          'Australian Provinces' => array('AU-NSW' => 'New South Wales','AU-QLD' => 'Queensland','AU-SA' => 'South Australia','AU-TAS' => 'Tasmania','AU-VIC' => 'Victoria','AU-WA' => 'Western Australia','AU-ACT' => 'Australian Capital Territory','AU-NT' => 'Northern Territory',
+          ),
+    );
+    return $states;
+}
+
+/**
+    * Function: s
+    * 
+    * NOTE: This function is used for debugging purposes. It sends a debug string 
+    * to the display and formats the element using the /PRE tags
+    *
+    * @param string $input - the value to display 
+    * @return void 
+*/
+function s($input) 
+{
+    $output = '<pre>';
+
+    if (is_array($input) || is_object($input)) 
+    {
+        $output .= print_r($input, true);
+    } 
+
+    else 
+    {
+        $output .= $input;
+    }
+    
+    $output .= '</pre>';
+    echo $output;
+}
+
+/**
+    * Function: sd
+    * 
+    * NOTE: This function is used for debugging purposes. It sends a debug string 
+    * to the display and formats the element using the /PRE tags and then stops
+    * the currently executing script from running 
+    *
+    * @param string $input - the value to display 
+    * @return void 
+*/
+function sd($input) 
+{
+    die(s($input));
 }
 
 ?>

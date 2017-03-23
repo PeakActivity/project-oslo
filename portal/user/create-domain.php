@@ -162,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	// --------------------------------------------------------------------------    	  	
 	// Store the local variables.
 	// --------------------------------------------------------------------------  
-	$domain = 	filter_var(trim($_POST["domain"]), FILTER_SANITIZE_STRING);
+	$domain = 	strtolower(filter_var(trim($_POST["domain"]), FILTER_SANITIZE_STRING));
 	$admin_id = 	filter_var(trim($_POST["admin_id"]), FILTER_SANITIZE_STRING);
 
 	

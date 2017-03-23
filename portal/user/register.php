@@ -40,8 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	// --------------------------------------------------------------------------    	  	
 	// Store the user and pass in local variables.
 	// --------------------------------------------------------------------------  
-	$first = 	filter_var(trim($_POST["register_first"]), FILTER_SANITIZE_STRING);
-	$last = 	filter_var(trim($_POST["register_last"]), FILTER_SANITIZE_STRING);
+	$first = 	ucfirst(filter_var(trim($_POST["register_first"]), FILTER_SANITIZE_STRING));
+	$last = 	ucfirst(filter_var(trim($_POST["register_last"]), FILTER_SANITIZE_STRING));
 	$email = 	filter_var(trim($_POST["register_email"]), FILTER_SANITIZE_STRING);
 	$pass = 	filter_var(trim($_POST["register_password"]), FILTER_SANITIZE_STRING);
 	$repeat = 	filter_var(trim($_POST["register_password_repeat"]), FILTER_SANITIZE_STRING);
@@ -49,14 +49,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	//portal administrator registering, get the domain they entered into the form
 	if(($type & 16) > 0) {
-		$domain = 	str_replace(' ', '-', $_POST['register_domain']);
-		$domain = 	str_replace('.', '-', $_POST['register_domain']);
-		$domain = 	filter_var(trim($_POST["register_domain"]), FILTER_SANITIZE_STRING);
+		$domain = preg_replace('/[^a-z]+/i', '', $_POST['register_domain']); 
+		$domain = strtolower($domain);
 	}
 	
 	//portal user registering, get the domain of the portal they are registering from
 	if(($type & 8) > 0) {
-		$domain = extract_subdomains($_SERVER['HTTP_HOST']);
+		$domain = ExtractSubdomains($_SERVER['HTTP_HOST']);
 	}
 	
 
@@ -92,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		else
 		{
 			//SQL INSERT GOES HERE
-			$guid = getGUID();
+			$guid = GetGUID();
 		    $passwordmd5 = sha1($pass);
 		    $typemask = 0;
 
@@ -110,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		    $typemask = $typemask +1;
 
 		    //also adding 2 to the bitmask if manual validation is turned on 
-		    $validate = checkManualValidate();
+		    $validate = CheckManualValidate();
 		    if($validate == true){
 		    	$typemask = $typemask + 2;
 		    } else {

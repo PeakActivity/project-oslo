@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		{
 
 			$md5password = sha1($pass);
-			$newguid = getGUID();
+			$newguid = GetGUID();
 			$row = mysqli_fetch_array($result,  MYSQLI_ASSOC);
 
 			$query = "UPDATE users SET validationGUID='$newguid', password='$md5password' WHERE validationGUID = '$guid'";

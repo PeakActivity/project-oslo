@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$pass = 	filter_var(trim($_POST["invite_password"]), FILTER_SANITIZE_STRING);
 	$repeat = 	filter_var(trim($_POST["invite_password_repeat"]), FILTER_SANITIZE_STRING);
 	$guid = 	filter_var(trim($_POST["invite_guid"]), FILTER_SANITIZE_STRING);
-	$newguid = 	getGuid();
+	$newguid = 	GetGUID();
 
 	
 	if(strlen($pass) > 7 && $pass == $repeat){

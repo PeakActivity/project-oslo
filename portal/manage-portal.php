@@ -1,13 +1,10 @@
 <?php
     require_once ('includes/managesessions.php'); 
     require_once ('includes/swdb_connect.php'); 
+    require_once ('includes/utilityfunctions.php'); 
 
-    if(!isset($_SESSION['username'])){
-        header( "Location: login.php" ); 
-    }
-    if(!isset($_SESSION['type']) || ($_SESSION['type'] & 16) < 1 || ($_SESSION['type'] & 32) < 1) {
-        //header( "Location: index.php" ); 
-    }
+    ValidateDomain($_SERVER['HTTP_HOST']); 
+    ValidateAdminLoggedIn($_SESSION['type']);
 
     $styles =[];
     $domain = $_SESSION['domain_id'];
@@ -142,7 +139,7 @@
       orakuploader_thumbnail_path : "domains/<?=$_SESSION['domain']?>/images/tn",
       
       orakuploader_add_image : 'assets/plugins/orakuploader/images/add.png',
-      orakuploader_add_label : 'Browser for images',
+      orakuploader_add_label : 'Browse for image',
       
       orakuploader_resize_to : 600,
       orakuploader_thumbnail_size : 150,

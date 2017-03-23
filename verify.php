@@ -29,7 +29,7 @@
 			//if type says the user is not admin approved
 			if(($type & 2) > 0){
 				//check to see if manual verification of portals is turned on
-				$validate = checkManualValidate();
+				$validate = CheckManualValidate();
 				//if manual verification of portals is turned off, remove the bitmask for "not admin approved" (2)
 				if(!$validate) {
 					//we're only auto-validating portal admins for now.. portal users must always be approved by portal admins (for now) 

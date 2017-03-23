@@ -1,116 +1,172 @@
-<div class="container-fluid my-2" id="header">
+<div class="container-fluid my-0" id="top">
+  <div class="container clearfix pt-2">
+    <div class="col-12 clearfix">
+        <ul class="nav nav-bar pull-right">
+          <li class="nav-item dropdown ml-0 mr-3">
+            <?php if(isset($_SESSION['username'])){ ?>
+               <a href="#" title="My Account" id="accountPopUp" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i> <span class="hidden-xs hidden-sm hidden-md"><?= $_SESSION['username']?></span> <span class="caret"></span></a>
+                  <div class="dropdown-menu mt-3" aria-labelledby="accountPopUp">
+                    <a class="dropdown-item" href="#">Edit Account</a>
+                    <a class="dropdown-item" href="/user/logout.php">Logout</a>
+                  </div>
+            <?php } else { ?>
+              <a href="#" title="My Account" class="dropdown-toggle"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i> <span class="hidden-xs hidden-sm hidden-md">My Account</span> <span class="caret"></span></a>
+                <div class="dropdown-menu mt-3" aria-labelledby="accountPopUp">
+                  <a class="dropdown-item" href="register.php">Register</a>
+                  <a class="dropdown-item" href="login.php">Login</a>
+                </div>
+            <?php } ?>
+          </li>
+          <li  class="nav-item mx-3">
+            <a href="#" id="wishlist-total" title="Wish List (0)"><i class="fa fa-heart"></i> <span class="hidden-md-down">Wish List (0)</span></a>
+          </li>
+          <li class="nav-item mx-3">
+            <a href="#" title="Shopping Cart"><i class="fa fa-shopping-cart"></i> <span class="hidden-md-down">Shopping Cart</span></a>
+          </li>
+          <li class="nav-item ml-3 mr-0">
+            <a href="/checkout.php" title="Checkout"><i class="fa fa-share"></i> <span class="hidden-md-down">Checkout</span></a>
+          </li>
+        </ul>
+    </div>
+  </div>
+</div>
+<div class="container-fluid my-3" id="header">
   <div class="container">
     <div class="row">
       <div class="col-6">
-        <?php 
-          //require_once ('swdb_connect.php'); 
-
-          if(isset($_SESSION['domain'])) {
-            $domain_id = $_SESSION['domain']; 
-          } else if($login_domain) {
-            $domain_id = $login_domain;
-          }             
-
-          $query = "SELECT property_name, property_value FROM domain_styles t1 ";
-          $query .= "JOIN domains t2 on t1.domain_id = t2.id ";
-          $query .= "WHERE t2.domain = '$domain_id' AND t1.style_name = 'logo-image';";
-          $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
-          $numrows = mysqli_num_rows($result);
-          if($numrows == 1) {
-            $row = mysqli_fetch_array($result,  MYSQLI_ASSOC);
-          ?>
-            <a href="/"><img src="domains/<?= $domain_id ?>/images/tn/<?= $row['property_value'] ?>" border="0" height="36" /></a>
-          <?php } else { ?>
-            <a href="/"><img src="domains/<?= $domain_id ?>/images/tn/logo.png" border="0" height="36" /></a>
-          <?php } ?>
-      </div>
-      <div class="col-6 text-right">
-        <?php if(isset($_SESSION['username'])){ ?>
-          <span class="align-middle"><a href="#"><?= $_SESSION['username']?> <i class="fa fa-user"></i></a></span>
-        <?php } ?>
+        <?php GetDomainLogo($_SERVER['HTTP_HOST']); ?>
       </div>
     </div>
   </div>
 </div>
-<div class="container-fluid bg-primary py-0">
-  <div class="container">
+<div class="container-fluid py-0">
+  <div class="container bg-primary topbar-container">
     <div class="row">
-      <div class="col-6">
-
-        <nav class="navbar navbar-toggleable-md navbar-inverse bg-primary top-nav-bar">
-          <button class="navbar-toggler navbar-toggler-left" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+      <div class="col-12">
+          <button id="menu-toggler" class="btn btn-primary hidden-lg-up" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fa fa-bars" aria-hidden="true"></i>
           </button>
 
-          <ul class="nav nav-pills hidden-md-down">
-            <?php if(isset($_SESSION['type'])) { ?>
-              <?php if(($_SESSION['type'] & 16) > 0 || ($_SESSION['type'] & 32) > 0) { ?>
+          <ul id="primary-navigation" class="nav nav-pills hidden-md-down">
+              <?php if(isset($_SESSION['type']) && ($_SESSION['type'] & 32) > 0) { ?>
+              <li class="nav-item">
+                <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/manage-platform.php') { echo('active'); } ?>" href="manage-platform.php">Manage Platform <span class="sr-only">(current)</span></a>
+              </li>
+              <?php } ?>
+              <?php if(isset($_SESSION['type']) && (($_SESSION['type'] & 16) > 0 || ($_SESSION['type'] & 32) > 0)) { ?>
               <li class="nav-item">
                 <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/manage-portal.php' || $_SERVER['PHP_SELF'] == '/manage-users.php') { echo('active'); } ?>" href="manage-portal.php">Manage Portal <span class="sr-only">(current)</span></a>
               </li>
               <?php } ?>
-              <?php if(($_SESSION['type'] & 8) > 0 || ($_SESSION['type'] & 16) > 0 || ($_SESSION['type'] & 32) > 0) { ?>
+              <?php 
+              $aCategories = GetNavCategories(ExtractSubdomains($_SERVER['HTTP_HOST']));
+              for($i=0;$i<count($aCategories);$i++){
+                if($i < 4){ ?>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="/category.php?id=<?= $aCategories[$i]['id'] ?>" id="<?= $aCategories[$i]['category_name'] ?>Dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $aCategories[$i]['category_name'] ?><span class="caret"></span></a>
+                    <div class="dropdown-menu" aria-labelledby="<?= $aCategories[$i]['category_name'] ?>Dropdown">
+                    <?php $aProducts = GetNavProducts($aCategories[$i]['id'], ExtractSubdomains($_SERVER['HTTP_HOST']));
+                    for($p=0;$p<count($aProducts);$p++){
+                      if($p < 4){ ?>
+                        <a class="dropdown-item" href="/product.php?id=<?= $aProducts[$p]['id'] ?>"><?= $aProducts[$p]['name'] ?></a>
+                    <?php  }
+                    }
+                    if(count($aProducts) > 4){ ?>
+                      <a class="dropdown-item" href="/category.php?id=<?= $aCategories[$i]['id'] ?>">Show All <?= $aCategories[$i]['category_name'] ?></a>
+                    <?php } ?>
+                    </div>
+                  </li>
+              <?php } 
+               ?>
+              <?php if(count($aCategories) > 4){ ?>
+              <li class="nav-item">
+                <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/category.php') { echo('active'); } ?>" href="/category.php">All Categories<span class="sr-only">(current)</span></a>
+              </li>
+              <?php } }?>
               <li class="nav-item">
                 <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/create-postcard.php') { echo('active'); } ?>" href="create-postcard.php">Create Postcard <span class="sr-only">(current)</span></a>
               </li>
-              <?php } ?>
-            <?php } ?>
           </ul>
-          
-        </nav>
-        </div>
-        <div class="col-6">
-        <nav class="navbar navbar-inverse bg-primary top-nav-bar pull-right">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <?php if(!isset($_SESSION['username'])){ ?>
-                <a class="nav-link" href="login.php">Log in</a>
-              <?php } else { ?>
-                <a class="nav-link" href="../user/logout.php">Log out</a>
-              <?php } ?>
-            </li>
-          </ul>
-        </nav>
       </div>
     </div>
 
-    <nav class="navbar navbar-inverse bg-primary top-nav-bar">
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav">
-          <?php if(isset($_SESSION['type'])) { ?>
-            <?php if(($_SESSION['type'] & 16) > 0 || ($_SESSION['type'] & 32) > 0) { ?>
-            <li class="nav-item">
-              <a class="nav-link active" href="manage-portal.php">Manage Portal <span class="sr-only">(current)</span></a>
-            </li>
-            <?php } ?>
-            <?php if(($_SESSION['type'] & 16) > 0 || ($_SESSION['type'] & 32) > 0){ ?>
-            <li class="nav-item">
-              <a class="nav-link" href="manage-users.php">Manage Users</a>
-            </li>
-            <?php } ?>
+    <div class="collapse navbar-collapse bg-primary hidden-lg-up" id="navbarSupportedContent">
+      <ul id="primary-navigation-hamburger" class="nav nav-navbar flex-column">
+          <?php if(isset($_SESSION['type']) && (($_SESSION['type'] & 16) > 0 || ($_SESSION['type'] & 32) > 0)) { ?>
+          <li class="nav-item">
+            <a class="nav-link active" href="manage-portal.php">Manage Portal <span class="sr-only">(current)</span></a>
+          </li>
           <?php } ?>
-        </ul>
-      </div>
-    </nav>
+          <?php if(isset($_SESSION['type']) && (($_SESSION['type'] & 16) > 0 || ($_SESSION['type'] & 32) > 0)){ ?>
+          <li class="nav-item">
+            <a class="nav-link" href="manage-users.php">Manage Users</a>
+          </li>
+          <?php } ?>
+          <?php if(isset($_SESSION['type']) && ($_SESSION['type'] & 16) > 0 ){ ?>
+          <li class="nav-item">
+            <a class="nav-link" href="manage-products.php">Manage Products</a>
+          </li>
+          <?php } ?>
+          <?php if(isset($_SESSION['type']) && ($_SESSION['type'] & 32) > 0 ){ ?>
+          <li class="nav-item">
+            <a class="nav-link" href="manage-platform.php">Manage Platform</a>
+          </li>
+          <?php } ?>
+          <?php if(isset($_SESSION['type']) && ($_SESSION['type'] & 32) > 0 ){ ?>
+          <li class="nav-item">
+            <a class="nav-link" href="admin-products.php">Admin Products</a>
+          </li>
+          <?php } ?>
+
+          <li class="nav-item">
+            <a class="nav-link" href="create-postcard.php">Create Postcard</a>
+          </li>
+      </ul>
+    </div>
   </div>
 </div>
-<?php if($_SERVER['PHP_SELF'] == '/manage-portal.php' || $_SERVER['PHP_SELF'] == '/manage-users.php') { ?>
-<div class="container-fluid hidden-md-down" id="manage_submenu">
+<?php if($_SERVER['PHP_SELF'] == '/manage-portal.php' || $_SERVER['PHP_SELF'] == '/manage-users.php' || $_SERVER['PHP_SELF'] == '/manage-products.php') { ?>
+<div class="container-fluid hidden-md-down  mt-3 mb-4" id="manage_submenu">
   <div class="container">
     <div class="row">
-      <div class="col-12">
-        <ul class="nav nav-pills">
-          <?php if(isset($_SESSION['type'])) { ?>
-            <?php if(($_SESSION['type'] & 16) > 0 || ($_SESSION['type'] & 32) > 0){ ?>
+      <div class="col-12 px-0">
+        <ul id="portal-tabs" class="nav nav-tabs">
+          <?php if(isset($_SESSION['type']) &&(($_SESSION['type'] & 16) > 0 || ($_SESSION['type'] & 32) > 0)){ ?>
             <li class="nav-item">
               <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/manage-portal.php') { echo('active'); } ?>" href="manage-portal.php">Manage Styles <span class="sr-only">(current)</span></a>
             </li>
-            <?php } ?>
-            <?php if(($_SESSION['type'] & 16) > 0 || ($_SESSION['type'] & 32) > 0) { ?>
+          <?php } ?>
+          <?php if(isset($_SESSION['type']) &&(($_SESSION['type'] & 16) > 0 || ($_SESSION['type'] & 32) > 0)) { ?>
+          <li class="nav-item">
+            <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/manage-users.php') { echo('active'); } ?>" href="manage-users.php">Manage Users <span class="sr-only">(current)</span></a>
+          </li>
+          <?php } ?>
+          <?php if(isset($_SESSION['type']) &&(($_SESSION['type'] & 16) > 0 || ($_SESSION['type'] & 32) > 0)) { ?>
+          <li class="nav-item">
+            <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/manage-products.php') { echo('active'); } ?>" href="manage-products.php">Manage Products <span class="sr-only">(current)</span></a>
+          </li>
+          <?php } ?>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<?php } ?>
+<?php if($_SERVER['PHP_SELF'] == '/manage-platform.php' || $_SERVER['PHP_SELF'] == '/admin-products.php') { ?>
+<div class="container-fluid hidden-md-down mt-3 mb-4" id="manage_submenu">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 px-0">
+        <ul id="portal-tabs" class="nav nav-tabs">
+          <?php if(isset($_SESSION['type']) && ($_SESSION['type'] & 32) > 0){ ?>
             <li class="nav-item">
-              <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/manage-users.php') { echo('active'); } ?>" href="manage-users.php">Manage Users <span class="sr-only">(current)</span></a>
+              <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/manage-platform.php') { echo('active'); } ?>" href="manage-platform.php">Manage Users <span class="sr-only">(current)</span></a>
             </li>
-            <?php } ?>
+          <?php } ?>
+          <?php if(isset($_SESSION['type']) && ($_SESSION['type'] & 32) > 0) { ?>
+          <li class="nav-item">
+            <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/admin-products.php') { echo('active'); } ?>" href="admin-products.php">Admin Products <span class="sr-only">(current)</span></a>
+          </li>
           <?php } ?>
         </ul>
       </div>
