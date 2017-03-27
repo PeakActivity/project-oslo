@@ -1,3 +1,4 @@
+
 <?php
     require_once ('includes/managesessions.php'); 
     require_once ('includes/swdb_connect.php'); 
@@ -16,7 +17,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 
-    <title>Welcome to Project Oslo</title>
+    <title>Viewing Category</title>
 
     <!-- domo arigato mr roboto.. load this font -->
     <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500' rel='stylesheet' type='text/css'>
@@ -28,106 +29,59 @@
 
     <!-- page styles -->
     <link rel="stylesheet" href="assets/css/home.css" />
-    <?php if(isset($_SESSION['domain'])) { ?>
-        <link rel="stylesheet" href="domains/<?=$_SESSION['domain']?>/css/portal.css" /> 
-    <?php } else { ?>
-        <link rel="stylesheet" href="domains/<?php echo(ExtractSubdomains($_SERVER['HTTP_HOST'])); ?>/css/portal.css" /> 
-    <?php } ?>
-
+    <link rel="stylesheet" href="domains/<?= ExtractSubdomains($_SERVER['HTTP_HOST']) ?>/css/portal.css" /> 
+    
 </head>
 
 <body>
-	<?php include('includes/topbar.php'); ?>
-	
-    <div class="container py-3 mb-5" id="body-container">
-        <?php 
-            $aCarouselItems = getCarouselItems(ExtractSubdomains($_SERVER['HTTP_HOST']));
-            if(count($aCarouselItems) > 0) { ?>
-        <div class="row">
-            <div class="col-12">
-                <div class="alert alert-success" id="success-alert">
-                  <button type="button" class="close" data-dismiss="alert">x</button>
-                  <strong>Success! </strong> the item(s) have been added to your Shopping Cart.
-                </div>
-                <div class="alert alert-danger" id="error-alert">
-                  <button type="button" class="close" data-dismiss="alert">x</button>
-                  <strong>Error! </strong> There was a problem adding the item(s) to your Shopping Cart.
-                </div>
-                <div class="card">
-                    <div class="card-block">
-                        <div id="promotedCarousel" class="carousel slide" data-ride="carousel">                
-                            <ol class="carousel-indicators">
-                                <?php for($i=0; $i<count($aCarouselItems); $i++) { ?>
-                                    <li data-target="#promotedCarousel" data-slide-to="<?= $i ?>" <?php if($i == 0){ ?> class="active"> <?php } ?></li>
-                                <?php } ?>
-                            </ol>
-                            <div class="carousel-inner" role="listbox">
-                            <?php for($i=0; $i<count($aCarouselItems); $i++) { ?>
-                                <?php if($i ==0) { ?>
-                                <div class="carousel-item active">
-                                <?php } else { ?>
-                                <div class="carousel-item">
-                                <?php } ?>
-                                    <a href="<?= $aCarouselItems[$i]['link'] ?>"><img class="d-block img-fluid" src="domains/<?php echo(ExtractSubdomains($_SERVER['HTTP_HOST'])); ?>/images/carousel/<?= $aCarouselItems[$i]['file_name'] ?>" border="0" alt="<?= $aCarouselItems[$i]['slide_title'] ?>"></a>
-                                
-                                </div>
-                                <? } ?>
-                            </div>
-                            <a class="carousel-control-prev" href="#promotedCarousel" role="button" data-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="carousel-control-next" href="#promotedCarousel" role="button" data-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+    <?php 
+      include('includes/topbar.php'); 
+      $aCategory = GetAllCategoryInfo($_GET['id']);
+    ?>
+    <div class="container" id="body-container">
+      <div class="row">
+        <div class="col-12">
+          <div class="alert alert-success" id="success-alert">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <strong>Success! </strong> the item(s) have been added to your Shopping Cart.
+          </div>
+          <div class="alert alert-danger" id="error-alert">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <strong>Error! </strong> There was a problem adding the item(s) to your Shopping Cart.
+          </div>
+          <ol class="breadcrumb my-3">
+            <li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i></a></li>
+            <li class="breadcrumb-item active"><?= $aCategory['category_name'] ?></li>
+          </ol>
         </div>
-        <?php } else { ?>
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-block">
-                        <div id="promotedCarousel" class="carousel slide" data-ride="carousel">                
-                            <ol class="carousel-indicators">
-                                <li data-target="#promotedCarousel" data-slide-to="1" class="active"></li>
-                                <li data-target="#promotedCarousel" data-slide-to="2"></li>
-                                <li data-target="#promotedCarousel" data-slide-to="0"></li>
-                            </ol>
-                            <div class="carousel-inner" role="listbox">
-                                <div class="carousel-item active">
-                                    <a href="/login.php"><img class="d-block img-fluid" src="/assets/images/default_slide1.jpg" border="0" alt="Create Products"></a>
-                                </div>
-                                <div class="carousel-item">
-                                    <a href="/login.php"><img class="d-block img-fluid" src="/assets/images/default_slide2.jpg" border="0" alt="Invite Users"></a>
-                                </div>
-                                <div class="carousel-item">
-                                    <a href="/login.php"><img class="d-block img-fluid" src="/assets/images/default_slide3.jpg" border="0" alt="Create Featured Items"></a>
-                                </div>
-                            </div>
-                            <a class="carousel-control-prev" href="#promotedCarousel" role="button" data-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="carousel-control-next" href="#promotedCarousel" role="button" data-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-3 mb-5 hidden-xs-down">
+          <div class="list-group category-list">
+          <?php $aCategories = GetPortalCategories(ExtractSubdomains($_SERVER['HTTP_HOST']));
+            foreach($aCategories as $aCat) { ?>
+              <a href="/category.php?id=<?= $aCat['id'] ?>" <?php if($_GET['id'] == $aCat['id']) { echo('class="list-group-item active"'); } else { echo('class="list-group-item"');}?>><?= $aCat['category_name'] ?></a>
+            <?php } ?>
+          </div>
         </div>
-        <?php } ?>
-        <?php 
-            $aFeatured = getFeatured(ExtractSubdomains($_SERVER['HTTP_HOST']));
-            if(count($aFeatured) > 0) { ?>
-        <div class="row mt-5">
-            <div class="col-12"><h3>Featured</h3></div>
-            <?php foreach($aFeatured as $aProduct) { ?>
+        <div class="col-sm-9">
+          <h1 class="mb-3"><?= $aCategory['category_name'] ?></h1>
+            <div class="row mb-5">
+              <div class="col-sm-2"><img src="/domains/<?= ExtractSubdomains($_SERVER['HTTP_HOST']) ?>/images/category/<?= $aCategory['category_image'] ?>" alt="<?= $aCategory['category_name'] ?>" title="<?= $aCategory['category_name'] ?>" class="img-thumbnail">
+              </div>
+              <div class="col-sm-10">
+                <p><?= $aCategory['category_description'] ?></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <h2 class="my-3">Products in <?= $aCategory['category_name'] ?></h2>
+              </div>
+            </div>
+            <div class="row">
+              <?php $aProducts = GetCategoryProducts($_GET['id'], ExtractSubdomains($_SERVER['HTTP_HOST']));
+                foreach($aProducts as $aProduct){ ?>
                 <div class="col-md-3 col-sm-6 col-xs-12 mb-3">
                     <form name="<?= $aProduct['id'] ?>_form" id="<?= $aProduct['id'] ?>_form" role="form" action="assets/ajax/add_to_cart.php" method="post">
                         <div class="card featured-card">
@@ -170,29 +124,32 @@
                         </div>
                     </form>
                 </div>
-            <?php } ?>
+                 <?php } ?>
+            </div>
         </div>
-    <?php } ?>
+      </div>
     </div>
+    
 
+   
     <?php include('includes/footer.php'); ?>
     <!-- common functions -->
-    <script src="assets/js/common.js"></script>
+    <script src="../assets/js/common.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-	  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-	  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+   
+   <script> 
 
-    <script>
         $(document).ready(function() {
-            // run test on initial page load
-            resizeFeatured();
             $("#success-alert").hide();
             $("#error-alert").hide();
+            // run test on initial page load
+            resizeFeatured();
 
             // run test on resize of the window
             $(window).resize(resizeFeatured);
         });
-
 
         // Make all of the featured equal height
         function resizeFeatured() {
@@ -205,7 +162,7 @@
             $(".featured-card").height(tallest);
         }
 
-        <?php foreach($aFeatured as $aProduct) { ?>
+        <?php foreach($aProducts as $aProduct) { ?>
             $("#<?= $aProduct['id'] ?>_form").on('submit', function (e) {
               e.preventDefault();    
               $("#success-alert").hide();
@@ -237,7 +194,6 @@
             });
         
         <?php } ?>
-
-    </script>
+   </script>
 </body>
 </html>

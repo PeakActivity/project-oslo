@@ -43,7 +43,7 @@
     <div class="container" id="body-container">
       <div class="row">
         <div class="col-xs-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3">
-          <form name="login_form" id="login_form" role="form" action="../user/login.php" method="post">
+          <form name="login_form" id="login_form" role="form" action="user/login.php" method="post">
             <div class="card text-center my-5">
               <div class="card-header">
                 <h5 class="my-0">Log in to Project Oslo</h5>

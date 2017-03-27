@@ -1,39 +1,12 @@
 <?php
-
-// --------------------------------------------------------------------------
-// Perform our initialization
-// --------------------------------------------------------------------------
-require 'assets/libs/cartman/init.php';
 require_once ('includes/managesessions.php'); 
+require 'assets/libs/cartman/init.php';
 
 ValidateDomain($_SERVER['HTTP_HOST']);
 
 $total = '';
 $invoice_action = '';
 $allow_submit = true;
-
-if (isset($_GET['invoice_id'])) 
-{
-    $invoice = Model::factory('Invoice')->where('unique_id', $_GET['invoice_id'])->find_one();
-
-    if ( !$invoice ) 
-    {
-        $invoice_action = 'not found';
-        $error = 'Sorry, but we can\'t seem to find that particular invoice.';
-    } 
-
-    elseif ( $invoice->status == 'Paid' ) 
-    {
-        $invoice_action = 'already paid';
-        $allow_submit = false;
-    } 
-
-    else 
-    {
-        $invoice_action = 'valid';
-        $total = $invoice->amount;
-    }
-}
 
 // do some error checking first
 if (empty($config['name']) || empty($config['email'])) 
@@ -77,16 +50,12 @@ if (isset($error))
     <link rel="stylesheet" href="assets/plugins/font-awesome-4.7.0/css/font-awesome.min.css" >
 
 
-    <!-- page styles -->
-    <link rel="stylesheet" href="assets/css/home.css" />
     <?php template('head'); ?>
 
+    <!-- page styles -->
+    <link rel="stylesheet" href="assets/css/home.css" />
+    <link rel="stylesheet" href="domains/<?= ExtractSubdomains($_SERVER['HTTP_HOST']) ?>/css/portal.css" /> 
 
-    <?php if(isset($_SESSION['domain'])) { ?>
-        <link rel="stylesheet" href="domains/<?=$_SESSION['domain']?>/css/portal.css" /> 
-    <?php } else if($login_domain){ ?>
-        <link rel="stylesheet" href="domains/<?= $login_domain ?>/css/portal.css" /> 
-    <?php } ?>
 
 </head>
 
@@ -121,86 +90,50 @@ if (isset($error))
         <?php endif; ?>
 
 
-        <form action="<?php echo url('includes/process.php'); ?>" method="post" class="validate form-horizontal <?php echo !$allow_submit ? 'disabled' : ''; ?>" id="order_form">
+        <form action="<?php echo url('assets/ajax/process.php'); ?>" method="post" class="validate form-horizontal <?php echo !$allow_submit ? 'disabled' : ''; ?>" id="order_form">
             <input type="hidden" name="csrf" value="<?php echo $csrf; ?>">
             <input type="hidden" name="action" value="process_payment">
-            <?php if ( $invoice_action == 'valid' ) : ?>
-            <input type="hidden" name="invoice_id" value="<?php echo $invoice->id; ?>">
-            <?php endif; ?>
+            <input type="hidden" name="shipping_carrier" value="UPS Ground">
+            <input type="hidden" name="invoice_id" value="<?php getGuid(); ?>">
             <input type="hidden" class="enable-subscriptions" value="<?php echo $config['enable_subscriptions']; ?>">
             <input type="hidden" class="publishable-key" value="<?php echo trim($config['stripe_publishable_key']); ?>">
 
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4 offset-md-2">
 
-                    <h3 class="colorgray mb20"><?php echo $invoice_action == 'valid' || $invoice_action == 'already paid' ? 'Invoice' : 'Payment'; ?> Details</h3>
+                  <h3 class="colorgray mb20">Invoice Details</h3>
 
-                    <?php if ( $invoice_action == 'valid' || $invoice_action == 'already paid' ) : ?>
+                  <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                          <td class="text-right"><strong>Sub-Total:</strong></td>
+                          <td class="text-right">
+                          <?php $subtotal = 0;
+                            foreach($_SESSION['cart_contents'] as $aProduct){
+                              $subtotal = $subtotal + ($aProduct['product_price'] * $aProduct['product_qty']);
+                            }
+                            echo('$'.number_format((float)$subtotal, 2, '.', ''));
+                          ?>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="text-right"><strong>Shipping (UPS Ground):</strong></td>
+                          <td class="text-right"><?php $shipping = 15;
+                                                  echo('$'.number_format((float)$shipping, 2, '.', '')); ?>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="text-right"><strong>Total:</strong></td>
+                          <td class="text-right"><?php $total = $subtotal + $shipping;
+                                                  echo('$'.number_format((float)$total, 2, '.', '')); ?>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
 
-                        <div class="form-group row">
-                            <label class="col-3 col-form-label">Amount</label>
-                            <div class="col-9">
-                                <?php echo currency($invoice->amount) ?>
-                            </div>
-                        </div>  
-                        <div class="form-group row">
-                            <label class="col-3 col-form-label">Description</label>
-                            <div class="col-9">
-                                <?php echo $invoice->description; ?>
-                            </div>
-                        </div>  
-                        <div class="form-group row">
-                            <label class="col-3 col-form-label">Due Date</label>
-                            <div class="col-9">
-                                <?php echo !is_null($invoice->date_due) ? date('F jS, Y', strtotime($invoice->date_due)) : '<em>no due date set</em>'; ?>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-3 col-form-label">Invoice #</label>
-                            <div class="col-9">
-                                <?php echo $invoice->number ? $invoice->number : $invoice->id; ?>
-                            </div>
-                        </div>
-
-                    <?php else : ?>
-
-                        <?php if ( $config['payment_type'] == 'item' ) : ?>
-                            
-
-                            <div class="form-group row">
-                                <label class="col-2 col-form-label"><span class="colordanger">*</span>Item</label>
-                                <div class="col-10">
-                                    <select name="item_id" class="form-control" required="true">
-                                        <option value="">-- Select Item --</option>
-                                        <?php foreach ( Model::factory('Item')->find_many() as $item ) : ?>
-                                        <option value="<?php echo $item->id; ?>" data-name="<?php echo $item->name; ?>" data-price="<?php echo $item->price; ?>" <?php echo get('item_id') == $item->id ? 'selected' : ''; ?>><?php echo $item->name; ?> (<?php echo currency($item->price); ?>)</option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                            </div>  
-
-                        <?php else : ?>
-
-                            <div class="form-group row">
-                                <label class="col-2 col-form-label"><span class="colordanger">*</span>Amount</label>
-                                <div class="col-10">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="fa fa-<?php echo currencyCode(); ?>"></i></span>
-                                        <input type="text" name="amount" class="form-control" placeholder="0.00" required="true" data-rule-number="true">
-                                    </div>
-                                </div>
-                            </div>  
-                            <?php if ( $config['show_description'] ) : ?>
-                                <div class="form-group row">
-                                    <label class="col-2 col-form-label"><span class="colordanger">*</span>Description</label>
-                                    <div class="col-10">
-                                        <textarea name="description" class="form-control h55 maxlength" maxlength="120" placeholder="Description" required="true"></textarea>
-                                    </div>
-                                </div>  
-                            <?php endif; ?>
-                        <?php endif; ?>
-                    <?php endif; ?>
-
+                    <input type="hidden" name="total" value="<?php echo $total; ?>">
+                    <input type="hidden" name="shipping_charge" value="<?= $shipping ?>">
+                    <div class="text-center"><a href="shopping-cart.php" class="btn btn-default">Return to Shopping Cart</a></div>
                     <hr class="hidden-md-up">
                     <h3 class="colorgray mt40 mb20">Your Information</h3>
                     <div class="form-group row">
@@ -219,9 +152,15 @@ if (isset($error))
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-2 col-form-label"><span class="colordanger">*</span>Address</label>
+                            <label class="col-2 col-form-label"><span class="colordanger">*</span>Address 1</label>
                             <div class="col-10">
-                                <input type="text" name="billing_address" class="form-control" placeholder="Address" value="" required="true">
+                                <input type="text" name="billing_address1" class="form-control" placeholder="Address" value="" required="true">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label"><span class="colordanger">*</span>Address 2</label>
+                            <div class="col-10">
+                                <input type="text" name="billing_address2" class="form-control" placeholder="Address" value="" required="true">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -266,7 +205,7 @@ if (isset($error))
                         </div>
                     <?php endif; ?>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
 
                     <?php if ( $config['show_shipping_address'] ) : ?>
                         <hr class="hidden-md-up">
@@ -278,9 +217,15 @@ if (isset($error))
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-2 col-form-label"><span class="colordanger">*</span>Address</label>
+                            <label class="col-2 col-form-label"><span class="colordanger">*</span>Address 1</label>
                             <div class="col-10">
-                                <input type="text" name="shipping_address" class="form-control" placeholder="Address" value="" required="true">
+                                <input type="text" name="shipping_address1" class="form-control" placeholder="Address" value="" required="true">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-2 col-form-label"><span class="colordanger">*</span>Address 2</label>
+                            <div class="col-10">
+                                <input type="text" name="shipping_address2" class="form-control" placeholder="Address" value="" required="true">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -396,7 +341,7 @@ if (isset($error))
 
                     <div class="row mt40">
                         
-                        <div class="col-12 alignright">
+                        <div class="col-12 text-center">
                             <div class="creditcard-content">
 
                                 <button type="submit" class="btn btn-lg btn-primary submit-button mb20" data-loading-text='<i class="fa fa-spinner fa-spin"></i> Submitting...' data-complete-text='<i class="fa fa-check"></i> Payment Complete!' <?php echo $allow_submit ? '' : 'disabled'; ?>>
@@ -419,57 +364,7 @@ if (isset($error))
 
         </form>
 
-        <?php if ( $config['enable_paypal'] ) : ?>
-
-            <form action="https://www.<?php echo $config['paypal_environment'] == 'sandbox' ? 'sandbox.' : ''; ?>paypal.com/cgi-bin/webscr" method="post" class="paypal-form" target="_top" id="paypal_form_one_time">
-                <input type="hidden" name="cmd" value="_xclick">
-                <input type="hidden" name="amount" value="<?php echo isset($invoice) && $invoice ? $invoice->amount : ''; ?>">
-                <input type="hidden" name="business" value="<?php echo $config['paypal_email']; ?>">
-                <input type="hidden" name="item_name" value="<?php echo isset($invoice) && $invoice ? $invoice->description : ''; ?>">
-                <input type="hidden" name="currency_code" value="<?php echo $config['currency']; ?>">
-                <input type="hidden" name="no_note" value="1">
-                <input type="hidden" name="no_shipping" value="1">
-                <input type="hidden" name="rm" value="1">
-                <input type="hidden" name="custom" value="">
-                <input type="hidden" name="return" value="<?php echo url('process.php?action=paypal_success'); ?>">
-                <input type="hidden" name="cancel_return" value="<?php echo url('process.php?action=paypal_cancel'); ?>">
-                <input type="hidden" name="notify_url" value="<?php echo url('process.php?action=paypal_ipn'); ?>">
-            </form>
-
-            <?php if ( $config['enable_subscriptions'] == 'stripe_and_paypal' || $config['enable_subscriptions'] == 'paypal_only' ) : ?>
-
-                <form action="https://www.<?php echo $config['paypal_environment'] == 'sandbox' ? 'sandbox.' : ''; ?>paypal.com/cgi-bin/webscr" method="post" class="paypal-form" target="_top" id="paypal_form_recurring">
-                    <input type="hidden" name="cmd" value="_xclick-subscriptions">
-                    <input type="hidden" name="business" value="<?php echo $config['paypal_email']; ?>">
-                    <input type="hidden" name="lc" value="US">
-                    <input type="hidden" name="item_name" value="">
-                    <input type="hidden" name="currency_code" value="<?php echo $config['currency']; ?>">
-                    <input type="hidden" name="no_note" value="1">
-                    <input type="hidden" name="no_shipping" value="1">
-                    <input type="hidden" name="custom" value="">
-                    <input type="hidden" name="src" value="1">
-
-                    <?php if ( $config['subscription_length'] ) : ?>
-                    <input type="hidden" name="srt" value="<?php echo $config['subscription_length']; ?>">
-                    <?php endif; ?>
-
-                    <?php if ( $config['enable_trial'] ) : ?>
-                    <input type="hidden" name="a1" value="0">
-                    <input type="hidden" name="p1" value="<?php echo $config['trial_days']; ?>">
-                    <input type="hidden" name="t1" value="D">
-                    <?php endif; ?>
-
-                    <input type="hidden" name="a3" value=""> <!-- amount gets set dynamically -->
-                    <input type="hidden" name="p3" value="<?php echo $config['subscription_interval']; ?>">
-                    <input type="hidden" name="t3" value="M">
-                    <input type="hidden" name="return" value="<?php echo url('process.php?action=paypal_subscription_success'); ?>">
-                    <input type="hidden" name="cancel_return" value="<?php echo url('process.php?action=paypal_cancel'); ?>">
-                    <input type="hidden" name="notify_url" value="<?php echo url('process.php?action=paypal_ipn'); ?>">
-                </form>
-
-            <?php endif; ?>
-
-        <?php endif; ?>
+        
             </div>
         </div>
 	</div>

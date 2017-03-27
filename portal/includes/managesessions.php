@@ -15,11 +15,21 @@ session_set_cookie_params(3600);
 // Now start our session
 // --------------------------------------------------------------------------           
 session_start(); 
+if(!isset($_SESSION['cart_contents'])){
+	$_SESSION['cart_contents'] = array();
+}
 
 // --------------------------------------------------------------------------           
 // Get the current time
 // --------------------------------------------------------------------------           
 $now = time();
+
+// --------------------------------------------------------------------------           
+// Set our session variable.. either new or old, it should live at most 
+// for another hour
+// --------------------------------------------------------------------------           
+$_SESSION['discard_after'] = $now + 3600;
+
 
 // --------------------------------------------------------------------------           
 // Check to see if we have our Session variable set that tells us whether 
@@ -35,11 +45,5 @@ if (isset($_SESSION['discard_after']) && $now > $_SESSION['discard_after'])
     session_destroy();
     session_start();
 }
-
-// --------------------------------------------------------------------------           
-// Set our session variable.. either new or old, it should live at most 
-// for another hour
-// --------------------------------------------------------------------------           
-$_SESSION['discard_after'] = $now + 3600;
 
 ?>

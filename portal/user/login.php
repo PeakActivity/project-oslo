@@ -211,7 +211,6 @@ if($numrows == 1)
 			$domainResult = mysqli_fetch_array($result,  MYSQLI_ASSOC);
 		}
 
-		session_start();
 		$_SESSION['userid'] = $row['id'];
 		$_SESSION['type'] = $row['type'];
 		$_SESSION['email'] = $row['email'];
