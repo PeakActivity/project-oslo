@@ -2,20 +2,31 @@
 // --------------------------------------------------------------------------
 // Specify our include files
 // --------------------------------------------------------------------------
-require 'includes/swdb_connect.php';
-require 'includes/utilityfunctions.php';
-require 'assets/libs/cartman/vendor/idiorm.php';
-require 'assets/libs/cartman/vendor/paris.php';
-require 'assets/libs/cartman/vendor/Stripe.php';
+
+/*
+echo "<pre>";
+print_r($_SERVER);
+echo "</pre>";
+die();
+*/
+$BASE_PATH = '/home2/rojectos/public_html/portal/';
+require $BASE_PATH.'includes/swdb_connect.php';
+require $BASE_PATH.'includes/utilityfunctions.php';
+require $BASE_PATH.'includes/managesessions.php';
+require $BASE_PATH.'assets/libs/cartman/vendor/idiorm.php';
+require $BASE_PATH.'assets/libs/cartman/vendor/paris.php';
+require $BASE_PATH.'assets/libs/cartman/vendor/Stripe.php';
 
 // --------------------------------------------------------------------------
 // Specify our model files 
 // --------------------------------------------------------------------------
-require 'models/Config.php';
-require 'models/Item.php';
-require 'models/Invoice.php';
-require 'models/Payment.php';
-require 'models/Subscription.php';
+require $BASE_PATH.'models/Config.php';
+require $BASE_PATH.'models/Item.php';
+require $BASE_PATH.'models/User.php';
+require $BASE_PATH.'models/Portal.php';
+require $BASE_PATH.'models/Invoice.php';
+require $BASE_PATH.'models/Payment.php';
+require $BASE_PATH.'models/Subscription.php';
 
 // --------------------------------------------------------------------------
 // Set our db credentials for our ORM 

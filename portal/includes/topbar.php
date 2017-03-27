@@ -18,10 +18,17 @@
             <?php } ?>
           </li>
           <li  class="nav-item mx-3">
-            <a href="#" id="wishlist-total" title="Wish List (0)"><i class="fa fa-heart"></i> <span class="hidden-md-down">Wish List (0)</span></a>
+            <a href="#" id="wishlist-total" title="Wish List (0)"><i class="fa fa-heart"></i> <span class="hidden-md-down">Wish List</span> <?php if(isset($_SESSION['wish_list'])){ 
+                    if(count($_SESSION['wish_list']) > 0) { ?> (<?= count($_SESSION['wish_list'])?>)
+                    <?php } 
+                } ?></a>
           </li>
           <li class="nav-item mx-3">
-            <a href="#" title="Shopping Cart"><i class="fa fa-shopping-cart"></i> <span class="hidden-md-down">Shopping Cart</span></a>
+            <a href="/shopping-cart.php" title="Shopping Cart"><i class="fa fa-shopping-cart"></i> <span class="hidden-md-down">Shopping Cart</span> <span id="cart_contents">
+            <?php if(isset($_SESSION['cart_contents'])){ 
+                    if(count($_SESSION['cart_contents']) > 0) { ?> (<?= count($_SESSION['cart_contents'])?>)
+                    <?php } 
+                } ?></span></a>
           </li>
           <li class="nav-item ml-3 mr-0">
             <a href="/checkout.php" title="Checkout"><i class="fa fa-share"></i> <span class="hidden-md-down">Checkout</span></a>
@@ -70,10 +77,9 @@
                       if($p < 4){ ?>
                         <a class="dropdown-item" href="/product.php?id=<?= $aProducts[$p]['id'] ?>"><?= $aProducts[$p]['name'] ?></a>
                     <?php  }
-                    }
-                    if(count($aProducts) > 4){ ?>
-                      <a class="dropdown-item" href="/category.php?id=<?= $aCategories[$i]['id'] ?>">Show All <?= $aCategories[$i]['category_name'] ?></a>
-                    <?php } ?>
+                    } ?>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item all-items" href="/category.php?id=<?= $aCategories[$i]['id'] ?>">Show All <?= $aCategories[$i]['category_name'] ?></a>
                     </div>
                   </li>
               <?php } 
@@ -117,6 +123,29 @@
             <a class="nav-link" href="admin-products.php">Admin Products</a>
           </li>
           <?php } ?>
+          <?php 
+            for($i=0;$i<count($aCategories);$i++){
+            if($i < 4){ ?>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="/category.php?id=<?= $aCategories[$i]['id'] ?>" id="<?= $aCategories[$i]['category_name'] ?>Dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $aCategories[$i]['category_name'] ?><span class="caret"></span></a>
+                <div class="dropdown-menu dropdown-menu-mobile" aria-labelledby="<?= $aCategories[$i]['category_name'] ?>Dropdown">
+                <?php $aProducts = GetNavProducts($aCategories[$i]['id'], ExtractSubdomains($_SERVER['HTTP_HOST']));
+                for($p=0;$p<count($aProducts);$p++){
+                  if($p < 4){ ?>
+                    <a class="dropdown-item" href="/product.php?id=<?= $aProducts[$p]['id'] ?>"><?= $aProducts[$p]['name'] ?></a>
+                <?php  }
+                } ?>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item all-items" href="/category.php?id=<?= $aCategories[$i]['id'] ?>">Show All <?= $aCategories[$i]['category_name'] ?></a>
+                </div>
+              </li>
+          <?php } 
+           ?>
+          <?php if(count($aCategories) > 4){ ?>
+          <li class="nav-item">
+            <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/category.php') { echo('active'); } ?>" href="/category.php">All Categories<span class="sr-only">(current)</span></a>
+          </li>
+          <?php } }?>
 
           <li class="nav-item">
             <a class="nav-link" href="create-postcard.php">Create Postcard</a>

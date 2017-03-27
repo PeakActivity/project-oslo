@@ -1,5 +1,5 @@
 <?php
-require 'lib/init.php';
+require '../libs/cartman/init.php';
 
 $action = isset($_POST['action']) ? $_POST['action'] : (isset($_GET['action']) ? $_GET['action'] : '');
 
@@ -21,7 +21,7 @@ if (!empty($action))
 		if ( !empty($_POST) && (!isset($_POST['csrf']) || empty($_POST['csrf']) || $_POST['csrf'] != $csrf) ) 
 		{
 			msg('Invalid CSRF token, please try submitting again.', 'warning');
-			go('index.php');
+			go('/checkout.php');
 		}
 	}
 
@@ -47,58 +47,112 @@ if (!empty($action))
 				// --------------------------------------------------------------------------
 				// Build our customer data
 				// --------------------------------------------------------------------------
-				$name = post('name');
-				$name_arr = explode(' ', trim($name));
-				$first_name = $name_arr[0];
-				$last_name = trim(str_replace($first_name, '', $name));
-				$email = post('email');
-				$description = post('description') ? post('description') : 'no description entered';
-				$address = post('address');
-				$city = post('city');
-				$state = post('state');
-				$zip = post('zip');
-				$country = post('country');
+				$invoice_id = filter_var(trim($_POST["invoice_id"]), FILTER_SANITIZE_STRING);
+				$billing_name = filter_var(trim($_POST["billing_name"]), FILTER_SANITIZE_STRING);
+				$billing_name_arr = explode(' ', trim($billing_name));
+				$billing_first_name = $billing_name_arr[0];
+				$billing_last_name = trim(str_replace($billing_first_name, '', $billing_name));
+				$email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_STRING);
+				$description = '<table class="table table-bordered">
+					              <thead>
+					                <tr>
+					                  <td class="text-center hidden-xs-down">Image</td>
+					                  <td class="text-left">Product Name</td>
+					                  <td class="text-left">Product Options</td>
+					                  <td class="text-left hidden-xs-down">Availability</td>
+					                  <td class="text-left">Quantity</td>
+					                  <td class="text-right hidden-xs-down">Unit Price</td>
+					                  <td class="text-right">Total</td>
+					                </tr>
+					              </thead>
+					              <tbody>';
+				$i = 0;	              
+				foreach($_SESSION['cart_contents'] as $aProduct){
+					$description .= '	<tr>';
+	                $description .= ' <td class="text-center hidden-xs-down"> ';
+	                $description .= '    <div class="image-additional">';
+	                $description .= '      <a class="thumbnail mb-0" href="/product.php?id='.$aProduct['product_id'].'">';
+	                $description .= '        <img src="http://'.$_SERVER['HTTP_HOST'].'/domains/'.ExtractSubdomains($_SERVER['HTTP_HOST']).'/images/products/'.$aProduct['product_file_name'].'" alt="'.$aProduct['product_name'].'" title="'.$aProduct['product_name'].'" width="40px" height="40px">';
+	                $description .= '      </a>';
+	                $description .= '    </div>';
+	                $description .= '  </td>';
+	                $description .= '  <td class="text-left"><a href="/product.php?id='.$aProduct['product_id'].'">'.$aProduct['product_name'].'</a></td>';
+	                $description .= '  <td class="text-left">';
+	                if(isset($aProduct['Size'])) { $description .= 'Size: '.$aProduct['Size'].'<br/>'; }
+	                if(isset($aProduct['Color'])) { $description .= 'Color: '.$aProduct['Color']; }
+	                $description .= '  </td>';
+	                $description .= '  <td class="text-left hidden-xs-down">'.$aProduct['product_availability'].'</td>';
+	                $description .= '  <td class="text-left">';
+	                $description .= $aProduct['product_qty'].'<br/>';
+	                if($aProduct['product_important_info']) { 
+	                $description .= '      <div class="alert alert-info mt-3" id="info-alert">';
+	                $description .= '          <i class="fa fa-info-circle"></i> '.$aProduct['product_important_info'];
+	                $description .= '      </div>';
+	                }
+	                $description .= '  </td>';
+	                $description .= '  <td class="text-right hidden-xs-down">$'.$aProduct['product_price'].'</td>';
+	                $description .= '  <td class="text-right">';
+	                $rowtotal = ($aProduct['product_price'] * $aProduct['product_qty']);
+	                $description .= '$'.number_format((float)$rowtotal, 2, '.', '');
+					$description .= '</td>';
+	                $description .= '</tr>';
+                 $i++;
+				}
+				$description .= '</tbody>';
+				$description .= '</table>';
+
+				$description =  addslashes($description);
+
+				$billing_address1 = filter_var(trim($_POST["billing_address1"]), FILTER_SANITIZE_STRING);
+				$billing_address2 = filter_var(trim($_POST["billing_address2"]), FILTER_SANITIZE_STRING);
+				$billing_city = filter_var(trim($_POST["billing_city"]), FILTER_SANITIZE_STRING);
+				$billing_state = filter_var(trim($_POST["billing_state"]), FILTER_SANITIZE_STRING);
+				$billing_zip = filter_var(trim($_POST["billing_zip"]), FILTER_SANITIZE_STRING);
+				$billing_country = filter_var(trim($_POST["billing_country"]), FILTER_SANITIZE_STRING);
+
+				
+				$shipping_name = filter_var(trim($_POST["shipping_name"]), FILTER_SANITIZE_STRING);
+				$shipping_name_arr = explode(' ', trim($shipping_name));
+				$shipping_first_name = $shipping_name_arr[0];
+				$shipping_last_name = trim(str_replace($shipping_first_name, '', $shipping_name));
+				$shipping_address1 = filter_var(trim($_POST["shipping_address1"]), FILTER_SANITIZE_STRING);
+				$shipping_address2 = filter_var(trim($_POST["shipping_address2"]), FILTER_SANITIZE_STRING);
+				$shipping_city = filter_var(trim($_POST["shipping_city"]), FILTER_SANITIZE_STRING);
+				$shipping_state = filter_var(trim($_POST["shipping_state"]), FILTER_SANITIZE_STRING);
+				$shipping_zip = filter_var(trim($_POST["shipping_zip"]), FILTER_SANITIZE_STRING);
+				$shipping_country = filter_var(trim($_POST["shipping_country"]), FILTER_SANITIZE_STRING);
+				$shipping_carrier = filter_var(trim($_POST["shipping_carrier"]), FILTER_SANITIZE_STRING);
+				$shipping_charge = filter_var(trim($_POST["shipping_charge"]), FILTER_SANITIZE_STRING);
+
+				$domain = ExtractSubdomains($_SERVER['HTTP_HOST']);
+				$domain_id = 0;
+				$query = "SELECT * FROM domains WHERE domain = '$domain';"; 
+				$result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+				$numrows = mysqli_num_rows($result);
+				
+				if($numrows == 1)
+				{
+					$row = mysqli_fetch_array($result,  MYSQLI_ASSOC);
+				    $domain_id = $row['id'];
+				}
+
+				$total = filter_var(trim($_POST["total"]), FILTER_SANITIZE_STRING);
 
 				// --------------------------------------------------------------------------
 				// Check for invoice first
 				// --------------------------------------------------------------------------
-				if ( post('invoice_id') ) 
+				if ($invoice_id) 
 				{
-					$invoice = Model::factory('Invoice')->find_one(post('invoice_id'));
-					$amount = $invoice->amount;
-					$type = 'invoice';
-					$description = $invoice->description;
+					$invoice = Model::factory('Invoice')->find_one($invoice_id);
+					if($invoice){
+						echo('exists');
+						die();
+					}
 				
+				} 
+
+
 				
-				} 
-
-				// --------------------------------------------------------------------------
-				// Now check for item
-				// --------------------------------------------------------------------------
-				elseif (post('item_id')) 
-				{
-					$item = Model::factory('Item')->find_one(post('item_id'));
-					$amount = $item->price;
-					$type = 'item';								
-				} 
-
-				// --------------------------------------------------------------------------
-				// Now check for the input amount
-				// --------------------------------------------------------------------------
-				elseif (post('amount')) 
-				{
-					$amount = post('amount');
-					$type = 'input';				
-				} 
-
-				// --------------------------------------------------------------------------
-				// Return an error if no amount was specified
-				// --------------------------------------------------------------------------
-				else 
-				{
-					throw new Exception('No amount was specified.');
-				}
-
 				// --------------------------------------------------------------------------
 				// Handle recurring payments
 				// --------------------------------------------------------------------------
@@ -119,7 +173,7 @@ if (!empty($action))
 					{
 						foreach ($plans->data as $plan) 
 						{
-							if ($plan->interval == 'month' && $plan->amount / 100 == $amount && $plan->interval_count == $config['subscription_interval']) 
+							if ($plan->interval == 'month' && $plan->amount / 100 == $total && $plan->interval_count == $config['subscription_interval']) 
 							{
 								// don't match the plan if the trial values don't line up
 								if ( ($config['enable_trial'] && $plan->trial_period_days != $config['trial_days']) || (!$config['enable_trial'] && $plan->trial_period_days) ) 
@@ -139,10 +193,10 @@ if (!empty($action))
 					if ($create_plan) 
 					{
 						$plan_arr = array(
-							'amount' => $amount * 100,
+							'amount' => $total * 100,
 							'interval_count' => $config['subscription_interval'],
 							'interval' => 'month',
-							'name' => '$' . $amount . ' every ' . $config['subscription_interval'] . ' month(s)',
+							'name' => '$' . $total . ' every ' . $config['subscription_interval'] . ' month(s)',
 							'id' => uniqid(),
 							'currency' => $config['currency']
 						);
@@ -208,7 +262,7 @@ if (!empty($action))
 					// Do the payment now
 					// --------------------------------------------------------------------------				
 					$transaction = Stripe_Charge::create(array(
-					  'amount' => $amount * 100,
+					  'amount' => $total * 100,
 					  'currency' => $config['currency'],
 					  'card' => post('token'),
 					  'description' => isset($item) ? $item->name : $description
@@ -216,37 +270,40 @@ if (!empty($action))
 
 					// --------------------------------------------------------------------------
 					// Save payment record
-					$payment = Model::factory('Payment')->create();
-					$payment->invoice_id = isset($invoice) ? $invoice->id : null;
-					$payment->name = $name;
-					$payment->email = $email;
-					$payment->amount = $transaction->amount / 100;
-					$payment->description = isset($item) ? $item->name : $description;
-					$payment->address = $address;
-					$payment->city = $city;
-					$payment->state = $state;
-					$payment->zip = $zip;
-					$payment->country = $country;
-					$payment->type = $type;
-					$payment->cc_name = $transaction->source->name;
-					$payment->cc_last_4 = $transaction->source->last4;
-					$payment->stripe_transaction_id = $transaction->id;
-					$payment->save();
-
-					// --------------------------------------------------------------------------
-					// Update paid invoice
-					// --------------------------------------------------------------------------					
-					if (isset($invoice)) 
-					{
-						$invoice->status = 'Paid';
-						$invoice->date_paid = date('Y-m-d H:i:s');
-						$invoice->save();
-					}
+					$invoice = Model::factory('Invoice')->create();
+					$invoice->unique_id = $invoice_id;
+					$invoice->domain_id = $domain_id;
+					$invoice->billing_name = $billing_name;
+					$invoice->shipping_name = $shipping_name;
+					$invoice->email = $email;
+					$invoice->total = $transaction->amount / 100;
+					$invoice->description = $description;
+					$invoice->billing_address1 = $billing_address1;
+					$invoice->billing_address2 = $billing_address2;
+					$invoice->shipping_address1 = $shipping_address1;
+					$invoice->shipping_address2 = $shipping_address2;
+					$invoice->billing_city = $billing_city;
+					$invoice->billing_state = $billing_state;
+					$invoice->billing_zip = $billing_zip;
+					$invoice->billing_country = $billing_country;
+					$invoice->shipping_city = $shipping_city;
+					$invoice->shipping_state = $shipping_state;
+					$invoice->shipping_zip = $shipping_zip;
+					$invoice->shipping_country = $shipping_country;
+					$invoice->shipping_carrier = $shipping_carrier;
+					$invoice->shipping_charge = $shipping_charge;
+					$invoice->cc_name = $transaction->source->name;
+					$invoice->cc_last_4 = $transaction->source->last4;
+					$invoice->stripe_transaction_id = $transaction->id;
+					$invoice->status = 'Paid';
+					$invoice->date_paid = date('Y-m-d H:i:s');
+					$invoice->save();
 
 					// --------------------------------------------------------------------------
 					// Set the message 
 					// --------------------------------------------------------------------------
 					$message = 'Your payment has been completed successfully, you should receive a confirmation email shortly.';
+					$_SESSION['cart_contents'] = array();
 
 				}
 
@@ -257,9 +314,9 @@ if (!empty($action))
 				// Build email values first for variable substitution
 				// --------------------------------------------------------------------------
 				$values = array(
-					'customer_name' => $name,
+					'customer_name' => $billing_name,
 					'customer_email' => $email,
-					'amount' => currency($amount) . '<small>' . currencySuffix() . '</small>' . $trial,
+					'amount' => currency($total) . '<small>' . currencySuffix() . '</small>' . $trial,
 					'description_title' => isset($item) ? 'Item' : 'Description',
 					'description' => isset($item) ? $item->name : $description,
 					'payment_method' => 'Credit Card' . (isset($transaction) ? ': XXXX-' . $transaction->source->last4 : ''),
@@ -355,7 +412,7 @@ if (!empty($action))
 				if (isset($data['invoice_id']) && $data['invoice_id']) 
 				{
 					$invoice = Model::factory('Invoice')->find_one($data['invoice_id']);
-					$amount = $invoice->amount;
+					$total = $invoice->total;
 					$type = 'invoice';
 					$description = $invoice->description;
 				} 
@@ -366,7 +423,7 @@ if (!empty($action))
 				elseif (isset($data['item_id']) && $data['item_id']) 
 				{
 					$item = Model::factory('Item')->find_one($data['item_id']);
-					$amount = $item->price;
+					$total = $item->price;
 					$type = 'item';
 				} 
 
@@ -375,7 +432,7 @@ if (!empty($action))
 				// --------------------------------------------------------------------------
 				elseif ( $payment_gross ) 
 				{
-					$amount = $payment_gross;
+					$total = $payment_gross;
 					$type = 'input';				
 				} 
 
@@ -384,7 +441,7 @@ if (!empty($action))
 				// --------------------------------------------------------------------------
 				else 
 				{
-					$amount = 0;
+					$total = 0;
 					$type = '';
 				}
 
@@ -398,7 +455,7 @@ if (!empty($action))
 						$payment->invoice_id = isset($invoice) ? $invoice->id : null;
 						$payment->name = $name;
 						$payment->email = $email;
-						$payment->amount = $amount;
+						$payment->amount = $total;
 						$payment->description = isset($item) ? $item->name : $description;
 						$payment->address = $address;
 						$payment->city = $city;
@@ -539,16 +596,16 @@ if (!empty($action))
 
 
 		case 'paypal_success':
-			go('index.php#status=paypal_success');
+			go('/checkout.php#status=paypal_success');
 		break;
 
 		case 'paypal_subscription_success':
-			go('index.php#status=paypal_subscription_success');
+			go('/checkout.php#status=paypal_subscription_success');
 		break;
 
 		case 'paypal_cancel':
 			msg('You canceled your PayPal payment, no payment has been made.', 'warning');
-			go('index.php');
+			go('/checkout.php');
 		break;
 
 		case 'delete_payment':
@@ -749,7 +806,7 @@ if (!empty($action))
 				if (!preg_match('/\/admin\.php$/', $_SERVER['HTTP_REFERER'])) 
 				{
 					msg('Invalid login attempt, please try again.', 'warning');
-					go('index.php');
+					go('/checkout.php');
 				}
 			}
 
@@ -786,7 +843,7 @@ if (!empty($action))
 				if (!preg_match('/\/admin\.php$/', $_SERVER['HTTP_REFERER'])) 
 				{
 					msg('Invalid login attempt, please try again.', 'warning');
-					go('index.php');
+					go('/checkout.php');
 				}
 			}
 

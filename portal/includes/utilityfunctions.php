@@ -23,7 +23,6 @@
 // --------------------------------------------------------------------------           
 DEFINE ('STRMSG_UNASSIGN_USER', 'UNASSIGN USER FROM RR');
 
-
 /**
     * Function: ArrayDisplay
     * 
@@ -97,12 +96,9 @@ function GetUserInfo($domain)
 } // End of Function
 
 
-function GetProductInfo($domain_id)
+function GetAllProductInfo($product_id)
 {
-    $rc = 0;
-    $aProducts = array();
-
-    $query = "SELECT id, email, fname, lname, type FROM users WHERE domain='$domain_id' "; 
+    $query = "SELECT t1.id AS id, category_id, category_name, name, brand, product_code, availability ,description, price, per_unit, important_info FROM products t1 JOIN product_categories t2 ON t1.category_id = t2.id WHERE t1.id = $product_id;"; 
     
     $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
 
@@ -112,21 +108,153 @@ function GetProductInfo($domain_id)
     while ($row = mysqli_fetch_array($result,  MYSQLI_ASSOC)) 
     {
         $aProduct = array(
-                    'id'                    => $row['id'],
-                    'email'                 => $row['email'],
-                    'lname'             => $row['lname'],
-                    'fname'              => $row['fname'],
-                    'type'              => $row['type']                   
-                    );      
-        array_push($aProducts, $aProduct);       
+                    'id'                => $row['id'],
+                    'category_id'       => $row['category_id'],
+                    'category_name'     => $row['category_name'],
+                    'name'              => $row['name'],
+                    'brand'             => $row['brand'],
+                    'product_code'      => $row['product_code'],
+                    'availability'      => $row['availability'],
+                    'description'       => $row['description'],
+                    'price'             => $row['price'],
+                    'per_unit'          => $row['per_unit'],
+                    'important_info'    => $row['important_info']                   
+                    );            
     }
 
-    return $aProducts;
+    return $aProduct;
+} // End of Function
+
+function GetAllCategoryInfo($category_id)
+{
+    $query = "SELECT id, category_name, category_description, category_image FROM product_categories WHERE id = $category_id;"; 
+    
+    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+
+    // --------------------------------------------------------------------------                 
+    // Enumerate through the list of Projects and store each within option tags
+    // --------------------------------------------------------------------------                 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_ASSOC)) 
+    {
+        $aCategory = array(
+                    'id'                    => $row['id'],
+                    'category_name'         => $row['category_name'],
+                    'category_description'  => $row['category_description'],
+                    'category_image'        => $row['category_image']                   
+                    );            
+    }
+
+    return $aCategory;
+} // End of Function
+
+function GetPortalCategories($domain)
+{
+    $aCategories = array();
+    $query = "SELECT t1.id AS id, category_name FROM product_categories t1 JOIN products t2 ON t2.category_id = t1.id JOIN domains t3 ON t2.domain_id = t3.id  WHERE t3.domain = '$domain' GROUP BY t1.id;"; 
+    
+    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+
+    // --------------------------------------------------------------------------                 
+    // Enumerate through the list of Projects and store each within option tags
+    // --------------------------------------------------------------------------                 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_ASSOC)) 
+    {
+        $aCategory = array(
+                    'id'                    => $row['id'],
+                    'category_name'         => $row['category_name']                  
+                    );            
+    
+        array_push($aCategories, $aCategory);
+    }
+
+    return $aCategories;
+} // End of Function
+
+function GetProductOptions($product_id)
+{
+
+    $aOptions = array();
+    $aOptionsGroup = array();
+    $key = "";
+    $query = "SELECT id, option_key, option_value, option_price FROM product_options WHERE product_id = $product_id;"; 
+    
+    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+
+    // --------------------------------------------------------------------------                 
+    // Enumerate through the list of Projects and store each within option tags
+    // --------------------------------------------------------------------------                 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_ASSOC)) 
+    {
+        if($row['option_key'] != $key){
+            if(count($aOptionsGroup) > 0){
+                array_push($aOptions, $aOptionsGroup);
+            }
+            $key = $row['option_key'];
+            $aOptionsGroup = array();
+        }
+        $aOption = array(
+                    'id'                => $row['id'],
+                    'option_key'        => $row['option_key'],
+                    'option_value'      => $row['option_value'],
+                    'option_price'      => $row['option_price']               
+                    );
+        array_push($aOptionsGroup, $aOption);            
+    }
+    if(count($aOptionsGroup) > 0) {
+        array_push($aOptions, $aOptionsGroup);
+    }
+
+    return $aOptions;
+} // End of Function
+
+
+function GetProductImages($product_id)
+{
+    $aImages = array();
+    $query = "SELECT t1.id AS id, name, file_name FROM products t1 JOIN product_images t2 ON t1.id = t2.product_id WHERE t1.id = $product_id;"; 
+    
+    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+
+    // --------------------------------------------------------------------------                 
+    // Enumerate through the list of Projects and store each within option tags
+    // --------------------------------------------------------------------------                 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_ASSOC)) 
+    {
+        $aImage = array(
+                    'id'                => $row['id'],
+                    'name'              => $row['name'],
+                    'file_name'         => $row['file_name']                 
+                    );  
+        array_push($aImages, $aImage);            
+    }
+
+    return $aImages;
+} // End of Function
+
+function GetProductSpecifications($product_id)
+{
+    $aSpecs = array();
+    $query = "SELECT spec_key, spec_value FROM product_specifications WHERE product_id = $product_id;"; 
+    
+    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+
+    // --------------------------------------------------------------------------                 
+    // Enumerate through the list of Projects and store each within option tags
+    // --------------------------------------------------------------------------                 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_ASSOC)) 
+    {
+        $aSpec = array(
+                    'spec_key'                => $row['spec_key'],
+                    'spec_value'              => $row['spec_value']                 
+                    );  
+        array_push($aSpecs, $aSpec);            
+    }
+
+    return $aSpecs;
 } // End of Function
 
 function GetNavProducts($category_id, $domain)
 {
-    $rc = 0;
     $aProducts = array();
 
     $query = "SELECT t1.id AS id, t1.name AS name FROM products t1 JOIN domains t2 on t1.domain_id = t2.id WHERE t2.domain = '$domain' AND t1.category_id = $category_id";
@@ -149,7 +277,6 @@ function GetNavProducts($category_id, $domain)
 
 function GetNavCategories($domain)
 {
-    $rc = 0;
     $aCategories = array();
 
     $query = "SELECT t1.id AS id, category_name FROM product_categories t1 JOIN products t2 on t1.id = t2.category_id JOIN domains t3 on t2.domain_id = t3.id WHERE t3.domain = '$domain' GROUP BY t1.id";
@@ -173,10 +300,9 @@ function GetNavCategories($domain)
 
 function GetFeatured($domain)
 {
-    $rc = 0;
     $aAllFeatured = array();
 
-    $query = "SELECT t1.id AS id, category_id, name, description, price, per_unit, category_name, t3.file_name AS file_name FROM products t1 JOIN product_categories t2 on t1.category_id = t2.id JOIN product_images t3 on t3.product_id = (SELECT t4.product_id FROM product_images t4 WHERE t1.id = t4.product_id LIMIT 1) JOIN domains t5 on t1.domain_id = t5.id WHERE t5.domain = '$domain' AND featured = 1";
+    $query = "SELECT t1.id AS id, category_id, category_name, name, brand, product_code, availability, description, price, per_unit, important_info, t3.file_name AS file_name FROM products t1 JOIN product_categories t2 on t1.category_id = t2.id JOIN product_images t3 on t3.product_id = (SELECT t4.product_id FROM product_images t4 WHERE t1.id = t4.product_id LIMIT 1) JOIN domains t5 on t1.domain_id = t5.id WHERE t5.domain = '$domain' AND featured = 1 GROUP BY t3.product_id";
     
     $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
 
@@ -186,14 +312,18 @@ function GetFeatured($domain)
     while ($row = mysqli_fetch_array($result,  MYSQLI_ASSOC)) 
     {
         $aFeatured = array(
-                    'id'                    => $row['id'],
-                    'category_id'           => $row['category_id'],
-                    'name'                  => $row['name'],
-                    'description'           => $row['description'],
-                    'price'                 => $row['price'],
-                    'per_unit'              => $row['per_unit'],
-                    'category_name'         => $row['category_name'],
-                    'file_name'             => $row['file_name']                   
+                    'id'                => $row['id'],
+                    'category_id'       => $row['category_id'],
+                    'category_name'     => $row['category_name'],
+                    'name'              => $row['name'],
+                    'brand'             => $row['brand'],
+                    'product_code'      => $row['product_code'],
+                    'availability'      => $row['availability'],
+                    'description'       => $row['description'],
+                    'price'             => $row['price'],
+                    'per_unit'          => $row['per_unit'],
+                    'important_info'    => $row['important_info'], 
+                    'file_name'         => $row['file_name']                   
                     );      
         array_push($aAllFeatured, $aFeatured);       
     }
@@ -201,9 +331,41 @@ function GetFeatured($domain)
     return $aAllFeatured;
 } // End of Function
 
+function GetCategoryProducts($category_id, $domain)
+{
+    $aProducts = array();
+
+    $query = "SELECT t1.id AS id, category_id, category_name, name, brand, product_code, availability, description, price, per_unit, important_info, t3.file_name AS file_name FROM products t1 JOIN product_categories t2 on t1.category_id = t2.id JOIN product_images t3 on t3.product_id = (SELECT t4.product_id FROM product_images t4 WHERE t1.id = t4.product_id LIMIT 1) JOIN domains t5 on t1.domain_id = t5.id WHERE t2.id = $category_id AND t5.domain = '$domain' GROUP BY t3.product_id";
+    
+    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+
+    // --------------------------------------------------------------------------                 
+    // Enumerate through the list of Projects and store each within option tags
+    // --------------------------------------------------------------------------                 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_ASSOC)) 
+    {
+        $aProduct = array(
+                    'id'                => $row['id'],
+                    'category_id'       => $row['category_id'],
+                    'category_name'     => $row['category_name'],
+                    'name'              => $row['name'],
+                    'brand'             => $row['brand'],
+                    'product_code'      => $row['product_code'],
+                    'availability'      => $row['availability'],
+                    'description'       => $row['description'],
+                    'price'             => $row['price'],
+                    'per_unit'          => $row['per_unit'],
+                    'important_info'    => $row['important_info'], 
+                    'file_name'         => $row['file_name']                     
+                    );      
+        array_push($aProducts, $aProduct);       
+    }
+
+    return $aProducts;
+} // End of Function
+
 function GetCarouselItems($domain)
 {
-    $rc = 0;
     $aCarouselItems = array();
 
     $query = "SELECT file_name, link, slide_title, slide_desc FROM carousel_items t1 JOIN domains t2 on t1.domain_id = t2.id WHERE t2.domain = '$domain'";
@@ -229,7 +391,6 @@ function GetCarouselItems($domain)
 
 function GetAllUserInfo()
 {
-    $rc = 0;
     $aUsers = array();
 
 
@@ -685,6 +846,7 @@ function email($to, $file, $values, $subject)
 {
     global $config;
 
+    $BASE_PATH = '/home2/rojectos/public_html/portal/';
     // --------------------------------------------------------------------------
     // Add config data to values array
     // --------------------------------------------------------------------------
@@ -693,17 +855,17 @@ function email($to, $file, $values, $subject)
     // --------------------------------------------------------------------------
     // Get email header
     // --------------------------------------------------------------------------
-    $content = file_get_contents('templates/emails/layout/header.php');
+    $content = file_get_contents($BASE_PATH.'assets/email_creatives/layout/header.php');
 
     // --------------------------------------------------------------------------
     // Get email content
     // --------------------------------------------------------------------------
-    $content .= file_get_contents('templates/emails/' . $file . '.php');
+    $content .= file_get_contents($BASE_PATH.'assets/email_creatives/' . $file . '.php');
 
     // --------------------------------------------------------------------------
     // Get email footer
     // --------------------------------------------------------------------------
-    $content .= file_get_contents('templates/emails/layout/footer.php');
+    $content .= file_get_contents($BASE_PATH.'assets/email_creatives/layout/footer.php');
 
     // --------------------------------------------------------------------------
     // Perform variable substitution for placeholders values
@@ -716,7 +878,8 @@ function email($to, $file, $values, $subject)
     // --------------------------------------------------------------------------
     // Build our email and send
     // --------------------------------------------------------------------------
-    require_once 'lib/vendor/PHPMailer/PHPMailerAutoload.php';
+
+    require_once $BASE_PATH.'assets/libs/PHPMailer/PHPMailerAutoload.php';
     $mail = new PHPMailer;
     $mail->isMail();
     $mail->From = $config['email'];
@@ -740,7 +903,7 @@ function email($to, $file, $values, $subject)
 function template($path, $container = true) 
 {
     global $csrf;
-    require 'assets/templates/' . $path . '.php';
+    require $BASE_PATH.'assets/templates/' . $path . '.php';
 }
 
 /**
