@@ -158,9 +158,9 @@ if (isset($error))
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-2 col-form-label"><span class="colordanger">*</span>Address 2</label>
+                            <label class="col-2 col-form-label">Address 2</label>
                             <div class="col-10">
-                                <input type="text" name="billing_address2" class="form-control" placeholder="Address" value="" required="true">
+                                <input type="text" name="billing_address2" class="form-control" placeholder="Address" value="">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -223,9 +223,9 @@ if (isset($error))
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-2 col-form-label"><span class="colordanger">*</span>Address 2</label>
+                            <label class="col-2 col-form-label">Address 2</label>
                             <div class="col-10">
-                                <input type="text" name="shipping_address2" class="form-control" placeholder="Address" value="" required="true">
+                                <input type="text" name="shipping_address2" class="form-control" placeholder="Address" value="">
                             </div>
                         </div>
                         <div class="form-group row">

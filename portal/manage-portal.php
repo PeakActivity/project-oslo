@@ -142,7 +142,7 @@
       orakuploader_add_label : 'Browse for image',
       
       orakuploader_resize_to : 600,
-      orakuploader_thumbnail_size : 150,
+      orakuploader_thumbnail_size : 300,
       
       orakuploader_maximum_uploads : 1,
       orakuploader_hide_on_exceed : true,
