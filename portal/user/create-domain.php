@@ -236,6 +236,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     				copy($srcfile, $destfile);
 
     				mkdir('../domains/'.$domain.'/css', 0777, true);
+    				mkdir('../domains/'.$domain.'/images/products', 0777, true);
+    				mkdir('../domains/'.$domain.'/images/products/tn', 0777, true);
 				}
 
 				$raw_css = file_get_contents('../assets/templates/css_template.css');

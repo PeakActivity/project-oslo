@@ -30,7 +30,7 @@
 
     <!-- page styles -->
     <link rel="stylesheet" href="assets/css/home.css" />
-    <link rel="stylesheet" href="domains/<?=$_SESSION['domain']?>/css/portal.css" />
+    <link rel="stylesheet" href="domains/<?= ExtractSubdomains($_SERVER['HTTP_HOST']) ?>/css/portal.css" /> 
 
     <!-- DataTables -->
     <link href="assets/plugins/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />

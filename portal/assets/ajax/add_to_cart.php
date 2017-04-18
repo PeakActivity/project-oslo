@@ -39,7 +39,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$cart_item = array();
 	
 	foreach($_POST as $key => $value) {
-		$cart_item[$key] = filter_var(trim($value), FILTER_SANITIZE_STRING);
+		if(is_array($value)){
+			$cart_item[$key] = json_encode($value);
+		} else {
+			$cart_item[$key] = filter_var(trim($value), FILTER_SANITIZE_STRING);
+		}
 	}
 
 	array_push($_SESSION['cart_contents'], $cart_item);

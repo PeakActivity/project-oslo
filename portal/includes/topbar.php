@@ -68,7 +68,7 @@
               <?php 
               $aCategories = GetNavCategories(ExtractSubdomains($_SERVER['HTTP_HOST']));
               for($i=0;$i<count($aCategories);$i++){
-                if($i < 4){ ?>
+                if($i < 5){ ?>
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="/category.php?id=<?= $aCategories[$i]['id'] ?>" id="<?= $aCategories[$i]['category_name'] ?>Dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?= $aCategories[$i]['category_name'] ?><span class="caret"></span></a>
                     <div class="dropdown-menu" aria-labelledby="<?= $aCategories[$i]['category_name'] ?>Dropdown">
@@ -84,11 +84,12 @@
                   </li>
               <?php } 
                ?>
-              <?php if(count($aCategories) > 4){ ?>
+              <?php } ?>
+              <?php if(count($aCategories) > 5){ ?>
               <li class="nav-item">
                 <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/category.php') { echo('active'); } ?>" href="/category.php">All Categories<span class="sr-only">(current)</span></a>
               </li>
-              <?php } }?>
+              <?php }?>
               <li class="nav-item">
                 <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/create-postcard.php') { echo('active'); } ?>" href="create-postcard.php">Create Postcard <span class="sr-only">(current)</span></a>
               </li>
@@ -116,11 +117,6 @@
           <?php if(isset($_SESSION['type']) && ($_SESSION['type'] & 32) > 0 ){ ?>
           <li class="nav-item">
             <a class="nav-link" href="manage-platform.php">Manage Platform</a>
-          </li>
-          <?php } ?>
-          <?php if(isset($_SESSION['type']) && ($_SESSION['type'] & 32) > 0 ){ ?>
-          <li class="nav-item">
-            <a class="nav-link" href="admin-products.php">Admin Products</a>
           </li>
           <?php } ?>
           <?php 
@@ -181,7 +177,7 @@
   </div>
 </div>
 <?php } ?>
-<?php if($_SERVER['PHP_SELF'] == '/manage-platform.php' || $_SERVER['PHP_SELF'] == '/admin-products.php') { ?>
+<?php if($_SERVER['PHP_SELF'] == '/manage-platform.php' || $_SERVER['PHP_SELF'] == '/admin-products.php' || $_SERVER['PHP_SELF'] == '/admin-categories.php' || $_SERVER['PHP_SELF'] == '/admin-promotions.php') { ?>
 <div class="container-fluid hidden-md-down mt-3 mb-4" id="manage_submenu">
   <div class="container">
     <div class="row">
@@ -194,7 +190,12 @@
           <?php } ?>
           <?php if(isset($_SESSION['type']) && ($_SESSION['type'] & 32) > 0) { ?>
           <li class="nav-item">
-            <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/admin-products.php') { echo('active'); } ?>" href="admin-products.php">Admin Products <span class="sr-only">(current)</span></a>
+            <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/admin-categories.php') { echo('active'); } ?>" href="admin-categories.php">Manage Product Categories <span class="sr-only">(current)</span></a>
+          </li>
+          <?php } ?>
+          <?php if(isset($_SESSION['type']) && ($_SESSION['type'] & 32) > 0) { ?>
+          <li class="nav-item">
+            <a class="nav-link <?php if($_SERVER['PHP_SELF'] == '/admin-promotions.php') { echo('active'); } ?>" href="admin-promotions.php">Manage Platform Promotions<span class="sr-only">(current)</span></a>
           </li>
           <?php } ?>
         </ul>

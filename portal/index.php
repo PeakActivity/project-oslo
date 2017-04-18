@@ -28,11 +28,7 @@
 
     <!-- page styles -->
     <link rel="stylesheet" href="assets/css/home.css" />
-    <?php if(isset($_SESSION['domain'])) { ?>
-        <link rel="stylesheet" href="domains/<?=$_SESSION['domain']?>/css/portal.css" /> 
-    <?php } else { ?>
-        <link rel="stylesheet" href="domains/<?php echo(ExtractSubdomains($_SERVER['HTTP_HOST'])); ?>/css/portal.css" /> 
-    <?php } ?>
+    <link rel="stylesheet" href="domains/<?= ExtractSubdomains($_SERVER['HTTP_HOST']) ?>/css/portal.css" /> 
 
 </head>
 
@@ -129,46 +125,20 @@
             <div class="col-12"><h3>Featured</h3></div>
             <?php foreach($aFeatured as $aProduct) { ?>
                 <div class="col-md-3 col-sm-6 col-xs-12 mb-3">
-                    <form name="<?= $aProduct['id'] ?>_form" id="<?= $aProduct['id'] ?>_form" role="form" action="assets/ajax/add_to_cart.php" method="post">
-                        <div class="card featured-card">
-                            <div class="card-block">
-                                <a href="/product.php?id=<?= $aProduct['id'] ?>"><img class="featured-image img-fluid" border="0" src="domains/<?php echo(ExtractSubdomains($_SERVER['HTTP_HOST'])); ?>/images/products/<?= $aProduct['file_name'] ?>" alt="<?= $aProduct['name'] ?>"></a>
-                                <h4 class="featured-product-name mt-2"><a href="/product.php?id=<?= $aProduct['id'] ?>"><?= $aProduct['name'] ?></a></h4>
-                                <p><?php echo(StringConcat($aProduct['description'], 100)); ?></p>
-                                <p class="my-2 text-muted">$<?= $aProduct['price'] ?> for <?= $aProduct['per_unit'] ?></p>
-                                <p class="small-text">Category: <a class="my-2" href="/category.php?id=<?= $aProduct['category_id'] ?>"><?= $aProduct['category_name'] ?></a></p>
-                                <hr />
-                                <?php $aOptions = GetProductOptions($aProduct['id']); 
-                                if(count($aOptions) > 0) { ?>
-                                  <?php for($i=0;$i<count($aOptions);$i++){ ?>
-                                  <select name="<?= $aOptions[$i][0]['option_key'] ?>" id="<?= $aOptions[$i][0]['option_key'] ?>" class="form-control mb-3" required="true">
-                                    <option value="">-- Select --</option>
-                                    <?php foreach ( $aOptions[$i] as $aOption ) : ?>
-                                    <option value="<?php echo $aOption['option_value']; ?>"><?php echo $aOption['option_value']; ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                                <?php } ?>
-                                <?php } ?>
-                                <input type="text" name="product_qty" id="product_qty" class="form-control" placeholder="Enter Quantity" required="true">
+                    <div class="card featured-card">
+                        <div class="card-block">
+                            <div style="width:100%; height:230px; overflow:hidden">
+                                <a href="/product.php?id=<?= $aProduct['id'] ?>"><img class="featured-image img-responsive" border="0" src="domains/<?php echo(ExtractSubdomains($_SERVER['HTTP_HOST'])); ?>/images/products/<?= $aProduct['file_name'] ?>" alt="<?= $aProduct['name'] ?>"></a>
                             </div>
-                            <div class="card-footer featured-footer text-muted">
-                                <input type="hidden" name="product_id" id="product_id" value="<?= $aProduct['id'] ?>">
-                                <input type="hidden" name="product_file_name" id="product_file_name" value="<?= $aProduct['file_name'] ?>">
-                                <input type="hidden" name="product_name" id="product_name" value="<?= $aProduct['name'] ?>">
-                                <input type="hidden" name="product_brand" id="product_brand" value="<?= $aProduct['brand'] ?>">
-                                <input type="hidden" name="product_code" id="product_code" value="<?= $aProduct['product_code'] ?>">
-                                <input type="hidden" name="product_availability" id="product_availability" value="<?= $aProduct['availability'] ?>">
-                                <input type="hidden" name="product_price" id="product_price" value="<?= $aProduct['price'] ?>">
-                                <input type="hidden" name="product_per_unit" id="product_per_unit" value="<?= $aProduct['per_unit'] ?>">
-                                <input type="hidden" name="product_important_info" id="product_important_info" value="<?= $aProduct['important_info'] ?>">
-                                <div class="btn-group featured-footer-group text-muted" role="group">
-                                    <button type="submit" class="btn btn-secondary feature-footer-cart-btn"><i class="fa fa-shopping-cart"></i> <span class="hidden-md-down">Add to Cart</span></button>
-                                    <button type="button" class="btn btn-secondary " data-toggle="tooltip" title="" onclick="" data-original-title="Add to Wish List"><i class="fa fa-heart"></i></button>
-                                    <button type="button" class="btn btn-secondary " data-toggle="tooltip" title="" onclick="" data-original-title="Compare this Product"><i class="fa fa-exchange"></i></button>
-                                </div>
-                            </div>
+                            <h4 class="featured-product-name mt-2"><a href="/product.php?id=<?= $aProduct['id'] ?>"><?= $aProduct['name'] ?></a></h4>
+                            <p><?php echo(StringConcat($aProduct['description'], 100)); ?></p>
+                            <p class="my-2 text-muted">$<?= money_format('%i', ($aProduct['price']*$aProduct['minimum_order'])) ?> for <?= $aProduct['minimum_order'] ?></p>
+                            <p class="small-text">Category: <a class="my-2" href="/category.php?id=<?= $aProduct['category_id'] ?>"><?= $aProduct['category_name'] ?></a></p>
                         </div>
-                    </form>
+                        <div class="card-footer featured-footer text-muted">
+                            <button class="btn btn-secondary feature-footer-cart-btn" onclick="productJump(<?= $aProduct['id'] ?>)"><i class="fa fa-shopping-cart"></i> <span class="hidden-md-down">View Details</span></button>                                
+                        </div>
+                    </div>
                 </div>
             <?php } ?>
         </div>
@@ -203,6 +173,10 @@
 
             });
             $(".featured-card").height(tallest);
+        }
+
+        function productJump(productid) {
+            $(location).attr('href', ('product.php?id='+productid));
         }
 
         <?php foreach($aFeatured as $aProduct) { ?>
