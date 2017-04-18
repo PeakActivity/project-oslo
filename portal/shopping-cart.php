@@ -37,7 +37,6 @@
 
     <?php 
       include('includes/topbar.php'); 
-      $aProduct = GetAllProductInfo($_GET['id']);
     ?>
     <div class="container" id="body-container">
       <div class="row">
@@ -77,9 +76,10 @@
                 <?php
                   $i=0; 
                   foreach($_SESSION['cart_contents'] as $aProduct) { ?>
+
                 <!-- debugging 
                 <tr>
-                  <td colspan="6"><pre><?php /*var_dump($aProduct);*/ ?></pre></td>
+                  <td colspan="6"><pre><? /*php var_dump($aProduct); */?></pre></td>
                 </tr> -->
                 <!-- /debugging -->
                 <tr>
@@ -92,8 +92,19 @@
                   </td>
                   <td class="text-left"><a href="/product.php?id=<?= $aProduct['product_id'] ?>"><?= $aProduct['product_name'] ?></a></td>
                   <td class="text-left">
-                    <?php if(isset($aProduct['Size'])) { echo('Size: '.$aProduct['Size'].'<br/>'); }?>
-                    <?php if(isset($aProduct['Color'])) { echo('Color: '.$aProduct['Color']); } ?>
+                    <?php 
+                        $options = json_decode($aProduct['option']);
+                        foreach($options as $key => $value) {
+                         echo(str_replace('_',' ', $key).': '.$value.'<br/>'); 
+                          }?>
+                    <?php if(isset($aProduct['vdp'])) { ?>
+                      <hr/>
+                      VDP Fields:<br/>
+                      <?php $vdpFields = json_decode($aProduct['vdp']);
+                        foreach($vdpFields as $key => $value) {
+                         echo(str_replace('_',' ', $key).': '.$value.'<br/>'); 
+                        }
+                      } ?>
                   </td>
                   <td class="text-left hidden-xs-down"><?= $aProduct['product_availability'] ?></td>
                   <td class="text-left">

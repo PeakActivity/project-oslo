@@ -4,7 +4,7 @@
     require_once ('includes/utilityfunctions.php'); 
 
     ValidateDomain($_SERVER['HTTP_HOST']);
-    ValidateAdminLoggedIn($_SESSION['type']);
+    ValidatePlatformAdminLoggedIn($_SESSION['type']);
 
 ?>
 
@@ -50,37 +50,36 @@
 	<div class="container" id="body-container">
     <div class="row mt-3">
       <div class="col-12 col-md-4 offset-md-8">
-        <button class="btn btn-lg btn-success" style="width:100%;" onclick="addProduct();">Add New Product</button>
+        <button class="btn btn-lg btn-success" style="width:100%;" onclick="addCategory();">Add New Category</button>
       </div>
     </div>
-    <div class="row">
-      <div class="col-12">
-        <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-          <thead>
-              <tr>
-                  <th class="text-center">ID</th>
-                  <th class="text-center">Category</th>
-                  <th class="text-center">Name</th>
-                  <th class="text-center">Description</th>
-                  <th class="text-center">Image</th>  
-                  <th class="text-center">Price</th>
-                  <th class="text-center">Code</th>
-                  <th class="text-center"></th>
-              </tr>
-          </thead>
-          <tbody>
-          <?php
+      <div class="row">
+        <div class="col-12">
+          <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+              <thead>
+                  <tr>
+                      <th class="text-center">ID</th>
+                      <th class="text-center">Name</th>
+                      <th class="text-center">Description</th>
+                      <th class="text-center">Image</th>  
+                      <th class="text-center">VDP</th>
+                      <th class="text-center">Active</th>
+                      <th class="text-center"></th>
+                  </tr>
+              </thead>
+              <tbody>
+<?php
 
 
-    $aProducts = GetProducts(ExtractSubdomains($_SERVER['HTTP_HOST']));
+    $aCategories = GetCategories();
 // --------------------------------------------------------------------------
 // Load our Template HTML
 // --------------------------------------------------------------------------
-$strApprovalsBody = file_get_contents('includes/template_view_products.html');
+$strApprovalsBody = file_get_contents('includes/template_view_categories.html');
 
 
 
-    foreach ($aProducts as $topkey => $topvalue) 
+    foreach ($aCategories as $topkey => $topvalue) 
     {
       foreach ($topvalue as $key => $value) 
       {
@@ -93,36 +92,50 @@ $strApprovalsBody = file_get_contents('includes/template_view_products.html');
 
         if ($key == 'category_name')
         {
-          $catname = $value;
+          $name = $value;
         }
 
-        if ($key == 'product_name')
+        if ($key == 'category_description')
         {
-          $prodname = $value;
+          $desc = $value;
         }
 
-        if ($key == 'product_description')
-        {
-            $desc = $value;
-        }
-
-        if ($key == 'product_image')
+        if ($key == 'category_image')
         {
           $image = $value;
         }
 
-        if ($key == 'product_price')
+        if ($key == 'category_vdp')
         {
-            $price = $value;
+            if ($value > 0) {
+                $vdp = "<div class='form-check'>";
+                $vdp .="   <label class='form-check-label'>";
+                $vdp .="       <input class='form-check-input' type='checkbox' id='vdp$id' name='vdp$id' onchange='changeVDP($id, this.checked, $value)' aria-label='Category allows VDP' checked='checked'>";
+                $vdp .="   </label>";
+                $vdp .="</div>";
+            } else {
+                $vdp = "<div class='form-check'>";
+                $vdp .="   <label class='form-check-label'>";
+                $vdp .="       <input class='form-check-input' type='checkbox' id='vdp$id' name='vdp$id' onchange='changeVDP($id, this.checked)'  aria-label='Category allows VDP'>";
+                $vdp .="   </label>";
+                $vdp .="</div>";
+            }
         }
 
-        if ($key == 'product_code')
+        if ($key == 'category_active')
         {
-            $code = $value;
+                $active = "<div class='form-check'>";
+                $active .="   <label class='form-check-label'>";
+                $active .="       <input class='form-check-input' type='checkbox' id='vdp$id' name='vdp$id' onchange='changeActive($id, this.checked)' aria-label='Category allows VDP'";
+                if ($value > 0) { 
+                  $active .= "checked='checked'";
+                }
+                $active .=">   </label>";
+                $active .="</div>";
         }
         $delete = "<div class='btn-group' role='group' aria-label='edit/delete'>";
         $delete .= "<button class='btn btn-success' onclick=\"edit('$id')\" ><i class='fa fa-edit'></i></button>";
-        $delete .= "<button class='btn btn-danger' onclick=\"deleteConfirm('$id', '$prodname')\" ><i class='fa fa-trash'></i></button>";
+        $delete .= "<button class='btn btn-danger' onclick=\"deleteConfirm('$id', '$name')\" ><i class='fa fa-trash'></i></button>";
         $delete .= "</div>";
         }
       /*
@@ -131,7 +144,7 @@ $strApprovalsBody = file_get_contents('includes/template_view_products.html');
       $buttons .= "<button type='button' class='btn btn-danger delete-button'><i class='fa fa-trash' aria-hidden='true'></i></button>";
       $buttons .= "</div>";
       */
-        $strBuffer = sprintf($strApprovalsBody, $id, $catname, $prodname, $desc, $image, $price, $code, $delete);
+        $strBuffer = sprintf($strApprovalsBody, $id, $name, $desc, $image, $vdp, $active, $delete);
         echo $strBuffer;  
       } // end foreach
 ?>
@@ -139,11 +152,12 @@ $strApprovalsBody = file_get_contents('includes/template_view_products.html');
 
 
 
-          </tbody>
-        </table>
+                  </tbody>
+              </table>
+          </div>
       </div>
-    </div>
 	</div>
+
 
 
     <!-- Delete Confirm Modal -->
@@ -151,52 +165,26 @@ $strApprovalsBody = file_get_contents('includes/template_view_products.html');
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Confirm Delete Product</h5>
+            <h5 class="modal-title">Confirm Delete Category</h5>
             <button type="button" class="close" id="close-recover" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <input type="hidden" id="hidden-product-id" name="hidden-product-id">
-            <p>You are about to delete <span id="productname"></span>.</p>
+            <input type="hidden" id="hidden-category-id" name="hidden-category-id">
+            <p>You are about to delete <span id="categoryname"></span>.</p>
             <p>This cannot be undone. Are you sure?</p>
           </div>
           <div class="modal-footer">
             <div style="width:100%; text-align:center;">
-                <button class="btn btn-danger" onclick="deleteProduct($('#hidden-product-id').val())">Delete</button>
-                <button class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Add Product Category Select Modal -->
-    <div class="modal fade" id="category-select-modal"  data-backdrop="static" keyboard="false">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Select Category for New Product</h5>
-            <button type="button" class="close" id="close-recover" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-          <div class="list-group category-list">
-            <?php $aCategories = GetAllCategories();
-              foreach($aCategories as $aCat) { ?>
-                <a href="/add-product.php?category_id=<?= $aCat['id'] ?>" class="list-group-item"><?= $aCat['category_name'] ?></a>
-              <?php } ?>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <div style="width:100%; text-align:center;">
+                <button class="btn btn-danger" onclick="deleteCategory($('#hidden-category-id').val())">Delete</button>
                 <button class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel</button>
             </div>
           </div>
         </div>
       </div>
     </div>  
+
 
     <?php include('includes/footer.php'); ?>
     <!-- common functions -->
@@ -205,6 +193,12 @@ $strApprovalsBody = file_get_contents('includes/template_view_products.html');
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
     
+    <!--color picker -->
+    <script src="assets/plugins/colorpicker/js/bootstrap-colorpicker.js"></script>
+
+    <!-- Uploader -->
+    <script src="assets/plugins/orakuploader/orakuploader.js?ver=1.02"></script>   
+
 
         <!--Datatables--> 
         <script src="assets/plugins/datatables/jquery.dataTables.min.js"></script>
@@ -226,35 +220,97 @@ $strApprovalsBody = file_get_contents('includes/template_view_products.html');
             $(document).ready( function() {
               $('#datatable-responsive').DataTable({
                   columnDefs: [
-                    {bSortable: false, targets: [7]} 
-                  ]
+                    {bSortable: false, targets: [6]} 
+                  ],
+                  buttons: []
                 });
               });
 
 
 
-            //TableManageButtons.init();
+            TableManageButtons.init();
 
         </script>
 
   <script>
-    function addProduct() {
-        $('#category-select-modal').modal('show');
+  function addCategory() {
+      $(location).attr('href', ('add-category.php'));
+  }
+    function changeVDP(categoryid, vdp) {
+      if(vdp == true){
+        vdp = 1;  
+      } else {
+        vdp = 0;
+      }
+        
+      $.ajax({
+        type: 'post',
+        url: 'user/update-category-vdp.php',
+        data: {category_id: categoryid, category_vdp: vdp},
+        success: function (data) {
+          if(data == "error"){
+            console.log("error changing category vdp");
+          }
+          if(data == "success"){
+             console.log("category updated");
+          }
+        },
+        error: function (data) {
+               var r = jQuery.parseJSON(data.responseText);
+               alert("Message: " + r.Message);
+               alert("StackTrace: " + r.StackTrace);
+               alert("ExceptionType: " + r.ExceptionType);
+        }
+      });
+      return false;
+    };
+
+    function changeActive(categoryid, active) {
+      if(active == true){
+        active = 1;  
+      } else {
+        active = 0;
+      }
+        
+      $.ajax({
+        type: 'post',
+        url: 'user/update-category-active.php',
+        data: {category_id: categoryid, category_active: active},
+        success: function (data) {
+          if(data == "error"){
+            console.log("error changing category active");
+          }
+          if(data == "success"){
+             console.log("category updated");
+          }
+        },
+        error: function (data) {
+               var r = jQuery.parseJSON(data.responseText);
+               alert("Message: " + r.Message);
+               alert("StackTrace: " + r.StackTrace);
+               alert("ExceptionType: " + r.ExceptionType);
+        }
+      });
+      return false;
+    };
+
+
+    function edit(categoryid){
+      $(location).attr('href', ('edit-category.php?id='+categoryid));
     }
 
-
-    function deleteConfirm(productid, name){
-        $('#hidden-product-id').val(productid)
-        $('#productname').html(name);
+    function deleteConfirm(categoryid, name){
+        $('#hidden-category-id').val(categoryid)
+        $('#categoryname').html(name);
         $('#delete-confirm-modal').modal('show');
     }
 
-    function deleteProduct(productid) {
+    function deleteCategory(categoryid) {
       $('#delete-confirm-modal').modal('hide');
       $.ajax({
         type: 'post',
-        url: 'user/delete-product.php',
-        data: {product_id: productid},
+        url: 'user/delete-category.php',
+        data: {category_id: categoryid},
         success: function (data) {
           if(data == "error"){
             console.log("error deleting category");
@@ -272,8 +328,6 @@ $strApprovalsBody = file_get_contents('includes/template_view_products.html');
       });
       return false;
     };
-
-    
   </script>
    
 </body>

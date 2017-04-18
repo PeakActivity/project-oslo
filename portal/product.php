@@ -132,34 +132,123 @@
             <input type="hidden" name="product_id" id="product_id" value="<?= $aProduct['id'] ?>">
             <input type="hidden" name="product_file_name" id="product_file_name" value="<?= $aImages[0]['file_name'] ?>">
             <input type="hidden" name="product_name" id="product_name" value="<?= $aProduct['name'] ?>">
-            <p>Brand: <?= $aProduct['brand'] ?></br>
-            <input type="hidden" name="product_brand" id="product_brand" value="<?= $aProduct['brand'] ?>">
+            <p>
+            <?php $aOptions = GetProductOptions($_GET['id']); ?>
+            <?php for($i=0;$i<count($aOptions);$i++){ 
+                  if( $aOptions[$i][0]['option_selects'] == "admin" && $aOptions[$i][0]['option_value'] != "None" ) {?>
+            <?= $aOptions[$i][0]['option_key'] ?>: <?= $aOptions[$i][0]['option_value'] ?> <?php if($aOptions[$i][0]['option_vdp'] > 0) { ?> VDP <?php } ?></br>
+            <input type="hidden" name="option[<?= str_replace(' ', '_', $aOptions[$i][0]['option_key']) ?>]" value="<?= $aOptions[$i][0]['option_value'] ?>">
+
+            <?php 
+              if($aOptions[$i][0]['option_vdp'] > 0) { 
+              $vdpFields = GetOptionVDPFields($_GET['id'], $aOptions[$i][0]['option_id']);
+              //echo('product_id:'.$_GET['id'].' option_id:'.$aOptions[$i][0]['option_id'].' vdpFields: '.count($vdpFields).'<br/>');
+              for($p=0;$p<count($vdpFields);$p++){ ?>
+
+                <div class="form-group row">
+                    <label class="col-4 col-form-label"><?= $vdpFields[$p] ?>: </label>
+                    <div class="col-8">
+                        <input type="text" name="vdp[<?= str_replace(' ', '_', $vdpFields[$p]) ?>]" id="<?= str_replace(' ', '_', $vdpFields[$p]) ?>" class="form-control" required="true">
+                    </div>
+                </div>
+            <?php } ?>
+            <hr/>
+            <?php } } } ?>
             Product Code: <?= $aProduct['product_code'] ?></br>
             <input type="hidden" name="product_code" id="product_code" value="<?= $aProduct['product_code'] ?>">
             Availability: <?= $aProduct['availability'] ?></p>
             <input type="hidden" name="product_availability" id="product_availability" value="<?= $aProduct['availability'] ?>">
-            <h3 class="price my-3">$<?= $aProduct['price'] ?> <span class="per-unit">for <?= $aProduct['per_unit'] ?></span></h3>
-            <input type="hidden" name="product_price" id="product_price" value="<?= $aProduct['price'] ?>">
-            <input type="hidden" name="product_per_unit" id="product_per_unit" value="<?= $aProduct['per_unit'] ?>">
+            <h3 id="priceField" class="price my-3">$<?= money_format('%i', ($aProduct['price']*$aProduct['minimum_order'])) ?> <span class="per-unit">for <?= $aProduct['minimum_order'] ?> pieces.</span></h3>
+            <input type="hidden" name="product_price" id="product_price" value="<?= money_format('%i', ($aProduct['price']*$aProduct['minimum_order'])) ?>">
             <input type="hidden" name="product_important_info" id="product_important_info" value="<?= $aProduct['important_info'] ?>">
-            <hr />
-            <?php $aOptions = GetProductOptions($_GET['id']); 
-            if(count($aOptions) > 0) { ?>
-              <h4 class="my-3">Available Options:</h4>
-              <?php for($i=0;$i<count($aOptions);$i++){ ?>
-              <div class="form-group row">
-                  <label class="col-2 col-form-label"><?= $aOptions[$i][0]['option_key'] ?>(s)</label>
+              <?php $userOptions = []; 
+                for($q=0;$q<count($aOptions);$q++){ 
+                  if( $aOptions[$q][0]['option_selects'] == "user") {
+                    array_push($userOptions, $aOptions[$q]);
+                  }
+                }
+                if(count($userOptions) > 0) {?>
+                  <hr />
+                  <h4 class="my-3">Available Options:</h4>
+              <?php }
+                for($j=0;$j<count($userOptions);$j++){ ?>
+                <?php if($userOptions[$j][0]['option_vdp'] > 0 || $userOptions[$j][0]['option_file'] > 0) { ?>
+                  <h4><?= $userOptions[$j][0]['option_key'] ?></h4>
+                  <div class="form-group row">
+                  <label class="col-2 col-form-label">Choose:</label>
+                  <?php } else { ?>
+                  <div class="form-group row">
+                  <label class="col-2 col-form-label"><?= $userOptions[$j][0]['option_key'] ?></label>
+                  <?php } ?>
                   <div class="col-10">
-                    <select name="<?= $aOptions[$i][0]['option_key'] ?>" id="<?= $aOptions[$i][0]['option_key'] ?>" class="form-control" required="true">
+                    <select name="option[<?= $userOptions[$i][0]['option_key'] ?>]" id="<?= $userOptions[$i][0]['option_key'] ?>" class="form-control" required="true">
                         <option value="">-- Select --</option>
-                        <?php foreach ( $aOptions[$i] as $aOption ) : ?>
-                        <option value="<?php echo $aOption['option_value']; ?>"><?php echo $aOption['option_value']; ?></option>
+                        <?php foreach ( $userOptions[$j] as $aOption ) : ?>
+                        <option value="<?php echo ($aOption['option_value']); 
+                                              if($aOption['option_price'] != "0.00") {
+                                                echo(" (+".$aOption['option_price'].")");} ?>"><?php echo ($aOption['option_value']); 
+                                              if($aOption['option_price'] != "0.00") {
+                                                echo(" (+".$aOption['option_price'].")");} ?></option>
                         <?php endforeach; ?>
                     </select>
                   </div>
               </div>
+              <?php if($userOptions[$j][0]['option_file'] > 0) { ?>
+                <div class="form-group row">
+                  <div class="col-12">
+                    <div class="form-group">
+                      <input type="file" name="img[<?= $aCatOption['option_name'] ?>]" class="file">
+                      <div class="input-group col-xs-12">
+                        <span class="input-group-addon"><i class="fa fa-file-image-o"></i></span>
+                        <input type="text" class="form-control" name="image[<?= $aCatOption['option_name'] ?>]" disabled placeholder="Upload Design File">
+                        <span class="input-group-btn">
+                          <button class="browse btn btn-primary" type="button"><i class="fa fa-search"></i> Browse</button>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+              </div>
               <?php } ?>
-            <?php } ?>
+              <?php if($userOptions[$j][0]['option_vdp'] > 0) { ?>
+                <div class="row" id="vdp_fields<?=$userOptions[$j][0]['option_id'] ?>">
+                </div>
+                <div class="row mb-3">
+                  <div class="col-12 text-center">
+                    <button class="btn btn-success" id="add_VDP_button<?=$userOptions[$j][0]['option_id'] ?>">Add VDP Field</button>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <div class="form-group">
+                      <input type="file" name="img[<?= $aCatOption['option_name'] ?>]" class="file">
+                      <div class="input-group col-xs-12">
+                        <span class="input-group-addon"><i class="fa fa-file-image-o"></i></span>
+                        <input type="text" class="form-control" name="image[<?= $aCatOption['option_name'] ?>]" disabled placeholder="Upload Plan File">
+                        <span class="input-group-btn">
+                          <button class="browse btn btn-primary" type="button"><i class="fa fa-search"></i> Browse</button>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <div class="form-group">
+                      <input type="file" name="img[<?= $aCatOption['option_name'] ?>]" class="file">
+                      <div class="input-group col-xs-12">
+                        <span class="input-group-addon"><i class="fa fa-file-image-o"></i></span>
+                        <input type="text" class="form-control" name="image[<?= $aCatOption['option_name'] ?>]" disabled placeholder="Upload Data Source">
+                        <span class="input-group-btn">
+                          <button class="browse btn btn-primary" type="button"><i class="fa fa-search"></i> Browse</button>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr class="mb-5"/>
+                <?php } ?>
+              <?php } ?>
+            <hr class="my-5" />
             <div class="form-group row">
                 <label class="col-2 col-form-label">Quantity</label>
                 <div class="col-10">
@@ -194,6 +283,20 @@
     });
 
 
+    <?php for($i=0;$i<count($userOptions);$i++){ 
+        if($userOptions[$i][0]['option_vdp'] > 0) { ?>
+    $('#add_VDP_button<?=$userOptions[$i][0]['option_id'] ?>').on('click', function(e){
+      e.preventDefault();
+      $("<div class='col-12 vdpField'><div class='row'><div class='col-5 pr-1'><input type='text' class='form-control mb-3' name='vdp_field_name[<?=$userOptions[$i][0]['option_key'] ?>][]' placeholder='Field Name' style='width:100%;' required></div><div class='col-5 pl-1 pr-1'><input type='text' class='form-control mb-3' name='vdp_field_value[<?=$userOptions[$i][0]['option_key'] ?>][]' placeholder='Field Value' style='width:100%;' required></div><div class='col-2 pl-1'><button type='button' class='btn btn-danger mb-3' style='width:100%;'><i class='fa fa-trash'></i></button></div></div></div>").appendTo("#vdp_fields<?=$userOptions[$i][0]['option_id'] ?>");
+    });
+    <?php } } ?>
+
+    $('#vdp_fields').on('click','button', function (e) {
+      e.preventDefault();
+      console.log(e.target.parentNode.parentNode.parentNode);
+      e.target.parentNode.parentNode.parentNode.remove();
+    });
+
     $('#cart_form').on('submit', function (e) {
       e.preventDefault();    
       $("#success-alert").hide();
@@ -222,6 +325,15 @@
         }
       });
 
+    });
+
+
+    $(document).on('click', '.browse', function(){
+      var file = $(this).parent().parent().parent().find('.file');
+      file.trigger('click');
+    });
+    $(document).on('change', '.file', function(){
+      $(this).parent().find('.form-control').val($(this).val().replace(/C:\\fakepath\\/i, ''));
     });
    </script>
 </body>

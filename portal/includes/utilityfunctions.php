@@ -95,10 +95,72 @@ function GetUserInfo($domain)
     return $aUsers;
 } // End of Function
 
+function GetProducts($domain)
+{
+    $aProducts = array();
+    $query = "SELECT t1.id AS id, t1.category_id, t2.category_name, name, product_code, description, price, important_info FROM products t1 JOIN product_categories t2 ON t2.id = t1.category_id JOIN domains t3 ON t1.domain_id = t3.id  WHERE t3.domain = '$domain'"; 
+    
+    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+
+    // --------------------------------------------------------------------------                 
+    // Enumerate through the list of Projects and store each within option tags
+    // --------------------------------------------------------------------------                 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_ASSOC)) 
+    {
+        $aProduct = array(
+                    'id'                        => $row['id'],
+                    'category_id'               => $row['category_id'],
+                    'category_name'             => $row['category_name'],
+                    'product_name'              => $row['name'],
+                    'product_code'              => $row['product_code'],
+                    'product_description'       => $row['description'],
+                    'product_price'             => $row['price'],
+                    'product_important_info'    => $row['important_info']
+
+                    );            
+    
+        array_push($aProducts, $aProduct);
+    }
+
+    return $aProducts;
+
+} // End of Function
+
+function GetCategories()
+{
+    $rc = 0;
+    $aCategories = array();
+
+
+    $query = "SELECT id, category_name, category_description, category_image, category_vdp, category_active, category_minimum_order, category_availability FROM product_categories"; 
+    
+    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+
+    // --------------------------------------------------------------------------                 
+    // Enumerate through the list of Projects and store each within option tags
+    // --------------------------------------------------------------------------                 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_ASSOC)) 
+    {
+        $aCategory = array(
+                    'id'                            => $row['id'],
+                    'category_name'                 => $row['category_name'],
+                    'category_description'          => $row['category_description'],
+                    'category_image'                => $row['category_image'],
+                    'category_vdp'                  => $row['category_vdp'],
+                    'category_active'               => $row['category_active'],
+                    'category_minimum_order'               => $row['category_minimum_order'],
+                    'category_availability'               => $row['category_availability']                   
+                    );      
+        array_push($aCategories, $aCategory);       
+    }
+    return $aCategories;
+
+} // End of Function
+
 
 function GetAllProductInfo($product_id)
 {
-    $query = "SELECT t1.id AS id, category_id, category_name, name, brand, product_code, availability ,description, price, per_unit, important_info FROM products t1 JOIN product_categories t2 ON t1.category_id = t2.id WHERE t1.id = $product_id;"; 
+    $query = "SELECT t1.id AS id, category_id, category_name, name, product_code, description, important_info, t2.category_availability, t2.category_base_price, t2.category_minimum_order, t2.category_vdp FROM products t1 JOIN product_categories t2 ON t1.category_id = t2.id WHERE t1.id = $product_id;"; 
     
     $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
 
@@ -112,13 +174,13 @@ function GetAllProductInfo($product_id)
                     'category_id'       => $row['category_id'],
                     'category_name'     => $row['category_name'],
                     'name'              => $row['name'],
-                    'brand'             => $row['brand'],
                     'product_code'      => $row['product_code'],
-                    'availability'      => $row['availability'],
                     'description'       => $row['description'],
-                    'price'             => $row['price'],
-                    'per_unit'          => $row['per_unit'],
-                    'important_info'    => $row['important_info']                   
+                    'availability'      => $row['category_availability'],
+                    'price'             => $row['category_base_price'],
+                    'minimum_order'     => $row['category_minimum_order'],
+                    'important_info'    => $row['important_info'],
+                    'vdp'               => $row['category_vdp']
                     );            
     }
 
@@ -127,7 +189,7 @@ function GetAllProductInfo($product_id)
 
 function GetAllCategoryInfo($category_id)
 {
-    $query = "SELECT id, category_name, category_description, category_image FROM product_categories WHERE id = $category_id;"; 
+    $query = "SELECT id, category_name, category_description, category_image, category_base_price, category_minimum_order, category_availability, category_vdp FROM product_categories WHERE id = $category_id;"; 
     
     $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
 
@@ -139,8 +201,12 @@ function GetAllCategoryInfo($category_id)
         $aCategory = array(
                     'id'                    => $row['id'],
                     'category_name'         => $row['category_name'],
+                    'category_base_price'   => $row['category_base_price'],
                     'category_description'  => $row['category_description'],
-                    'category_image'        => $row['category_image']                   
+                    'category_image'        => $row['category_image'],
+                    'category_minimum_order'=> $row['category_minimum_order'],
+                    'category_availability' => $row['category_availability'] ,
+                    'category_vdp'          => $row['category_vdp']                   
                     );            
     }
 
@@ -170,13 +236,83 @@ function GetPortalCategories($domain)
     return $aCategories;
 } // End of Function
 
+function GetAllCategories()
+{
+    $aCategories = array();
+    $query = "SELECT id, category_name FROM product_categories ORDER BY category_name ASC;"; 
+    
+    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+
+    // --------------------------------------------------------------------------                 
+    // Enumerate through the list of Projects and store each within option tags
+    // --------------------------------------------------------------------------                 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_ASSOC)) 
+    {
+        $aCategory = array(
+                    'id'                    => $row['id'],
+                    'category_name'         => $row['category_name']                  
+                    );            
+    
+        array_push($aCategories, $aCategory);
+    }
+
+    return $aCategories;
+} // End of Function
+
+function GetCategoryOptions($category_id)
+{
+
+    $aOptions = array();
+    $query = "SELECT id, option_name, option_values, option_prices, option_file, option_vdp FROM category_options WHERE category_id = $category_id;"; 
+    
+    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+
+    // --------------------------------------------------------------------------                 
+    // Enumerate through the list of Projects and store each within option tags
+    // --------------------------------------------------------------------------                 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_ASSOC)) 
+    {
+        $aOption = array(
+                    'id'                => $row['id'],
+                    'option_name'        => $row['option_name'],
+                    'option_values'      => $row['option_values'],
+                    'option_prices'      => $row['option_prices'],
+                    'option_file'        => $row['option_file'],
+                    'option_vdp'        => $row['option_vdp']               
+                    );
+        array_push($aOptions, $aOption);            
+    }
+    return $aOptions;
+} // End of Function
+
+function GetOptionVDPFields($product_id, $option_id)
+{
+
+    $aFields = array();
+    $query = "SELECT vdp_field_name FROM product_option_vdp WHERE option_id = $option_id AND product_id = $product_id;"; 
+    
+    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+
+    // --------------------------------------------------------------------------                 
+    // Enumerate through the list of Projects and store each within option tags
+    // --------------------------------------------------------------------------                 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_ASSOC)) 
+    {
+        $field =  $row['vdp_field_name'];
+
+        array_push($aFields, $field);            
+    }
+
+    return $aFields;
+} // End of Function
+
 function GetProductOptions($product_id)
 {
 
     $aOptions = array();
     $aOptionsGroup = array();
     $key = "";
-    $query = "SELECT id, option_key, option_value, option_price FROM product_options WHERE product_id = $product_id;"; 
+    $query = "SELECT id, option_key, option_value, option_price, option_selects, option_file, option_vdp, option_id FROM product_options WHERE product_id = $product_id ORDER BY option_key ASC, option_value ASC;"; 
     
     $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
 
@@ -196,7 +332,11 @@ function GetProductOptions($product_id)
                     'id'                => $row['id'],
                     'option_key'        => $row['option_key'],
                     'option_value'      => $row['option_value'],
-                    'option_price'      => $row['option_price']               
+                    'option_price'      => $row['option_price'],
+                    'option_selects'    => $row['option_selects'],
+                    'option_file'       => $row['option_file'],
+                    'option_vdp'       => $row['option_vdp'] ,
+                    'option_id'       => $row['option_id']               
                     );
         array_push($aOptionsGroup, $aOption);            
     }
@@ -229,6 +369,24 @@ function GetProductImages($product_id)
     }
 
     return $aImages;
+} // End of Function
+
+function GetProductVDP($product_id)
+{
+    $aFields = array();
+    $query = "SELECT vdp_field_name FROM product_vdp WHERE product_id = $product_id;"; 
+    
+    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+
+    // --------------------------------------------------------------------------                 
+    // Enumerate through the list of Projects and store each within option tags
+    // --------------------------------------------------------------------------                 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_ASSOC)) 
+    {
+        array_push($aFields, $row['vdp_field_name']);            
+    }
+
+    return $aFields;
 } // End of Function
 
 function GetProductSpecifications($product_id)
@@ -302,7 +460,7 @@ function GetFeatured($domain)
 {
     $aAllFeatured = array();
 
-    $query = "SELECT t1.id AS id, category_id, category_name, name, brand, product_code, availability, description, price, per_unit, important_info, t3.file_name AS file_name FROM products t1 JOIN product_categories t2 on t1.category_id = t2.id JOIN product_images t3 on t3.product_id = (SELECT t4.product_id FROM product_images t4 WHERE t1.id = t4.product_id LIMIT 1) JOIN domains t5 on t1.domain_id = t5.id WHERE t5.domain = '$domain' AND featured = 1 GROUP BY t3.product_id";
+    $query = "SELECT t1.id AS id, category_id, category_name, name, product_code, t2.category_availability, description, t2.category_base_price, t2.category_minimum_order, important_info, t3.file_name AS file_name FROM products t1 JOIN product_categories t2 on t1.category_id = t2.id JOIN product_images t3 on t3.product_id = (SELECT t4.product_id FROM product_images t4 WHERE t1.id = t4.product_id LIMIT 1) JOIN domains t5 on t1.domain_id = t5.id WHERE t5.domain = '$domain' AND featured = 1 GROUP BY t3.product_id";
     
     $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
 
@@ -316,12 +474,11 @@ function GetFeatured($domain)
                     'category_id'       => $row['category_id'],
                     'category_name'     => $row['category_name'],
                     'name'              => $row['name'],
-                    'brand'             => $row['brand'],
                     'product_code'      => $row['product_code'],
-                    'availability'      => $row['availability'],
+                    'availability'      => $row['category_availability'],
                     'description'       => $row['description'],
-                    'price'             => $row['price'],
-                    'per_unit'          => $row['per_unit'],
+                    'price'             => $row['category_base_price'],
+                    'minimum_order'     => $row['category_minimum_order'],
                     'important_info'    => $row['important_info'], 
                     'file_name'         => $row['file_name']                   
                     );      
@@ -335,7 +492,7 @@ function GetCategoryProducts($category_id, $domain)
 {
     $aProducts = array();
 
-    $query = "SELECT t1.id AS id, category_id, category_name, name, brand, product_code, availability, description, price, per_unit, important_info, t3.file_name AS file_name FROM products t1 JOIN product_categories t2 on t1.category_id = t2.id JOIN product_images t3 on t3.product_id = (SELECT t4.product_id FROM product_images t4 WHERE t1.id = t4.product_id LIMIT 1) JOIN domains t5 on t1.domain_id = t5.id WHERE t2.id = $category_id AND t5.domain = '$domain' GROUP BY t3.product_id";
+    $query = "SELECT t1.id AS id, category_id, category_name, name, product_code, t2.category_availability, description, t2.category_base_price, t2.category_minimum_order, important_info, t3.file_name AS file_name FROM products t1 JOIN product_categories t2 on t1.category_id = t2.id JOIN product_images t3 on t3.product_id = (SELECT t4.product_id FROM product_images t4 WHERE t1.id = t4.product_id LIMIT 1) JOIN domains t5 on t1.domain_id = t5.id WHERE t2.id = $category_id AND t5.domain = '$domain' GROUP BY t3.product_id";
     
     $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
 
@@ -349,12 +506,11 @@ function GetCategoryProducts($category_id, $domain)
                     'category_id'       => $row['category_id'],
                     'category_name'     => $row['category_name'],
                     'name'              => $row['name'],
-                    'brand'             => $row['brand'],
                     'product_code'      => $row['product_code'],
-                    'availability'      => $row['availability'],
+                    'availability'      => $row['category_availability'],
                     'description'       => $row['description'],
-                    'price'             => $row['price'],
-                    'per_unit'          => $row['per_unit'],
+                    'price'             => $row['category_base_price'],
+                    'minimum_order'     => $row['category_minimum_order'],
                     'important_info'    => $row['important_info'], 
                     'file_name'         => $row['file_name']                     
                     );      

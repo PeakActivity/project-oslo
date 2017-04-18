@@ -29,11 +29,7 @@
 
     <!-- page styles -->
     <link rel="stylesheet" href="assets/css/home.css" />
-    <?php if(isset($_SESSION['domain'])) { ?>
-        <link rel="stylesheet" href="domains/<?=$_SESSION['domain']?>/css/portal.css" /> 
-    <?php } else if($login_domain){ ?>
-        <link rel="stylesheet" href="domains/<?= $login_domain ?>/css/portal.css" /> 
-    <?php } ?>
+    <link rel="stylesheet" href="domains/<?= ExtractSubdomains($_SERVER['HTTP_HOST']) ?>/css/portal.css" /> 
 
 </head>
 
