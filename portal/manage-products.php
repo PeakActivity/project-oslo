@@ -242,6 +242,10 @@ $strApprovalsBody = file_get_contents('includes/template_view_products.html');
         $('#category-select-modal').modal('show');
     }
 
+    function edit(product_id){
+      $(location).attr('href', ('edit-product.php?id='+product_id));
+    }
+
 
     function deleteConfirm(productid, name){
         $('#hidden-product-id').val(productid)
