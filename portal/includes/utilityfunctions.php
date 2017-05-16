@@ -160,7 +160,7 @@ function GetCategories()
 
 function GetAllProductInfo($product_id)
 {
-    $query = "SELECT t1.id AS id, category_id, category_name, name, product_code, description, important_info, t2.category_availability, t2.category_base_price, t2.category_minimum_order, t2.category_vdp FROM products t1 JOIN product_categories t2 ON t1.category_id = t2.id WHERE t1.id = $product_id;"; 
+    $query = "SELECT t1.id AS id, category_id, category_name, name, product_code, description, important_info, featured, t2.category_availability, t2.category_base_price, t2.category_minimum_order, t2.category_vdp FROM products t1 JOIN product_categories t2 ON t1.category_id = t2.id WHERE t1.id = $product_id;"; 
     
     $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
 
@@ -180,11 +180,38 @@ function GetAllProductInfo($product_id)
                     'price'             => $row['category_base_price'],
                     'minimum_order'     => $row['category_minimum_order'],
                     'important_info'    => $row['important_info'],
+                    'featured'          => $row['featured'],
                     'vdp'               => $row['category_vdp']
                     );            
     }
 
     return $aProduct;
+} // End of Function
+
+function GetAllCategoryInfoFromProductID($product_id)
+{
+    $query = "SELECT t1.id, category_name, category_description, category_image, category_base_price, category_minimum_order, category_availability, category_vdp FROM product_categories t1 JOIN products t2 ON t1.id = t2.category_id WHERE t2.id = $product_id;"; 
+    
+    $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
+
+    // --------------------------------------------------------------------------                 
+    // Enumerate through the list of Projects and store each within option tags
+    // --------------------------------------------------------------------------                 
+    while ($row = mysqli_fetch_array($result,  MYSQLI_ASSOC)) 
+    {
+        $aCategory = array(
+                    'id'                    => $row['id'],
+                    'category_name'         => $row['category_name'],
+                    'category_base_price'   => $row['category_base_price'],
+                    'category_description'  => $row['category_description'],
+                    'category_image'        => $row['category_image'],
+                    'category_minimum_order'=> $row['category_minimum_order'],
+                    'category_availability' => $row['category_availability'] ,
+                    'category_vdp'          => $row['category_vdp']                   
+                    );            
+    }
+
+    return $aCategory;
 } // End of Function
 
 function GetAllCategoryInfo($category_id)
@@ -263,7 +290,7 @@ function GetCategoryOptions($category_id)
 {
 
     $aOptions = array();
-    $query = "SELECT id, option_name, option_values, option_prices, option_file, option_vdp FROM category_options WHERE category_id = $category_id;"; 
+    $query = "SELECT id, category_id, option_name, option_values, option_prices, option_file, option_vdp FROM category_options WHERE category_id = $category_id;"; 
     
     $result = @mysqli_query($GLOBALS["___mysqli_ston"], $query); 
 
@@ -274,6 +301,7 @@ function GetCategoryOptions($category_id)
     {
         $aOption = array(
                     'id'                => $row['id'],
+                    'category_id'           => $row['category_id'],
                     'option_name'        => $row['option_name'],
                     'option_values'      => $row['option_values'],
                     'option_prices'      => $row['option_prices'],
@@ -335,8 +363,8 @@ function GetProductOptions($product_id)
                     'option_price'      => $row['option_price'],
                     'option_selects'    => $row['option_selects'],
                     'option_file'       => $row['option_file'],
-                    'option_vdp'       => $row['option_vdp'] ,
-                    'option_id'       => $row['option_id']               
+                    'option_vdp'        => $row['option_vdp'] ,
+                    'option_id'         => $row['option_id']               
                     );
         array_push($aOptionsGroup, $aOption);            
     }

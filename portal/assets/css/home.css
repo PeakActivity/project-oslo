@@ -261,7 +261,8 @@ ul.config-left.nav.nav-pills.flex-column .nav-link:hover {
 	border:1px solid #ddd;
 	border-radius:4px;
 	-webkit-transition:all .2s ease-in-out;
-	transition:all .2s ease-in-out
+	transition:all .2s ease-in-out;
+	position:relative;
 }
 .thumbnail>img,.thumbnail a>img {
 	display:block;
@@ -353,7 +354,7 @@ a.thumbnail:hover,a.thumbnail:focus,a.thumbnail.active {
 	padding-bottom: 0px;
 }
 
-#categoryNameField, #category_name, #product_name {
+#categoryNameField, #category_name, #product_name, #productNameField {
 	font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
 	font-size: 30px;
 	font-weight: 200;
@@ -403,4 +404,10 @@ a.thumbnail:hover,a.thumbnail:focus,a.thumbnail.active {
 .file {
   visibility: hidden;
   position: absolute;
+}
+
+.multibox.file, .multibox.uploadButton {
+	visibility: visible;
+	position: relative;
+	float: left;
 }

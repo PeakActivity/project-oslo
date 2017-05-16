@@ -112,7 +112,7 @@
                         <?php $i=0; foreach($aValues as $aValue) { ?>
                         <div class="form-check">
                           <label class="form-check-label">
-                            <input type="radio" class="form-check-input" name="option[<?= $aCatOption['id'] ?>]" id="<?= $aCatOption['id'] ?>" value="admin:<?= $aCatOption['option_name'] ?>:<?= trim($aValue) ?>:<?php if($aPrices[$i]){
+                            <input type="radio" class="form-check-input" name="option[<?= $aCatOption['id'] ?>][]" id="<?= $aCatOption['id'] ?>" value="admin:<?= $aCatOption['option_name'] ?>:<?= trim($aValue) ?>:<?php if($aPrices[$i]){
                                             echo(trim($aPrices[$i]));
                                           } else {
                                             echo('0.00');
@@ -173,11 +173,11 @@
                         <h4 class="mb-3">Variable Data Printing</h4>
                       </div>
                     </div>
-                    <div class="row" id="vdp_fields">
+                    <div class="row" id="vdp_fields<?=$aCatOption['id']?>">
                     </div>
                     <div class="row mb-3">
                       <div class="col-12 text-center">
-                        <button class="btn btn-success" id="add_VDP_button" optionid="<?= $aCatOption['id'] ?>">Add VDP Field</button>
+                        <button class="btn btn-success" id="add_VDP_button<?= $aCatOption['id'] ?>">Add VDP Field</button>
                       </div>
                     </div>
                     <div class="row">
@@ -280,13 +280,17 @@
         
       });
   });
-
-  $('#add_VDP_button').on('click', function(e){
+  <?php $aCatOptions = GetCategoryOptions($_GET['category_id']); 
+    foreach($aCatOptions as $aCatOption){
+      if($aCatOption['option_vdp'] > 0) { ?>
+  $('#add_VDP_button<?=$aCatOption['id']?>').on('click', function(e){
     e.preventDefault();
     var btn = e.target;
-    $("<div class='col-12 vdpField'><div class='row'><div class='col-9 pr-1'><input type='text' class='form-control mb-3' name='vdp_field["+$('#add_VDP_button').attr('optionid')+"][]' placeholder='VDP Field Name' style='width:100%;' required></div><div class='col-3 pl-1'><button type='button' class='btn btn-danger mb-3' style='width:100%;'>Delete</button></div></div></div>").appendTo("#vdp_fields");
+    $("<div class='col-12 vdpField'><div class='row'><div class='col-9 pr-1'><input type='text' class='form-control mb-3'"+
+      " name='vdp_field[<?=$aCatOption['id']?>][]' placeholder='VDP Field Name' style='width:100%;' required></div><div class='col-3 pl-1'><button type='button' class='btn btn-danger mb-3' style='width:100%;'>Delete</button></div></div></div>").appendTo("#vdp_fields<?=$aCatOption['id']?>");
       fieldCount++;
   });
+  <?php } }  ?>
 
   $('#vdp_fields').on('click','button', function (e) {
     e.preventDefault();

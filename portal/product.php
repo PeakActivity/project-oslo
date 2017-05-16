@@ -136,13 +136,12 @@
             <?php $aOptions = GetProductOptions($_GET['id']); ?>
             <?php for($i=0;$i<count($aOptions);$i++){ 
                   if( $aOptions[$i][0]['option_selects'] == "admin" && $aOptions[$i][0]['option_value'] != "None" ) {?>
-            <?= $aOptions[$i][0]['option_key'] ?>: <?= $aOptions[$i][0]['option_value'] ?> <?php if($aOptions[$i][0]['option_vdp'] > 0) { ?> VDP <?php } ?></br>
+            <?= $aOptions[$i][0]['option_key'] ?>: <?= $aOptions[$i][0]['option_value'] ?></br>
             <input type="hidden" name="option[<?= str_replace(' ', '_', $aOptions[$i][0]['option_key']) ?>]" value="<?= $aOptions[$i][0]['option_value'] ?>">
 
             <?php 
               if($aOptions[$i][0]['option_vdp'] > 0) { 
               $vdpFields = GetOptionVDPFields($_GET['id'], $aOptions[$i][0]['option_id']);
-              //echo('product_id:'.$_GET['id'].' option_id:'.$aOptions[$i][0]['option_id'].' vdpFields: '.count($vdpFields).'<br/>');
               for($p=0;$p<count($vdpFields);$p++){ ?>
 
                 <div class="form-group row">
